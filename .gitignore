@@ -1,0 +1,38 @@
+# Secrets and local environment (CLAUDE.md, section 11)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Dependencies and build output
+node_modules/
+dist/
+build/
+coverage/
+
+# Local data, database dumps and backups (CLAUDE.md, section 11)
+data/
+backups/
+*.dump
+*.sql
+*.sql.gz
+
+# Logs may contain sensitive data (CLAUDE.md, section 11)
+*.log
+logs/
+
+# Editors and operating system files
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Local Claude Code settings, personal and not shared
+.claude/settings.local.json
+CLAUDE.local.md
+
+# Project instructions kept out of the repository by the owner's decision (2026-11-04)
+CLAUDE.md
