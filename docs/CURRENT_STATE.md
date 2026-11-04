@@ -39,6 +39,7 @@ Recorded in `docs/decisions/`:
 - `0015` — Docker for local PostgreSQL on the Windows computer; code written only there; the POCO F3 is production; one branch per significant task named `tipo/descricao-curta`; no pull requests.
 - `0016` — Three test levels (business rules, integration with PostgreSQL in Docker, browser flows); tests must pass before each merge; continuous integration deferred; scripted deployment to the phone with a health check and a rollback copy.
 - `0017` — The first release includes the online store and the two physical stores of MONUMENT. Stock is tracked per location.
+- `0018` — The production phone is dedicated to Expathio. The old project is removed after a backup, and the device is renamed `expathio`.
 
 Other decisions recorded in the documents:
 
