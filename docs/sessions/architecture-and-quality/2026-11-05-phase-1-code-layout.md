@@ -8,8 +8,9 @@ This session decides and documents the options. It does not create folders or co
 
 ## Scope
 
-- In scope: three layout options, their cost, maintenance, fit with the Platform and Frontend sessions; a recommendation; a PROPOSED decision record (ADR) in this file; the owner's pending decisions.
+- In scope: three layout options, their cost, maintenance, fit with the Platform and Frontend sessions; a recommendation; a decision record (ADR) proposal, later approved and filed as ADR 0019; the owner's pending decisions.
 - Added after owner approval on 2026-11-05: `docs/decisions/0019-phase-1-code-layout.md`, status APPROVED.
+- Added on 2026-11-05 at the owner's request: `docs/05-TECHNICAL-ARCHITECTURE.md`, section 19 (rewritten into "Decided" and "Still open") and section 21 (three risks from ADR 0019). Section 16 was compared with ADR 0016; the owner chose option 1, and a status note was added to section 16. The ADRs were not changed.
 - Out of scope: creating any folder or code; the Phase 1 test folder details (to be fixed by the sessions that write the tests); the PostgreSQL and Node.js version check on the phone (Infrastructure and Operations); the better-auth compatibility check with NestJS 12 (Platform Engineering, ADR 0014).
 
 ## Documents Read
@@ -26,6 +27,7 @@ This session decides and documents the options. It does not create folders or co
 10. `docs/decisions/0015-development-environment-and-repository.md`.
 11. `docs/decisions/0016-testing-and-deployment-strategy.md`.
 12. `docs/05-TECHNICAL-ARCHITECTURE.md`, all sections (section 5 and sections 3, 8, 16 and 21 were the most relevant).
+13. `docs/decisions/0011-initial-host.md` and `docs/decisions/0018-dedicated-production-phone.md` (checked for section 19).
 
 Git: `git pull` returned "Already up to date". Branch `docs/phase-1-code-layout` was created from `main` (commit `50cc0df`). No commit was made.
 
@@ -172,12 +174,14 @@ The decision was proposed in this session as a provisional ADR 0019, and the own
 
 ## Tests and Results
 
-Nothing was executed. There is no application code. `git pull` returned "Already up to date". Branch `docs/phase-1-code-layout` was created from `main`. No commit and no push.
+Nothing was executed. There is no application code. `git pull` returned "Already up to date". Branch `docs/phase-1-code-layout` was created from `main`. No commit and no push. Documents were checked by reading; no build or test exists to run.
 
 ## Documents Changed
 
-- `docs/sessions/architecture-and-quality/2026-11-05-phase-1-code-layout.md`: created by this session.
+- `docs/sessions/architecture-and-quality/2026-11-05-phase-1-code-layout.md`: created by this session, then updated.
 - `docs/decisions/0019-phase-1-code-layout.md`: created by this session, status APPROVED (2026-11-05).
+- `docs/decisions/0020-release-history-and-versioning.md`: created by this session, status APPROVED (2026-11-05).
+- `docs/05-TECHNICAL-ARCHITECTURE.md`: section 19 rewritten (19.1 Decided with ADR numbers; 19.2 Still open); three rows added to section 21 (risk register) for ADR 0019. Section 16: status note added (owner chose option 1: CI and code review deferred, per ADR 0016 and ADR 0015).
 - Branch `docs/phase-1-code-layout` was created from `main`. No commit.
 
 ## Decisions
@@ -187,7 +191,39 @@ Nothing was executed. There is no application code. `git pull` returned "Already
   - Option A (one project with `server/`, `web/`, `shared/` and `ops/`). Recorded as `docs/decisions/0019-phase-1-code-layout.md`.
   - The three rules for `shared/` and API contracts.
   - The start order: Platform Engineering first, then Frontend Engineering with Experience and Design.
+- Approved by the owner on 2026-11-05 (section 16): option 1. The status note in section 16 of `05-TECHNICAL-ARCHITECTURE.md` describes CI and code review as deferred. ADR 0015 and ADR 0016 are unchanged.
+- Approved by the owner on 2026-11-05: GitHub Actions (CI) stays deferred until the project has code. Revisit when the first tests exist (likely end of Phase 1 or start of Phase 2). CI cannot deploy to the phone, which is on a private network (ADR 0011), so deployment stays with the script. Any adoption needs a new ADR and owner approval.
+- Approved by the owner on 2026-11-05 (release history): accepted the recommendation. Tags `vMAJOR.MINOR.PATCH`, `0.x` until Phase 5, `1.0.0` at the end of Phase 5; `CHANGELOG.md` at the root; a GitHub Release per tag, approved for each one; deployment log written by the script. Recorded as `docs/decisions/0020-release-history-and-versioning.md`, status APPROVED.
+- Left to Phase 1 (not decided here): the tag check inside the deployment script, to be specified by Infrastructure and Operations.
 - Not adopted: a lint tool to block wrong imports between folders. Needs owner approval when it is proposed. A plain-language explanation was given in the session on 2026-11-05.
+
+## Lint: Explanation and Options (no decision, nothing installed)
+
+**What a lint is.** A lint is a program that reads source code without running it and reports problems: unused variables, risky patterns, or rules the project sets. The best-known one for TypeScript is ESLint. A lint can be told a rule such as "files in `web/` may not import from `server/`". Then the check happens automatically, not only by reading the code.
+
+**Options to block wrong imports between `server/`, `web/` and `shared/`:**
+
+| Option | What it is | Cost | Maintenance |
+|---|---|---|---|
+| 1. No tool | The rules of ADR 0019 are checked by reading the code before each merge. | R$ 0 | None technical. Depends on attention, which fails silently when the project grows. |
+| 2. ESLint with the `no-restricted-imports` rule | ESLint is an open-source lint program. The rule lists the forbidden import paths. Needs one new library and one configuration file. | R$ 0 | Low to medium. Keep ESLint and its TypeScript plugin updated; one more step in the test run. Needs owner approval because it is a new dependency. |
+| 3. ESLint with a boundaries plugin (for example `eslint-plugin-boundaries`) | Same ESLint, with a plugin that names each folder as a zone and decides which zones may import which. Clearer rules when there are many folders. | R$ 0 | Medium. One more library to keep updated and a more detailed configuration. Needs owner approval. |
+| 4. TypeScript project references | A built-in TypeScript feature. Each folder is a separate project declared as a dependency of another. The compiler refuses an import that is not declared. No new library. | R$ 0 | Medium to high. Configuration is more involved and error messages can be hard to read. Behaviour to be checked before any decision. |
+| 5. dependency-cruiser | An open-source tool that reads the imports, checks them against rules in a configuration file, and can draw a diagram of the dependencies. | R$ 0 | Low to medium. One new library and one configuration file. The diagram helps learning. Needs owner approval. |
+
+The options are not compared as a recommendation. The owner decides.
+
+## Section 16 Compared With ADR 0016 (divergences, not changed)
+
+Section 16 of `05-TECHNICAL-ARCHITECTURE.md` lists what the project "should support". ADR 0016 is the approved decision. The comparison:
+
+1. **CI/CD pipelines.** Section 16 lists them as supported. ADR 0016 defers continuous integration: tests run by hand before each merge. **Divergence.**
+2. **Code review practices.** Section 16 lists them. ADR 0015 has no pull requests, and the owner merges alone. **Divergence.**
+3. **Release history.** Section 16 lists it. ADR 0016 does not define how releases are recorded, for example tags. **Gap, not a contradiction.**
+4. **Rollback strategies.** Section 16 lists them. ADR 0016 defines the direction (keep the previous version, reverse the migration or restore the backup), and the steps are to be written in Phase 1. **Consistent, with the steps pending.**
+5. Automated tests, migrations, deployment validation, environment configuration, separate environments and a controlled deployment process match ADR 0015 and ADR 0016. **Consistent.**
+
+Per the owner's instruction, the ADR is not rewritten. Question for the owner: should section 16 follow ADR 0016 (CI deferred, no code review) with a note, or should ADR 0016 be revisited?
 
 ## Pending
 
@@ -198,13 +234,18 @@ Routed to Product and Documentation (owner of `CURRENT_STATE.md` and `SESSION-ST
 Owner's action:
 - Install Docker Desktop and WSL2 on the Windows computer (ADR 0015). Required before Phase 1 starts.
 
+Outdated statement to route (not changed here, the ADR is not rewritten):
+- ADR 0016 (Consequences, and the CI rationale) says the repository "is not yet created" on GitHub. The owner confirmed on 2026-11-05 that the repository already exists on GitHub. Check the remote: `origin` points to the public repository, and its `main` branch exists there. Product and Documentation should record this in the "Open Inconsistencies" section of `CURRENT_STATE.md`, and the owner decides whether ADR 0016 needs a note.
+- Effect on the open options: GitHub Releases (see the release question) becomes available once the owner approves it. Continuous integration (GitHub Actions) is technically possible now, but it stays deferred under ADR 0016 for the other reasons given there (one person, cost of setup and maintenance). This is for the owner to revisit.
+
 Other sessions (not blocking the layout):
 - Infrastructure and Operations: check the PostgreSQL and Node.js versions on the phone against Docker (ADR 0011, ADR 0014).
 - Platform Engineering: confirm better-auth compatibility with NestJS 12 before implementing login (ADR 0014).
 - Platform Engineering and Frontend Engineering: decide where tests live inside the folders, in Phase 1.
 
-Deferred:
-- Lint tool to block wrong imports between folders. The owner wants it explained before any decision. Needs owner approval when proposed.
+Owner's decision:
+- Lint tool to block wrong imports between folders. Options and costs are in "Lint: Explanation and Options". Nothing was installed. The owner decides later; any option needs approval because it adds a library, except option 4, which is built into TypeScript.
+- Section 16 divergences (CI/CD and code review): resolved by option 1 (see "Decisions"). Release history: resolved by ADR 0020. Its deployment tag check is a Phase 1 item.
 
 ## How to Resume
 

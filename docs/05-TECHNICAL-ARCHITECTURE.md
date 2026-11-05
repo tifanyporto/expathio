@@ -498,6 +498,8 @@ Changes to the system should be reproducible and traceable.
 
 Deployment should be treated as a controlled process rather than a manual sequence of undocumented actions.
 
+**Status note (2026-11-05):** Continuous integration and code review are deferred. Tests run by hand before each merge, and there are no pull requests, as decided in ADR 0016 and ADR 0015. Release history (for example, version tags) is not yet defined; it is expected to be set in Phase 1 together with the deployment script.
+
 ## 17. Infrastructure and Cost Constraints
 
 The initial infrastructure should prioritize low fixed costs.
@@ -545,22 +547,32 @@ Every increase in architectural complexity should have a clear justification.
 
 ## 19. Open Technical Decisions
 
-The following decisions remain open and should be evaluated before implementation:
+### 19.1. Decided
 
-- Backend language and framework.
-- Frontend framework.
-- Primary database.
-- Background job mechanism.
-- Event processing strategy.
-- AI providers and model selection.
-- Hosting provider.
-- File storage.
-- Authentication strategy.
-- CI/CD tooling.
-- Testing strategy.
-- Monitoring and observability tooling.
-- Backup and recovery strategy.
-- Initial deployment topology.
+| Area | Decision | Record |
+|---|---|---|
+| Backend language and framework | TypeScript; NestJS 12 | ADR 0012, ADR 0013 |
+| Frontend framework | React 19, Vite 8, TanStack Query 5, for a web application | ADR 0012, ADR 0014 |
+| Primary database | PostgreSQL, in Docker on the Windows computer. The phone's version must match and is not yet checked | ADR 0014, ADR 0015 |
+| Database access | Drizzle ORM 0.45 | ADR 0013 |
+| Background job mechanism | pg-boss 12.38.0, using the PostgreSQL database | ADR 0014 |
+| Authentication strategy | better-auth 1.7.15, self-hosted, account data in the project's database | ADR 0012, ADR 0014 |
+| Testing strategy | Three levels: business rules, integration with PostgreSQL in Docker, browser flows; tests pass before each merge | ADR 0014, ADR 0016 |
+| Source code layout | One package with `server/`, `web/`, `shared/` and `ops/` | ADR 0019 |
+| Initial host | POCO F3 running postmarketOS, through Phase 3 | ADR 0011, ADR 0018 |
+| Initial deployment | Script copies the tested version to the phone, applies migrations, restarts, runs a health check; one process serves the API and the web files | ADR 0016, ADR 0019 |
+| Backup (part of the item) | Daily backup kept off the device | ADR 0011 |
+
+### 19.2. Still open
+
+- **CI/CD tooling.** Deferred until the project has code, as confirmed by the owner on 2026-11-05 (ADR 0016). Tests are run by hand before each merge. CI cannot reach the phone, so deployment stays with the script (ADR 0011).
+- **Monitoring and observability tooling.** Not decided. Section 15 lists what should be observed.
+- **File storage.** The abstraction is decided (ADR 0010: business code does not depend on local paths). The storage location and its technology are not.
+- **AI providers and model selection.** Not decided. AI starts in Phase 6 (ADR 0003), with a monthly budget of R$ 0 (ADR 0004).
+- **Event processing strategy.** Background jobs are decided (ADR 0014) and idempotency is required (ADR 0010). How business events are recorded and routed is not decided.
+- **Hosting provider for Phase 4.** Not decided. Required before the first participant is admitted (ADR 0011).
+- **Backup and recovery.** The daily off-device backup is decided (ADR 0011). The restore procedure, retention period and a tested restore are not.
+- **Deployment topology beyond the initial phone.** Not decided. Running more than one application instance or separate worker processes needs a new decision (ADR 0010, ADR 0019).
 
 Technology selection should consider developer productivity, ecosystem maturity, operational cost, maintainability, and the learning objectives of the project.
 
@@ -590,5 +602,8 @@ Format: each risk has an impact and a probability, rated low, medium or high, an
 | A library makes a breaking change or stops being maintained (Drizzle, NestJS, Vitest 5) | Medium | Low | Lock versions; upgrade only through a deliberate change; fall back to Vitest 4.1 if needed (ADR 0014) |
 | Phone battery wears out or overheats under continuous use | Medium | Medium | Use a charge limit if postmarketOS supports it; monitor temperature; plan battery replacement |
 | Development time is shorter than planned (5 to 10 hours a week) | Medium | High | Keep phases small; finish each phase's exit criteria before starting the next |
+| Wrong import between `server/`, `web/` and `shared/` (ADR 0019) | Medium | Medium | Follow the import rules in ADR 0019; check imports in review before each merge; a lint rule is an open option that needs owner approval |
+| ESM (modern JavaScript module system) configuration breaks the build or the server start (ADR 0019) | Medium | Medium | Set the module and import conventions in the Phase 1 TypeScript configuration; run build and start before each merge (ADR 0016) |
+| Development dependencies are installed on the production phone (ADR 0019) | Medium | Medium | The deployment script installs production dependencies only (`npm ci --omit=dev`) and checks it as a deployment step (ADR 0016) |
 
 The goal is to build an architecture capable of supporting a living simulated organization without making the infrastructure more complicated than the organization itself.
