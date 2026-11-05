@@ -41,6 +41,7 @@ Recorded in `docs/decisions/`:
 - `0017` — The first release includes the online store and the two physical stores of MONUMENT. Stock is tracked per location.
 - `0018` — The production phone is dedicated to Expathio. The old project is removed after a backup, and the device is renamed `expathio`.
 - `0019` — Phase 1 source code is one package at the repository root, with `server/`, `web/`, `shared/` and `ops/`.
+- `0020` — Releases are recorded and versioned as defined in `docs/decisions/0020-release-history-and-versioning.md`.
 
 Other decisions recorded in the documents:
 
