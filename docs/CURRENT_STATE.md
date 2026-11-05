@@ -76,4 +76,6 @@ Resolved on 2026-11-04:
 - `02-BUSINESS-SIMULATION.md` described online sales only, while `08-COMPANY.md` has two physical stores. Resolved by `docs/decisions/0017-physical-stores-in-first-release.md`; `02` sections 3, 6.2 and 6.3 updated.
 - `02-BUSINESS-SIMULATION.md`, section 15, listed questions already answered in `docs/decisions/0001-simulation-time.md` and `06-ROADMAP.md`. Each answer is now noted inline.
 
-None open at this time.
+Resolved on 2026-11-05:
+
+- `docs/decisions/0016-testing-and-deployment-strategy.md` said the GitHub repository was "not yet created". The wording now states that it did not exist on 2026-11-04, when the decision was taken. The decision to defer CI is unchanged.

@@ -15,7 +15,7 @@ The project has one person. There are no pull requests (ADR 0015), so nothing re
 ## Alternatives
 
 **Automated testing on each change (continuous integration, CI)**
-1. **Adopt CI now (for example, GitHub Actions).** Runs tests on every push. Discarded for now: it adds a service to set up and maintain before any code exists, and it needs the repository on GitHub, which is not yet created.
+1. **Adopt CI now (for example, GitHub Actions).** Runs tests on every push. Discarded for now: it adds a service to set up and maintain before any code exists, and it needs the repository on GitHub, which did not exist when this decision was taken on 2026-11-04.
 2. **Defer CI; run tests manually before merging a branch.** Chosen. Revisit when the number of features makes manual runs error-prone.
 
 **Deployment**
