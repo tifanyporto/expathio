@@ -40,6 +40,7 @@ Recorded in `docs/decisions/`:
 - `0016` — Three test levels (business rules, integration with PostgreSQL in Docker, browser flows); tests must pass before each merge; continuous integration deferred; scripted deployment to the phone with a health check and a rollback copy.
 - `0017` — The first release includes the online store and the two physical stores of MONUMENT. Stock is tracked per location.
 - `0018` — The production phone is dedicated to Expathio. The old project is removed after a backup, and the device is renamed `expathio`.
+- `0019` — Phase 1 source code is one package at the repository root, with `server/`, `web/`, `shared/` and `ops/`.
 
 Other decisions recorded in the documents:
 
@@ -63,7 +64,7 @@ Other decisions recorded in the documents:
 - **Hosting decision for Phase 4**: required before the first participant is admitted. The initial host is decided in ADR 0011.
 - **Continuous integration tool**: deferred. Tests are run manually before each merge (ADR 0016). To be decided when the number of features makes manual runs error-prone.
 - **Rollback procedure**: the deployment script does not exist yet. Its rollback steps are defined in Phase 1 (ADR 0016).
-- **Session structure**: the session map in `docs/SESSION-STRUCTURE.md` is APPROVED (2026-11-04), including the planned sessions for Phases 5 to 7 (section 4). The Phase 1 source code folder layout is still open.
+- **Session structure**: the session map in `docs/SESSION-STRUCTURE.md` is APPROVED (2026-11-04), including the planned sessions for Phases 5 to 7 (section 4). The Phase 1 source code folder layout is set by ADR 0019.
 - **Standard session prompt and role assignment**: kept by the owner, outside the project, so that sessions do not read it. Not a project document.
 - **Visual specifications**: the palette and design tokens in `09-DESIGN-SYSTEM.md` are a direction, not a final specification.
 

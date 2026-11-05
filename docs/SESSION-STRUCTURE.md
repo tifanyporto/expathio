@@ -313,6 +313,8 @@ Approved by the owner on 2026-11-04:
 - The local Docker setup belongs to Infrastructure and Operations, since it owns the environments.
 - Experience and Design is a separate session from Frontend Engineering, so the design is not approved by the session that builds it.
 
-Still open, to be decided when Phase 1 starts and the repository is created:
+Approved by the owner on 2026-11-05:
 
-- Where the source code folders live (`apps/` and `packages/` are common).
+- The Phase 1 source code folders follow ADR 0019: one package at the repository root, with `server/`, `web/`, `shared/` and `ops/`.
+
+Still open: none in this section.
