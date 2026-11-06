@@ -21,6 +21,7 @@ The structure is kept small on purpose. A session is added only when a phase nee
 - A session changes only the files listed under its own function.
 - Work that belongs to another function is written as a handoff in the session record, under "Pending", with the target function named. The owner routes it.
 - Sessions do not message each other. Information moves through documents, session records and the owner.
+- Questions that another function must answer are added to `docs/OPEN-QUESTIONS.md`, with the function they are addressed to. The owner closes each entry. The answering function writes the answer in the entry and links the decision record, if there is one.
 - Decisions are recorded by the function that owns the subject, and approved by the owner (`CLAUDE.md`, section 5).
 - A session that finds a contradiction between documents records it in `docs/CURRENT_STATE.md` and asks the owner. It does not pick a side.
 

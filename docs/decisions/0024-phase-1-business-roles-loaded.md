@@ -10,7 +10,7 @@
 
 `06-ROADMAP.md`, section 4, requires a "basic role and permission structure" in Phase 1.
 
-ADR 0009 decides that the first version has four participant roles, with the tools listed in `08-COMPANY.md`, section 5: Operations Coordinator, Customer Service Specialist, Sales Analyst and Financial Analyst.
+ADR 0009 decides that the first version has four participant roles, with the tools listed in `08-COMPANY.md`, section 5: Operations Assistant, Customer Service Representative, Sales Support Assistant and Finance Assistant.
 
 ADR 0023 decides that Phase 1 memberships are direct links, so each link needs a role to point to.
 

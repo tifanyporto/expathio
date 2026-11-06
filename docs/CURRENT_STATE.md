@@ -45,13 +45,15 @@ Recorded in `docs/decisions/`:
 - `0022` — Phase 1 uses test accounts only. No real person creates an account or signs in to the production phone before Phase 4.
 - `0023` — In Phase 1, membership in the organization is a direct link created by the owner or the test setup. Vacancy applications (ADR 0005) are not part of Phase 1.
 - `0024` — Phase 1 loads the four business roles from ADR 0009 as data, with no business behavior. Permissions are enforced by the backend.
-- `0025` — Refund and exchange requests from Customer Service are approved or rejected by the Financial Analyst.
+- `0025` — Refund and exchange requests from Customer Service are approved or rejected by the Finance Assistant.
 - `0026` — The vacancy application flow (ADR 0005) is built in Phase 2, not Phase 4.
+- `0027` — The four first-version role titles are Operations Assistant, Customer Service Representative, Sales Support Assistant and Finance Assistant.
 
 Other decisions recorded in the documents, added on 2026-11-06:
 
 - Permissions by role for the first version are approved (`08-COMPANY.md`, section 6.1).
 - The Phase 1 scope is approved, with nine items (`06-ROADMAP.md`, section 4).
+- The process for adding a role, which may also add functions, is approved (`08-COMPANY.md`, section 9). Whether a role can be added without a code change is open for Architecture and Quality.
 
 Other decisions recorded in the documents:
 
@@ -66,18 +68,10 @@ Other decisions recorded in the documents:
 
 ## Open
 
-- **GitHub connection mechanism**: long-term, not yet defined. No phase set yet; the owner decides when to specify it.
-- **Stock transfers between locations**: not defined (`02-BUSINESS-SIMULATION.md`, section 15, question 13). Required before Phase 3.
-- **Participant privacy and data rights**: not defined (`01-PRODUCT.md`, section 12). Required before Phase 4 admits the first real participant.
-- **Visual specification**: `09-DESIGN-SYSTEM.md` is a direction only. Required before the first screen in Phase 1.
-- **Open questions by phase** (approved by the owner on 2026-11-04): `03` before Phase 4; `04` before Phase 6; `07` before Phase 7. Simulated-day mechanics (`02`, section 11) are specified in Phase 5. Stock transfers between locations (`02`, question 13) are decided before Phase 3. Visual specification (`09`) is done before the first Phase 1 screen. Participant privacy (`01`, section 12) is done before Phase 4 admits the first real participant. The GitHub connection has no phase yet.
-- **Technical stack**: language, application type, repository and login approach are decided in ADR 0012. Backend framework and ORM are decided in ADR 0013. Background jobs, login, testing and frontend tools are decided in ADR 0014. Still open: the PostgreSQL and Node.js versions available on postmarketOS. Checking them belongs to the session that configures the device, not to the documentation work. See `05-TECHNICAL-ARCHITECTURE.md`, section 19.
-- **Hosting decision for Phase 4**: required before the first participant is admitted. The initial host is decided in ADR 0011.
-- **Continuous integration tool**: deferred. Tests are run manually before each merge (ADR 0016). To be decided when the number of features makes manual runs error-prone.
-- **Rollback procedure**: the deployment script does not exist yet. Its rollback steps are defined in Phase 1 (ADR 0016).
-- **Session structure**: the session map in `docs/SESSION-STRUCTURE.md` is APPROVED (2026-11-04), including the planned sessions for Phases 5 to 7 (section 4). The Phase 1 source code folder layout is set by ADR 0019.
+Open questions are listed in `docs/OPEN-QUESTIONS.md`, one entry per question, with the function it is addressed to. Do not repeat them here.
+
 - **Standard session prompt and role assignment**: kept by the owner, outside the project, so that sessions do not read it. Not a project document.
-- **Visual specifications**: the palette and design tokens in `09-DESIGN-SYSTEM.md` are a direction, not a final specification.
+- **Session structure**: the session map in `docs/SESSION-STRUCTURE.md` is APPROVED (2026-11-04), including the planned sessions for Phases 5 to 7 (section 4). The Phase 1 source code folder layout is set by ADR 0019.
 
 ## Open Inconsistencies
 
