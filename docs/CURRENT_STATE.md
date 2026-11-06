@@ -48,6 +48,7 @@ Recorded in `docs/decisions/`:
 - `0025` — Refund and exchange requests from Customer Service are approved or rejected by the Finance Assistant.
 - `0026` — The vacancy application flow (ADR 0005) is built in Phase 2, not Phase 4.
 - `0027` — The four first-version role titles are Operations Assistant, Customer Service Representative, Sales Support Assistant and Finance Assistant.
+- `0028` — Phase 1 login uses e-mail, the post-login page shows the organization and role with a simulated-data label, there is no password recovery in Phase 1, and the text "Expathio" is used until a logo is approved.
 
 Other decisions recorded in the documents, added on 2026-11-06:
 

@@ -125,6 +125,16 @@
 - **Needed by:** when the first Phase 1 functions are specified
 - **Question:** the list of existing functions, with the records each one uses and the roles that use it (`08-COMPANY.md`, section 9)
 
+### Q-016 — Who creates the Expathio logo, and the MONUMENT visual identity
+
+- **Status:** IN DISCUSSION
+- **Asked by:** Experience and Design (through the owner)
+- **Answered by:** Experience and Design, approved by the owner
+- **Needed by:** before the logo appears in any screen. The text "Expathio" is used until then (ADR 0028).
+- **Answer (owner, 2026-11-06):** Experience and Design creates the logo.
+- **Still open:** how the artwork is made (by hand, with a tool, or by an external designer). Experience and Design proposes the options. A paid designer needs the owner's approval (`CLAUDE.md`, section 2).
+- **Also open:** the MONUMENT visual identity. `08-COMPANY.md`, section 2, refers to a "company's visual specification" that does not exist yet. Experience and Design is the natural owner, but this is not yet confirmed.
+
 ### Q-014 — Lint rule for imports between folders
 
 - **Status:** PROPOSED
