@@ -1,6 +1,6 @@
 # Expathio — Visual Identity and Design System
 
-**Status:** APPROVED (Phase 1 scope: sign-in screen and application shell)  
+**Status:** APPROVED for the sign-in screen (7.9). The application shell (6.1) and the post-login page (7.10) are specified, but their visual design is pending owner review  
 **Approved by:** Project owner, 2026-11-06  
 **Document type:** Design specification  
 **Project:** Expathio
@@ -88,6 +88,8 @@ Status (each one is used with text, never alone). Values confirmed by the owner 
 
 Status tints for backgrounds: success `#DCF1E5` with text `#14532F`; warning `#FBF1DC` with text `#5C3B00`. Phase 1 uses only `status-error`.
 
+Error text on the sign-in notice uses a lighter red, `error-text` `#CC4438`. It is for text only, never for borders or fills. Contrast 4.71:1 on `neutral-0` (section 4.4). Approved by the owner on 2026-11-06 with the sign-in demonstration.
+
 ### 4.3 Semantic Tokens
 
 Components use these names, which point to the tones above:
@@ -123,6 +125,7 @@ Measured contrast ratios (WCAG 2.x). Text needs at least 4.5:1; control boundari
 | `purple-800` on `purple-100` (selected item, highlight band) | 9.9:1 | Pass |
 | `neutral-800` on `neutral-100` (tag) | 12.3:1 | Pass |
 | `neutral-0` on `status-error` | 6.5:1 | Pass |
+| `#CC4438` (`error-text`) on `neutral-0` | 4.71:1 | Pass (text only) |
 | `status-success` on `neutral-0` | 5.3:1 | Pass |
 | `status-warning` on `neutral-0` | 5.9:1 | Pass |
 | `status-info` on `neutral-0` | 6.5:1 | Pass |
@@ -230,7 +233,7 @@ Buttons say what they do ("Sign in", "Sign out"), never "OK" or "Submit".
 - Label above the field, `type-label`.
 - Field: `color-surface`, 1 px `color-border-control`, radius 10 px, height 40 px, padding 10 px 12 px, text `type-body-large`.
 - Helper text below, `type-caption`, `color-text-muted`.
-- Error text below, `type-caption`, in `status-error` and with the text saying what to correct. The field border becomes 2 px `status-error`.
+- Error text below, `type-caption`, in `status-error`, with the text saying what to correct. The field border does not change color: the error is shown by the text and by the notice (7.4), not by a red border.
 
 | State | Field |
 |---|---|
@@ -238,9 +241,9 @@ Buttons say what they do ("Sign in", "Sign out"), never "OK" or "Submit".
 | Hover | Border `color-text-muted` |
 | Focus | Focus outline |
 | Disabled | Background `neutral-50`, text `color-text-muted`, border `neutral-200` |
-| Error | Border 2 px `status-error`, error text below |
+| Error | Border `color-border-control` (unchanged), error text below in `status-error` |
 
-Required fields say "required" in the label, not only an asterisk.
+Labels contain only the field name. Phase 1 fields are all required, so no field is marked as required. A field that is optional says so in its label.
 
 ### 7.3 Table
 
@@ -248,7 +251,7 @@ Not used in Phase 1. Specified in Phase 2, when a screen with a table exists.
 
 ### 7.4 Notice
 
-- Layout: `color-surface` background, 2 px left border in the status color, text `color-text`, radius 10 px, padding 12 px 14 px. The notice title is in the status color, with its text.
+- Layout: `color-surface` background, 1 px `color-border` border, radius 10 px, padding 12 px 14 px. Error notices: title and text in `error-text` (`#CC4438`, section 4.2). Other status notices use the status color with its text.
 - Phase 1 uses one notice: the sign-in failure notice, with `status-error`.
 - Notices do not close on their own. The user dismisses them, or the next state replaces them.
 
@@ -287,11 +290,20 @@ The first screen the user sees. It is the only screen outside the shell.
   1. The simulated-data marker (7.6).
   2. Page title, `type-heading-1`: "Sign in".
   3. Sign-in failure notice (7.4), only after a failed attempt. Text: "The email or password is not correct." It is shown above the fields.
-  4. Field "Email (required)", type email (7.2).
-  5. Field "Password (required)", type password (7.2).
+  4. Field "Email", type email (7.2).
+  5. Field "Password", type password (7.2).
   6. Primary button "Sign in", full width of the panel (7.1).
 - **Not on this screen in Phase 1:** sign-up, organization selection, and any other account option. Product defined that Phase 1 uses test accounts only (ADR 0022) and one fixed organization (ADR 0023).
-- **After a successful sign-in:** the user enters the application shell (6.1).
+- **After a successful sign-in:** the user sees the post-login page inside the application shell (7.10).
+
+### 7.10 Post-login Page (Phase 1)
+
+Content defined by ADR 0028, `docs/decisions/0028-experience-screen-decisions-phase-1.md`. **Visual design not yet approved by the owner.** The layout shown in the demonstration (shell with this content) has not been reviewed.
+
+- Shown inside the shell (6.1), in the content area.
+- Page title: the organization name ("MONUMENT"), `type-heading-1`.
+- Content: the role of the account's membership (for example "Operations Assistant"), `type-body`, and the simulated-data marker (7.6).
+- No business content in Phase 1. The tools start in Phase 2 or later.
 
 ## 8. Icons
 
@@ -347,15 +359,16 @@ For Frontend Engineering, when this specification is approved:
 7. **Status colors:** values in section 4.2, confirmed for now.
 8. **Phase 1 screens:** the sign-in screen (7.9) and the application shell (6.1) only. Navigation items are defined in Phase 2.
 9. **Direction:** the refined direction with brand in points (section 2) is approved.
+10. **Sign-in demonstration:** approved by the owner. Labels without "required"; input borders stay neutral in the error state; error notice with a 1 px border and error text in `error-text` (`#CC4438`).
 
 ### 13.2 Open points to clarify before implementation
 
 These are not decided. They belong to Product, unless noted.
 
-1. **Sign-in identifier.** This specification assumes the email address is the identifier. Product to confirm.
-2. **Page after sign-in.** Its title and content are not defined. Product to define. Until then, the content area holds the page header only.
-3. **Password recovery.** Product has not defined it for Phase 1. It is not shown in this specification.
-4. **Expathio logo.** Not defined. The shell uses text until a logo is defined.
+1. **Sign-in identifier.** Answered by ADR 0028: e-mail address (7.9).
+2. **Page after sign-in.** Answered by ADR 0028: organization name, role and simulated-data label (7.10).
+3. **Password recovery.** Answered by ADR 0028: not in Phase 1, not shown.
+4. **Expathio logo.** Not defined. The shell uses the text "Expathio" until a logo is approved (ADR 0028). Routed in `docs/OPEN-QUESTIONS.md`, Q-016.
 
 ### 13.3 Routed to other functions
 

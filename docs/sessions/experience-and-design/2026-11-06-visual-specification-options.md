@@ -133,6 +133,20 @@ Routed to other functions (not done here):
 - **Product and Documentation:** `docs/CURRENT_STATE.md`, "Visual specification" open item. Update when the specification is approved; this approval makes it applicable.
 - **Frontend Engineering:** install Public Sans with a pinned version in the first screen, and record it in its own session record.
 
+### Owner's decisions, sign-in demonstration (2026-11-06, third round)
+
+Demonstration published as a private artifact, page `tela-entrada-casca.html` (scratchpad, not a project file): https://claude.ai/artifact/71bzpg7utQgKEZFKNqMPpy. It shows the sign-in screen in three states and the shell after sign-in. Versions 1 to 4.
+
+- Labels: "(required)" removed. The owner found it unnecessary. `09`, section 7.2, now says labels contain only the field name.
+- Error state: the red border on the input fields was removed. Input borders stay `color-border-control`. The error is shown by the notice and the field text.
+- Notice: the 2 px red left border was replaced by a 1 px `color-border` border.
+- Error text: a lighter red, `#CC4438` (token `error-text`), for text only. Contrast 4.71:1 on white. The owner approved it. Recorded in `09`, section 4.2 and 4.4.
+- Post-login page: specified in `09`, section 7.10, following ADR 0028 (organization name, role, simulated-data label, no business content).
+- The owner approved the two sign-in states (default and after a failed attempt), in the words "Está ótimo".
+- **Not approved:** the application shell (screen 2) and the post-login page in the demonstration. The owner has not reviewed them. `09`, section 6.1 and 7.10, stay pending visual review. Its content comes from ADR 0028, which is approved.
+
+Changes to `09`: sections 4.2, 4.4, 7.2, 7.4, 7.9, new 7.10, 13.1 (item 10) and 13.2 (items 1 to 3 answered by ADR 0028).
+
 ## Tests and Results
 
 No code and no tests were run. Checks that were executed:
@@ -148,7 +162,8 @@ No code and no tests were run. Checks that were executed:
 
 This function's own pending items:
 
-- Owner answers to the four open points in `09`, section 13.2 (sign-in identifier, page after sign-in, password recovery, logo). These need Product's answers first.
+- Expathio logo: open. Routed to Q-016 in `docs/OPEN-QUESTIONS.md`. Text "Expathio" is used until then (ADR 0028).
+- `docs/CURRENT_STATE.md` visual specification item: routed to Q-017 in `docs/OPEN-QUESTIONS.md` (Product and Documentation).
 - Remaining in this function: none beyond the open points above. The specification and ADR 0021 are APPROVED.
 
 For other functions (routed, not done here): see "Routed to other functions" above.
