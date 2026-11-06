@@ -18,7 +18,7 @@ The first version needs a set of participant roles and tools that supports a com
 
 ## Decision
 
-The first version has four participant roles: Operations Coordinator, Customer Service Specialist, Sales Analyst and Financial Analyst. Each receives the tools listed in `08-COMPANY.md`, section 3. Common tools are shared by all roles. The sales dashboard is read-only. Technology, Marketing, Product and Design, and Executive roles are deferred.
+The first version has four participant roles: Operations Coordinator, Customer Service Specialist, Sales Analyst and Financial Analyst. Each receives the tools listed in `08-COMPANY.md`, section 5. Common tools are shared by all roles. The sales dashboard is read-only. Technology, Marketing, Product and Design, and Executive roles are deferred.
 
 ## Rationale
 

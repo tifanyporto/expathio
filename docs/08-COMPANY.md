@@ -78,6 +78,35 @@ Each tool shows only the data its role may see and act on (`01-PRODUCT.md`, sect
 - Sales dashboards are read-only for every role.
 - No tool connects to an external service in the first version (`docs/decisions/0009-first-version-tools-and-roles.md`).
 
+### 6.1 Permissions by Role (APPROVED)
+
+Status: APPROVED by the owner on 2026-11-06. The refund row follows `docs/decisions/0025-refund-decision-by-financial-analyst.md`. The backend enforces these rules (`CLAUDE.md`, section 10; `docs/decisions/0024-phase-1-business-roles-loaded.md`).
+
+Key: **Change** = can create and modify records of this type. **Read** = can view, cannot change. **Request** = can send a request that another role decides. **—** = no access.
+
+| Record | Operations Coordinator | Customer Service Specialist | Sales Analyst | Financial Analyst |
+|---|---|---|---|---|
+| Stock levels (per location) | Change (replenishment requests) | — | — | — |
+| Orders | Read | Read (only the customer's own orders, for a case) | Read | Read |
+| Fulfillment queue and deliveries | Change | — | — | — |
+| Customer cases | — | Change (own cases) | — | — |
+| Customer contact history | — | Read | — | — |
+| Refund or exchange requests | — | Request (sent to Finance) | — | Read; approves or rejects (ADR 0025) |
+| Payment and refund ledger | — | — | — | Change |
+| Revenue report | — | — | — | Change |
+| Sales dashboard | Read | Read | Read | Read |
+
+Common to all roles:
+
+| Record | Access |
+|---|---|
+| Own tasks on the task board | Change (status and notes) |
+| Internal messages | Send and read, for their own role |
+| Organization documents | Read |
+| Session summary | Read, for their own role |
+
+Refund and exchange requests are approved or rejected by the Financial Analyst (`docs/decisions/0025-refund-decision-by-financial-analyst.md`).
+
 ## 7. Vacancies
 
 Participants apply to predefined vacancies (`docs/decisions/0005-admission-model.md`). Each participant role has one occupant (`docs/decisions/0007-first-version-participant-rules.md`), so each role has one vacancy at a time. When a role is filled, its vacancy closes. When the occupant leaves, the role returns to the simulation and a new vacancy opens.

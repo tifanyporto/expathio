@@ -72,19 +72,21 @@ A sufficiently defined product and technical direction to begin implementation w
 
 Build the foundation required to create and access organizations.
 
+Scope approved by the owner on 2026-11-06. Accounts are test accounts only (`docs/decisions/0022-phase-1-test-accounts-only.md`). Membership is a direct link (`docs/decisions/0023-phase-1-direct-membership.md`). The four business roles are loaded as data (`docs/decisions/0024-phase-1-business-roles-loaded.md`).
+
 ### Scope
 
-- Project initialization.
-- Backend foundation.
-- Frontend foundation.
-- Database integration.
-- Authentication.
-- Basic user management.
-- A fixed initial organization. Creating organizations is a future step (see `01-PRODUCT.md`, section 10).
-- Organization membership.
-- Basic role and permission structure.
-- Initial desktop application layout.
-- Development and test environments.
+1. Project initialization and development and test environments, reproducible on the development computer.
+2. Backend foundation, with database integration and migrations.
+3. Frontend foundation, with the initial layout for computer screens.
+4. Authentication: login and logout, with test accounts.
+5. Basic user management: account data for test accounts.
+6. A fixed initial organization, MONUMENT. Creating organizations is a future step (see `01-PRODUCT.md`, section 10).
+7. Organization membership: a direct link between an account, the organization and a role.
+8. Basic role and permission structure: the four business roles from `08-COMPANY.md`, section 5, with the permissions in section 6.1.
+9. Data isolation by organization from the start (`docs/decisions/0010-scalability-foundations.md`).
+
+Item 3 is read as the initial layout for computer screens, confirmed by the owner on 2026-11-06. The application is a web application (`docs/decisions/0012-initial-technology-direction.md`).
 
 ### Technical Focus
 
@@ -128,7 +130,7 @@ Create the first simulated organization with a coherent business structure.
 - Product catalog.
 - Basic inventory.
 - Basic organizational information.
-- Initial participant role assignment.
+- Initial participant role assignment, through vacancies: participants apply to predefined vacancies, and an accepted application assigns the role (`docs/decisions/0026-vacancy-application-in-phase-2.md`).
 
 ### Expected Outcome
 

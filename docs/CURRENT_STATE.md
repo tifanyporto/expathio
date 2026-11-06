@@ -42,6 +42,16 @@ Recorded in `docs/decisions/`:
 - `0018` — The production phone is dedicated to Expathio. The old project is removed after a backup, and the device is renamed `expathio`.
 - `0019` — Phase 1 source code is one package at the repository root, with `server/`, `web/`, `shared/` and `ops/`.
 - `0020` — Releases are recorded and versioned as defined in `docs/decisions/0020-release-history-and-versioning.md`.
+- `0022` — Phase 1 uses test accounts only. No real person creates an account or signs in to the production phone before Phase 4.
+- `0023` — In Phase 1, membership in the organization is a direct link created by the owner or the test setup. Vacancy applications (ADR 0005) are not part of Phase 1.
+- `0024` — Phase 1 loads the four business roles from ADR 0009 as data, with no business behavior. Permissions are enforced by the backend.
+- `0025` — Refund and exchange requests from Customer Service are approved or rejected by the Financial Analyst.
+- `0026` — The vacancy application flow (ADR 0005) is built in Phase 2, not Phase 4.
+
+Other decisions recorded in the documents, added on 2026-11-06:
+
+- Permissions by role for the first version are approved (`08-COMPANY.md`, section 6.1).
+- The Phase 1 scope is approved, with nine items (`06-ROADMAP.md`, section 4).
 
 Other decisions recorded in the documents:
 
@@ -70,6 +80,12 @@ Other decisions recorded in the documents:
 - **Visual specifications**: the palette and design tokens in `09-DESIGN-SYSTEM.md` are a direction, not a final specification.
 
 ## Open Inconsistencies
+
+Resolved on 2026-11-06:
+
+- `docs/decisions/0009-first-version-tools-and-roles.md`, `01-PRODUCT.md`, section 3.5, and `docs/decisions/0024-phase-1-business-roles-loaded.md` pointed to `08-COMPANY.md`, section 3, for the role tools. The tools are in section 5. References corrected; no change to the decision itself.
+
+- `06-ROADMAP.md`, section 4, puts login in Phase 1, while ADR 0011 and `01-PRODUCT.md`, section 12, restrict real participant data until Phase 4. Resolved by `docs/decisions/0022-phase-1-test-accounts-only.md`: Phase 1 uses test accounts only.
 
 Resolved on 2026-11-04:
 

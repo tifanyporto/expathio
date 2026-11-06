@@ -138,7 +138,7 @@ Examples may include:
 
 Development environments and version control or deployment workflows are long-term possibilities, not part of the initial release.
 
-Not every role should have access to every tool. The tools for each role in the first version are listed in `08-COMPANY.md`, section 3 (`docs/decisions/0009-first-version-tools-and-roles.md`).
+Not every role should have access to every tool. The tools for each role in the first version are listed in `08-COMPANY.md`, section 5 (`docs/decisions/0009-first-version-tools-and-roles.md`).
 
 The available workspace should reflect the participant's position and permissions.
 
