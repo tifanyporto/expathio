@@ -133,7 +133,17 @@ Version facts come from web search (secondary sources, not the official sites). 
 - `docker compose -f ops\docker-compose.yml config --quiet` with a throwaway value for `POSTGRES_PASSWORD` (not saved): exit 0. The file is valid.
 - `ops\check-local.ps1`: Node OK, Docker engine OK; compose file, container and port FAIL as expected, because `ops/.env` and the container do not exist yet.
 
-Not done yet: `ops/.env`, `docker compose up -d`, the image download, the health check and the `psql` connection. Those need the owner's password choice.
+**Database started (same day, without the phone):**
+- `ops/.env` created from `.env.example`, with a generated local password. It is git-ignored (`git check-ignore`: `.gitignore:2:.env`). The password is not written in this record or in chat.
+- `docker compose up -d` (run in `ops/`): image `postgres:18.4` pulled; volume `expathio-dev_expathio-pgdata` and container `expathio-postgres-dev` created and started.
+- `docker compose ps`: `Up ... (healthy)`, port `127.0.0.1:5433->5432/tcp`.
+- Server version, inside the container: `PostgreSQL 18.4 (Debian 18.4-1.pgdg13+1)`. Query run with `docker exec expathio-postgres-dev psql -U expathio -d expathio_dev -c "SELECT version();"`.
+- `check-local.ps1`: all five checks OK (Node 24, Docker engine 29.9.3, compose file, container healthy, port 5433), exit 0.
+- Not verified: the host `psql` on port 5433. The earlier `psql` 16.13 at `C:\Program Files\PostgreSQL\16\bin` is no longer there, and `Get-Command psql` finds nothing. TCP to 127.0.0.1:5433 is open.
+
+**Found and not explained:** the Windows service `postgresql-x64-16` (listed as Running on 2026-11-09 earlier) no longer exists, and `C:\Program Files\PostgreSQL\16` is gone, but 127.0.0.1:5432 still accepts connections. Who listens on 5432 is not known. The owner should check it; this session did not change anything on 5432.
+
+Still not done: the phone (no access), and the `psql` host check on 5433.
 - **Owner decision (Q-007):** approve or change PostgreSQL 18.4 and Node 24 for the local computer.
 - **Owner decision (not in Q-007):** the Windows PostgreSQL 16 service on port 5432. Keep it, stop it, or remove it. ADR 0015 chose Docker, and the Expathio database does not use this service. This session did not change it.
 - **Phone part of Q-007 — OWNER-ONLY, OPEN.** Not planned now. When phone access returns: check the PostgreSQL major and Node.js version on the phone, and whether the PostgreSQL major matches Docker (ADR 0015). The phone is not touched in this session (ADRs 0011, 0018).
@@ -160,6 +170,6 @@ Do not change: `server/` (Platform Engineering works there), the phone, the Wind
 
 ## Next Step
 
-1. The owner installs Docker Desktop (guide, section 2), creates `ops/.env` (section 3), and runs `docker compose up -d` (section 4). Then the owner sends the output of `docker compose ps`, `psql ... "SELECT version();"` (section 5) and `check-local.ps1`.
+1. Done on this computer: Docker Desktop installed, `ops/.env` created, `docker compose up -d` run, container healthy, server 18.4 confirmed (see the section above). Still to do: the host `psql` check on port 5433 (guide section 5), once a `psql` client is available again. Then the owner reviews the Windows PostgreSQL service question.
 2. The owner answers Q-007 (approve PostgreSQL 18.4 and Node 24, or choose other versions).
 3. After that, this session re-runs the checks and records the real results. It then checks the official version pages and updates the pin if needed.
