@@ -36,3 +36,6 @@ CLAUDE.local.md
 
 # Project instructions kept out of the repository by the owner's decision (2026-11-04)
 CLAUDE.md
+
+# Drizzle migration files are plain SQL and must be versioned (ADR 0016)
+!server/db/migrations/*.sql

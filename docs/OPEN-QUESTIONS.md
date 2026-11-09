@@ -150,3 +150,45 @@
 - **Answered by:** Architecture and Quality, approved by the owner
 - **Needed by:** deferred
 - **Question:** whether a lint tool should block imports that cross folder rules (ADR 0019, consequences). Adding a new tool needs the owner's approval.
+
+### Q-017 — Docker Desktop is not installed on the Windows computer
+
+- **Status:** PROPOSED
+- **Asked by:** Platform Engineering
+- **Answered by:** owner (installation on the Windows computer; needs administrator rights and WSL2)
+- **Needed by:** now. Phase 1 cannot run migrations, the seed, login or the integration tests without it.
+- **Question:** `docker` does not exist on the Windows computer (checked on 2026-11-09 with PowerShell and Git Bash). ADR 0015 requires Docker Desktop with WSL2 for local PostgreSQL. Please install it and tell Platform Engineering the PostgreSQL image tag to use. The major version must match the one on the phone (Q-007, Infrastructure and Operations).
+- **Alternative (owner decision):** a native PostgreSQL on Windows. ADR 0015 discarded it, so it needs a new decision.
+- **Source:** `docs/decisions/0015-development-environment-and-repository.md`, decision 1 and consequences
+
+### Q-018 — PostgreSQL driver for Drizzle (`pg`) is not an approved dependency
+
+- **Status:** PROPOSED
+- **Asked by:** Platform Engineering
+- **Answered by:** owner
+- **Needed by:** now. Blocks the database connection, migrations, the seed, login with a real database and the integration tests.
+- **Question:** ADR 0013 names Drizzle, and ADR 0014 names better-auth, but neither names the PostgreSQL driver that Drizzle uses to talk to the database. The standard choice is `pg` (node-postgres, MIT licence, no service, no cost). Approve `pg` and its type package `@types/pg` for the backend? Until then, `server/db/database.ts` stops with an error and no driver is installed.
+- **Recommendation:** approve `pg`. It is the driver that the approved Drizzle line documents for PostgreSQL. Cost R$ 0 per month. Maintenance is low.
+- **Source:** `docs/decisions/0013-backend-framework-and-orm.md`; `docs/decisions/0014-remaining-stack-tools.md`
+
+### Q-019 — Confirm build and migration tooling outside the named ADR libraries
+
+- **Status:** PROPOSED
+- **Asked by:** Platform Engineering
+- **Answered by:** owner
+- **Needed by:** before the first commit of the backend is merged
+- **Question:** the backend uses these packages, which no ADR names by name. The session took them as part of the approved lines. Confirm, or say which to drop:
+  - `drizzle-kit` 0.31.11: the Drizzle tool that writes migration SQL files from the schema (part of the Drizzle family in ADR 0013).
+  - `typescript` 5.9.3 and `@types/node`, `@types/express`: the compiler and type files that the language choice (ADR 0012) needs.
+  - `reflect-metadata` and `rxjs`: required by NestJS 12 as its peer packages.
+  - `vitest` 5.1.0 is named by ADR 0014.
+- **Source:** `docs/decisions/0013-backend-framework-and-orm.md`; `docs/decisions/0014-remaining-stack-tools.md`
+
+### Q-020 — npm audit reports four moderate vulnerabilities
+
+- **Status:** PROPOSED
+- **Asked by:** Platform Engineering
+- **Answered by:** Architecture and Quality, approved by the owner
+- **Needed by:** before the first production deployment (Phase 1 exit)
+- **Question:** `npm install` on 2026-11-09 reported four moderate-severity advisories. The fix `npm audit fix --force` changes major versions, so the session did not run it. Decide how to handle the advisories, and whether `npm audit` is run before each merge (ADR 0016).
+- **Source:** `package-lock.json` at branch `feat/phase-1-backend-foundation`

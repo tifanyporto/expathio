@@ -1,0 +1,34 @@
+{
+  "name": "expathio",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Expathio: persistent simulated organization (Phase 1 backend foundation).",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate --config server/drizzle.config.ts",
+    "db:seed": "node dist/server/db/run-seed.js",
+    "start": "node dist/server/main.js"
+  },
+  "dependencies": {
+    "@nestjs/common": "12.3.2",
+    "@nestjs/core": "12.3.2",
+    "@nestjs/platform-express": "12.3.2",
+    "better-auth": "1.7.15",
+    "drizzle-orm": "0.45.4",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.3",
+    "@types/node": "24.10.1",
+    "drizzle-kit": "0.31.11",
+    "typescript": "5.9.3",
+    "vitest": "5.1.0"
+  }
+}
