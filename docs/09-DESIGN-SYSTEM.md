@@ -387,7 +387,7 @@ Geometry, on a 24-unit grid: circle of radius 8 centered at (12, 12), stroke wid
 
 ### 11.2 MONUMENT Identity (proposal, Q-016)
 
-Not specified here. Proposed: a separate document, owned by Experience and Design, that defines the fictional company's logo, typeface and colors, linked from `08-COMPANY.md`, section 2. It stays out of the Expathio interface. The owner confirms the owner and the location of that document. Today `08-COMPANY.md`, section 2, refers to a company visual specification that does not exist (section 13.3).
+Not specified here. Proposed: a separate document, owned by Experience and Design, that defines the fictional company's logo, typeface and colors, linked from `08-COMPANY.md`, section 2. It stays out of the Expathio interface. The owner confirmed on 2026-11-09 that Experience and Design owns this document. Its location is still to be decided. Today `08-COMPANY.md`, section 2, refers to a company visual specification that does not exist (section 13.3).
 
 ## 12. Implementation Notes
 
@@ -426,7 +426,7 @@ These are not decided. They belong to Product, unless noted.
 ### 13.3 Routed to other functions
 
 - **MONUMENT company visual specification.** `08-COMPANY.md`, section 2, refers to a document that does not exist, and no owner is assigned. Proposed as a separate document in section 11.2 (Q-016). Routed to Product and Documentation to correct the reference in `08`.
-- **`docs/CURRENT_STATE.md`, "Visual specification" open item.** Routed to Product and Documentation, to update when this specification is approved.
+- **`docs/CURRENT_STATE.md`, visual specification record.** Product and Documentation reported on 2026-11-09 that `main` does not list the visual specification as an open item, and that it has added the approvals of ADR 0021 and of the logo. The closure of Q-017 is the owner's. This section is kept as a record of the question.
 
 ### 13.4 Not blocking this specification
 
@@ -441,13 +441,13 @@ Status: **PROPOSED, IN DISCUSSION.** The screens of Phase 1 are listed below. Sc
 | 1 | Sign in | 1 | Outside the shell | 7.9 | Approved by the owner, 2026-11-06 |
 | 2 | Post-login page: organization, role, simulated-data marker | 1 | Content area of the shell | 7.10 | Content per ADR 0028. Visual design not approved |
 | — | Application shell | 1 | Every signed-in screen | 6.1 | Specified. Visual design not approved |
-| — | Member list of the organization | 1, proposed | Content area of the shell | Q-011 only | Proposed, not approved. Not in 7.10 |
+| — | Member list of the organization | — | — | Q-011 | Removed from Phase 1 by the owner, 2026-11-09. Not in 7.10 |
 | — | Navigation items | 2 and later | Navigation column | 7.5 | Not defined in Phase 1 |
 
 Rules:
 
 - Phase 1 has no sign-up, no password recovery and no organization selection (ADR 0022, ADR 0023, ADR 0028).
-- The member list is not part of Phase 1 until the owner approves it. If approved, section 7.10 is updated to match.
+- The member list is not part of Phase 1. The owner removed it on 2026-11-09 (Q-018). If it returns, section 7.10 and this table are updated, and Q-018 is reopened.
 - The member list needs an access rule before it is built. `08-COMPANY.md`, section 6.1, has no row for the list today. Routed to Product and Documentation.
 - Navigation items are a Phase 2 decision (7.5). Hiding a navigation item is not access control (`CLAUDE.md`, section 10).
 
