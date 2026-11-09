@@ -125,6 +125,7 @@ Version facts come from web search (secondary sources, not the official sites). 
 ## Pending
 
 - **Owner (needs a physical action):** install Docker Desktop with WSL 2, following `ops/local-setup.md`, section 2. Then run the guide and `check-local.ps1`, and send the output.
+- **Docker install attempt (2026-11-09):** `winget install --id Docker.DockerDesktop --exact` (package 4.99.0, publisher Docker Inc., installer hash verified) was run twice from the session. Both runs stopped with exit code -1978335226: the installer needs administrator rights and no elevation prompt was answered from the session. Docker is still not installed (`C:\Program Files\Docker\Docker\Docker Desktop.exe` not found). The session did not try to bypass the elevation prompt. The owner must run the install from an administrator PowerShell, then the checks in section 2 of the guide.
 - **Owner decision (Q-007):** approve or change PostgreSQL 18.4 and Node 24 for the local computer.
 - **Owner decision (not in Q-007):** the Windows PostgreSQL 16 service on port 5432. Keep it, stop it, or remove it. ADR 0015 chose Docker, and the Expathio database does not use this service. This session did not change it.
 - **Phone part of Q-007 — OWNER-ONLY, OPEN.** Not planned now. When phone access returns: check the PostgreSQL major and Node.js version on the phone, and whether the PostgreSQL major matches Docker (ADR 0015). The phone is not touched in this session (ADRs 0011, 0018).
