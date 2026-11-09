@@ -16,7 +16,7 @@ The organization is fictional. Its identity and catalog are chosen to keep the f
 
 - **Name:** MONUMENT.
 - **Business:** a streetwear fashion brand (`02-BUSINESS-SIMULATION.md`, section 3). It sells primarily online to individual customers, and it has two physical stores at the start of the simulation.
-- **Logo:** the name itself, written in a stylized typeface. The typeface is chosen in the company's visual specification, not in `09-DESIGN-SYSTEM.md`, which covers only the Expathio interface.
+- **Logo:** the name itself, written in a stylized typeface. The typeface is chosen in a separate MONUMENT visual specification, proposed by Experience and Design and owned by it (owner confirmed 2026-11-09). That document does not exist yet (`docs/OPEN-QUESTIONS.md`, Q-016). `09-DESIGN-SYSTEM.md` covers only the Expathio interface.
 - **Market:** a single country and a single currency, shown as US dollars (USD) in the simulation.
 
 ## 3. Catalog and Pricing
