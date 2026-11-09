@@ -163,9 +163,10 @@
 
 ### Q-018 — PostgreSQL driver for Drizzle (`pg`) is not an approved dependency
 
-- **Status:** PROPOSED
+- **Status:** APPROVED
 - **Asked by:** Platform Engineering
 - **Answered by:** owner
+- **Owner answer (2026-11-09):** `pg` 8.23.1 and `@types/pg` 8.23.1 approved and installed.
 - **Needed by:** now. Blocks the database connection, migrations, the seed, login with a real database and the integration tests.
 - **Question:** ADR 0013 names Drizzle, and ADR 0014 names better-auth, but neither names the PostgreSQL driver that Drizzle uses to talk to the database. The standard choice is `pg` (node-postgres, MIT licence, no service, no cost). Approve `pg` and its type package `@types/pg` for the backend? Until then, `server/db/database.ts` stops with an error and no driver is installed.
 - **Recommendation:** approve `pg`. It is the driver that the approved Drizzle line documents for PostgreSQL. Cost R$ 0 per month. Maintenance is low.
@@ -192,3 +193,12 @@
 - **Needed by:** before the first production deployment (Phase 1 exit)
 - **Question:** `npm install` on 2026-11-09 reported four moderate-severity advisories. The fix `npm audit fix --force` changes major versions, so the session did not run it. Decide how to handle the advisories, and whether `npm audit` is run before each merge (ADR 0016).
 - **Source:** `package-lock.json` at branch `feat/phase-1-backend-foundation`
+
+### Q-021 — A PostgreSQL server already listens on localhost:5432
+
+- **Status:** PROPOSED
+- **Asked by:** Platform Engineering
+- **Answered by:** owner
+- **Needed by:** before the first migration is run on this computer
+- **Question:** on 2026-11-09 a PostgreSQL server answered on localhost:5432, and password login for user `expathio` failed. The session did not try any password. ADR 0015 requires Docker for local PostgreSQL, and Docker is not installed (Q-017). Is this server yours, and should Platform Engineering use it, or should it be stopped so that the Docker container can use port 5432?
+- **Source:** `docs/decisions/0015-development-environment-and-repository.md`

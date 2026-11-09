@@ -177,7 +177,7 @@ Test coverage in terms of rules:
 
 ## Pending
 
-1. **Database driver (Q-018).** `server/db/database.ts` must create a Drizzle client once `pg` is approved. The same change lets `run-seed.ts` and `main.ts` run. Migrations need the migrator from `drizzle-orm/node-postgres/migrator`, which also needs `pg`.
+1. **Database driver (Q-018): approved and done on 2026-11-09.** `pg` 8.23.1 and `@types/pg` 8.23.1 are installed. `server/db/database.ts` creates the Drizzle client; `server/db/migrate.ts` (`npm run db:migrate`) applies migrations. Not yet run successfully against a database: see Q-021.
 2. **Docker (Q-017).** Docker Desktop with WSL2 must be installed on the Windows computer. Then start PostgreSQL with a fixed major version (to be matched to the phone, Q-007).
 3. **Run and check the backend** once 1 and 2 are done:
    - `npm run db:generate` is already run; apply the migration to the local database.
@@ -217,3 +217,10 @@ Must not change:
 - `ops/` (Infrastructure and Operations).
 - `web/` (Frontend Engineering).
 - The `.gitignore` exception for migration SQL: without it, the migration files are not versioned.
+
+## Update 2026-11-09: pg approved
+
+- Owner approved `pg` (Q-018). Added `pg` and `@types/pg` at exact versions. `createDatabase` now builds a real Drizzle client. Added `server/db/migrate.ts`.
+- `npx tsc --noEmit`: exit 0. `npx vitest run`: 5 files, 41 tests passed. `npm run build`: exit 0.
+- `node dist/server/db/migrate.js` with `DATABASE_URL` pointing at localhost:5432: a PostgreSQL server answered, and password authentication failed for user `expathio`. No password was tried. The migration did not run. Docker is still not installed (Q-017). Asked in Q-021 whether this server is to be used.
+- Still pending: migrations, seed, login and logout against a real database (see Pending 2 to 4).
