@@ -1,6 +1,6 @@
 # 0029 — Direct Messages Between Sessions
 
-**Status:** APPROVED  
+**Status:** APPROVED, decision point 2 superseded by ADR 0030  
 **Date:** 2026-11-09  
 **Approved by:** Project owner
 

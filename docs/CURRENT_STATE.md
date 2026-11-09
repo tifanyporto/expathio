@@ -50,7 +50,8 @@ Recorded in `docs/decisions/`:
 - `0026` — The vacancy application flow (ADR 0005) is built in Phase 2, not Phase 4.
 - `0027` — The four first-version role titles are Operations Assistant, Customer Service Representative, Sales Support Assistant and Finance Assistant.
 - `0028` — Phase 1 login uses e-mail, the post-login page shows the organization and role with a simulated-data label, there is no password recovery in Phase 1, and the text "Expathio" is used until a logo is approved.
-- `0029` — Sessions may request things from each other by direct message, after the owner's first approval; each request is recorded in the sending session's record.
+- `0029` — Sessions may request things from each other by direct message; each request is recorded in the sending session's record. Its decision point 2 (owner approval of the first message) is superseded by `0030`.
+- `0030` — Direct communication between sessions is permitted and recommended, without prior owner approval. The owner is consulted only for business, visual and external-dependency decisions that depend on the owner.
 
 Other decisions recorded in the documents, added on 2026-11-06:
 
