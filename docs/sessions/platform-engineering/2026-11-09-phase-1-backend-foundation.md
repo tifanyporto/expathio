@@ -224,3 +224,23 @@ Must not change:
 - `npx tsc --noEmit`: exit 0. `npx vitest run`: 5 files, 41 tests passed. `npm run build`: exit 0.
 - `node dist/server/db/migrate.js` with `DATABASE_URL` pointing at localhost:5432: a PostgreSQL server answered, and password authentication failed for user `expathio`. No password was tried. The migration did not run. Docker is still not installed (Q-017). Asked in Q-021 whether this server is to be used.
 - Still pending: migrations, seed, login and logout against a real database (see Pending 2 to 4).
+
+## Update 2026-11-09: local PostgreSQL in Docker verified
+
+- Owner installed Docker Desktop 29.9.3 (daemon running). Q-017 awaits the owner's closing.
+- The old PostgreSQL 16 on Windows was removed at the owner's request (service, data folder, pgAdmin settings). Port 5432 is free.
+- Container: `postgres:16` named `expathio-postgres`, port 5432, volume `expathio-pgdata`. Server reports PostgreSQL 16.15. The major version still has to match the phone (Q-007).
+- Real results:
+  - `npm run build`: exit 0.
+  - `node dist/server/db/migrate.js`: "Migrations applied." Eight tables.
+  - `node dist/server/db/run-seed.js`, run twice. Rows after both runs: organizations 1, roles 4, role_permissions 52, user 4, memberships 4 (idempotent).
+  - `node dist/server/main.js` on port 3000, running.
+  - Sign-in with operations.assistant@expathio.test: HTTP 200.
+  - `GET /api/me` with the session: HTTP 200, MONUMENT, Operations Assistant, simulated true.
+  - `POST /api/auth/sign-out` with Origin: HTTP 200. Then `GET /api/me`: HTTP 401.
+  - `POST /api/auth/sign-out` without Origin: HTTP 403 (library CSRF check; browsers send Origin).
+  - `POST /api/auth/sign-up/email`: HTTP 404.
+  - Wrong password: HTTP 401.
+- Passwords are kept in the user's temp folder, outside the repository.
+- Not done: Vitest integration tests against this database (ADR 0016, level 2); Playwright flows.
+- The backend process started in this session is still running on port 3000 (stop it with the owner's approval).
