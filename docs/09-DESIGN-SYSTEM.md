@@ -88,7 +88,7 @@ Status (each one is used with text, never alone). Values confirmed by the owner 
 
 Status tints for backgrounds: success `#DCF1E5` with text `#14532F`; warning `#FBF1DC` with text `#5C3B00`. Phase 1 uses only `status-error`.
 
-Error text on the sign-in notice uses a lighter red, `error-text` `#CC4438`. It is for text only, never for borders or fills. Contrast 4.71:1 on `neutral-0` (section 4.4). Approved by the owner on 2026-11-06 with the sign-in demonstration.
+Error text on the sign-in notice uses a lighter red, `error-text` `#CC4438`. It is for text only, never for borders or fills. Contrast 4.71:1 on `neutral-0`, but 4.38:1 on `neutral-50`, which fails. So `error-text` is used only on `neutral-0` (section 4.4). Approved by the owner on 2026-11-06 with the sign-in demonstration.
 
 ### 4.3 Semantic Tokens
 
@@ -126,6 +126,10 @@ Measured contrast ratios (WCAG 2.x). Text needs at least 4.5:1; control boundari
 | `neutral-800` on `neutral-100` (tag) | 12.3:1 | Pass |
 | `neutral-0` on `status-error` | 6.5:1 | Pass |
 | `#CC4438` (`error-text`) on `neutral-0` | 4.71:1 | Pass (text only) |
+| `#CC4438` (`error-text`) on `neutral-50` | 4.38:1 | Fail. Do not use on the page background |
+| `neutral-500` (control border) on `neutral-50` | 4.0:1 | Pass (3:1 required) |
+| `purple-600` (focus ring) on `neutral-0` | 7.3:1 | Pass (3:1 required) |
+| `purple-600` (focus ring) on `neutral-50` | 6.8:1 | Pass (3:1 required) |
 | `status-success` on `neutral-0` | 5.3:1 | Pass |
 | `status-warning` on `neutral-0` | 5.9:1 | Pass |
 | `status-info` on `neutral-0` | 6.5:1 | Pass |
@@ -179,7 +183,7 @@ Spacing scale (base unit 4 px): `4 · 8 · 12 · 16 · 24 · 32 · 48` px. Every
 
 The shell is the frame that every signed-in screen uses. It has three regions:
 
-- **Header** (full width, top): height 56 px, background `color-surface`, one bottom border `color-border`, horizontal padding 24 px. It contains, from left to right: the text "Expathio" in `type-heading-3` (the logo is not defined, section 11); the **simulated-data marker** (7.6), placed next to the name; and, on the right, the signed-in account name in `type-body` and the secondary button "Sign out" (7.1).
+- **Header** (full width, top): height 56 px, background `color-surface`, one bottom border `color-border`, horizontal padding 24 px. It contains, from left to right: the Expathio mark and the word "Expathio" as one lockup, 24 px high (section 11.1); the **simulated-data marker** (7.6), placed next to the name; and, on the right, the signed-in account name in `type-body` and the secondary button "Sign out" (7.1).
 - **Navigation column** (left, below the header): reserved width 200 px, background `color-surface`, one right border `color-border`. **In Phase 1 this column has no items. Navigation items, their styles and their behavior are to be defined in Phase 2** (section 7.5).
 - **Content area** (right of the navigation column, below the header): background `color-page`. It holds the page header (7.7) at the top and the page content below it. The content gutter is 28 px on desktop.
 
@@ -334,7 +338,56 @@ The owner ran the demonstration on two screens on 2026-11-06 and found it accept
 
 ## 11. Logo and Company Identity
 
-The Expathio logo and wordmark are not defined in this document. Until they are, the shell shows the text "Expathio" (6.1). The MONUMENT identity (the fictional company's logo and typeface) is not part of this specification (`08-COMPANY.md`, section 2).
+Two identities are kept apart (`03-USER-EXPERIENCE.md`, section 17): the Expathio identity, specified here, and the MONUMENT identity of the fictional company, which is not part of this specification.
+
+### 11.1 Expathio Logo (approved, Q-016)
+
+Status: **APPROVED by the owner on 2026-11-09.** The mark is the three-phase ring described below. Until this approval, the shell showed the text "Expathio" (6.1; `docs/decisions/0028-experience-screen-decisions-phase-1.md`).
+
+Rules for the mark:
+
+- **Form:** a mark and the word "Expathio" as one lockup, drawn as a vector image (SVG) so it stays sharp at any size. The source file is kept in the project.
+- **Color:** tones of the purple scale only, as in the approved mark. Never on a dark purple surface. No gradient, shadow or effect.
+- **Clear space:** at least the height of the letter "E" of the word, on every side.
+- **Minimum size:** 24 px high in the shell header. The mark alone is not shown below 16 px.
+- **Placement in Phase 1:** the shell header (6.1), at the left, in the place of the text "Expathio". The sign-in screen (7.9) has no brand element in Phase 1, so no logo is placed there.
+- **Accessibility:** the logo has the accessible name "Expathio". The same name is also in the page text.
+- **Not allowed:** the MONUMENT typeface or any MONUMENT mark in the Expathio interface.
+
+The owner chose option A on 2026-11-06 (Q-016). Experience and Design draws the mark. The options were:
+
+- **A.** Experience and Design draws the mark in a free vector editor. Cost R$ 0 per month. Recommended.
+- **B.** An external designer. Cost not known. Needs the owner's approval before any contact, and the contract must transfer the rights of the files to the project.
+- **C.** No mark. The text "Expathio" stays the product name. Cost R$ 0.
+
+Drafts were shown as visible screens in the shell header, as `CLAUDE.md`, section 12 requires. The owner has chosen one direction for now.
+
+**Approved mark (owner, 2026-11-09).** The mark is the three-phase ring: an open ring made of three arcs, with a gap between each arc. The input arc is the lightest purple, the process arc is the middle purple, and the output arc is the deepest purple. The owner asked that these values be kept for the rest of the visual identity work, so later work uses the values below.
+
+The owner approved the purple version on 2026-11-09. The mark uses tones of one hue, and each arc is a different step of the purple scale. The order of the arcs on the ring carries the meaning as well as the tone.
+
+| Part | Token | Hex | Contrast on `neutral-0` |
+|---|---|---|---|
+| Input arc | `purple-400` | `#A385D3` | 3.06:1 (graphic, at the 3:1 minimum) |
+| Process arc | `purple-600` | `#6A3FA6` | 7.31:1 (graphic, 3:1 required) |
+| Output arc | `purple-900` | `#331856` | 14.94:1 (graphic, 3:1 required) |
+
+Points recorded at approval:
+
+- **The lightest tone is at the minimum.** `purple-400` gives 3.06:1, which passes the 3:1 rule for graphics with no margin. The owner kept it.
+- **Tone is not the only signal.** Section 4 says color is never the only signal. In the mark, position on the ring carries the order of the stages.
+- **One color rule.** The owner confirmed that tones of one hue satisfy the one-color rule. The rules above now say "tones of the purple scale".
+- **Legibility at 16 px** has not been checked on a real screen.
+
+Geometry, on a 24-unit grid: circle of radius 8 centered at (12, 12), stroke width 2.2, round caps. Arcs run clockwise from the positive x-axis: input from 90° to 190°, process from 210° to 310°, output from 330° to 70°.
+
+```svg
+<svg viewBox="0 0 24 24"><path d="M12 20 A8 8 0 0 1 4.12 10.61" fill="none" stroke="#A385D3" stroke-width="2.2" stroke-linecap="round"/><path d="M5.07 8 A8 8 0 0 1 17.14 5.87" fill="none" stroke="#6A3FA6" stroke-width="2.2" stroke-linecap="round"/><path d="M18.93 8 A8 8 0 0 1 14.74 19.52" fill="none" stroke="#331856" stroke-width="2.2" stroke-linecap="round"/></svg>
+```
+
+### 11.2 MONUMENT Identity (proposal, Q-016)
+
+Not specified here. Proposed: a separate document, owned by Experience and Design, that defines the fictional company's logo, typeface and colors, linked from `08-COMPANY.md`, section 2. It stays out of the Expathio interface. The owner confirms the owner and the location of that document. Today `08-COMPANY.md`, section 2, refers to a company visual specification that does not exist (section 13.3).
 
 ## 12. Implementation Notes
 
@@ -368,13 +421,48 @@ These are not decided. They belong to Product, unless noted.
 1. **Sign-in identifier.** Answered by ADR 0028: e-mail address (7.9).
 2. **Page after sign-in.** Answered by ADR 0028: organization name, role and simulated-data label (7.10).
 3. **Password recovery.** Answered by ADR 0028: not in Phase 1, not shown.
-4. **Expathio logo.** Not defined. The shell uses the text "Expathio" until a logo is approved (ADR 0028). Routed in `docs/OPEN-QUESTIONS.md`, Q-016.
+4. **Expathio logo.** Approved by the owner on 2026-11-09 (section 11.1). The MONUMENT identity is still open in `docs/OPEN-QUESTIONS.md`, Q-016.
 
 ### 13.3 Routed to other functions
 
-- **MONUMENT company visual specification.** `08-COMPANY.md`, section 2, refers to a document that does not exist, and no owner is assigned. Routed to Product and Documentation.
+- **MONUMENT company visual specification.** `08-COMPANY.md`, section 2, refers to a document that does not exist, and no owner is assigned. Proposed as a separate document in section 11.2 (Q-016). Routed to Product and Documentation to correct the reference in `08`.
 - **`docs/CURRENT_STATE.md`, "Visual specification" open item.** Routed to Product and Documentation, to update when this specification is approved.
 
 ### 13.4 Not blocking this specification
 
 The implementation of Public Sans, the simulated-data marker and the status colors is done by Frontend Engineering in the first screen. Those steps are not part of this document.
+
+## 14. Screen Map (Q-011)
+
+Status: **PROPOSED, IN DISCUSSION.** The screens of Phase 1 are listed below. Screens from Phase 2 on are not defined here. They come from `06-ROADMAP.md`, section 5, and `08-COMPANY.md`, section 6.1.
+
+| # | Screen | Phase | Where it appears | Specified in | Status |
+|---|---|---|---|---|---|
+| 1 | Sign in | 1 | Outside the shell | 7.9 | Approved by the owner, 2026-11-06 |
+| 2 | Post-login page: organization, role, simulated-data marker | 1 | Content area of the shell | 7.10 | Content per ADR 0028. Visual design not approved |
+| — | Application shell | 1 | Every signed-in screen | 6.1 | Specified. Visual design not approved |
+| — | Member list of the organization | 1, proposed | Content area of the shell | Q-011 only | Proposed, not approved. Not in 7.10 |
+| — | Navigation items | 2 and later | Navigation column | 7.5 | Not defined in Phase 1 |
+
+Rules:
+
+- Phase 1 has no sign-up, no password recovery and no organization selection (ADR 0022, ADR 0023, ADR 0028).
+- The member list is not part of Phase 1 until the owner approves it. If approved, section 7.10 is updated to match.
+- The member list needs an access rule before it is built. `08-COMPANY.md`, section 6.1, has no row for the list today. Routed to Product and Documentation.
+- Navigation items are a Phase 2 decision (7.5). Hiding a navigation item is not access control (`CLAUDE.md`, section 10).
+
+## 15. Specification Completeness (Q-010)
+
+Status: this section lists what this specification covers and what is still open before implementation. It does not close Q-010. The owner decides that.
+
+**Covered:** tones and tokens (4), typography (5), spacing, shell and layout (6), the components used in Phase 1 (7.1, 7.2, 7.4, 7.6, 7.7, 7.9, 7.10), accessibility target (9), color check method (10), logo rules (11.1).
+
+**Open before implementation:**
+
+- Keyboard order and screen-reader labels on the sign-in screen and the shell (9).
+- Text resizing up to 200 % (9).
+- Disabled-control behavior (9).
+- Color check on the implemented screens (10).
+- Owner approval of the visual design of the shell (6.1) and the post-login page (7.10).
+- Owner approval of `#CC4438` as a tone in the scale. Section 4.2 currently allows it as a text-only exception.
+- Public Sans package, with a pinned version recorded in the session that installs it (12).

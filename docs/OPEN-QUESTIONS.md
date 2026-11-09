@@ -99,6 +99,7 @@
 - **Needed by:** before the first Phase 1 screen is built
 - **Source:** `09-DESIGN-SYSTEM.md`, now on `main` (merge `bd69844`), status APPROVED for the Phase 1 scope (sign-in screen and application shell).
 - **Proposed answer (Experience and Design, 2026-11-06):** the visual specification is `09-DESIGN-SYSTEM.md`. Its typeface is decided in `docs/decisions/0021-interface-typeface.md` (APPROVED). The login and post-login decisions are in `docs/decisions/0028-experience-screen-decisions-phase-1.md` (APPROVED). The specification is not yet implemented or tested.
+- **Specification:** `09-DESIGN-SYSTEM.md`, section 15, lists what the specification covers and what is still open before implementation. Two contrast failures were found and recorded in section 4.4: `error-text` fails on `neutral-50` (4.38:1), so it is used only on `neutral-0`.
 - **Still open before closing:** the implementation in the first Phase 1 screen (Public Sans package with a pinned version, tokens) and the color check on the implemented screens (`09`, section 10). Section 13.2 of `09` still lists the four points that ADR 0028 now answers; Experience and Design will update it when the owner agrees.
 - **Closure:** owner decides (not this session).
 
@@ -116,6 +117,7 @@
   - **Phase 2 and later:** no screen list is proposed here, because Phase 2 scope is decided in `06-ROADMAP.md`, section 5. Proposed rule for navigation: its items come from the functions each role uses in `08-COMPANY.md`, section 6.1, and the backend decides what each role can change (`CLAUDE.md`, section 10). Hiding a menu item is not access control.
   - **Post-login page, proposed (Experience and Design, 2026-11-06):** a read-only list of the members of MONUMENT, with the name and role of each member, and no actions. It is shown in the shell, with the simulated-data marker. Demonstration, with fictional test accounts: https://claude.ai/artifact/8PHX7ZT6pTV6ais9LWpZ3q. Not defined here: who may see the list (`08-COMPANY.md`, section 6.1, access rules) and any navigation items (owner decides).
   - **Open for the owner:** approval of this proposed post-login page. Its visual design has not been approved yet.
+  - **Specified in** `09-DESIGN-SYSTEM.md`, section 14 (screen map). Gap routed to Product and Documentation: `08-COMPANY.md`, section 6.1, has no row for a member list, so its access rule is not defined.
 - **Closure:** owner decides (not this session).
 
 ### Q-012 — Adding a role without a code change
@@ -142,11 +144,14 @@
 - **Answered by:** Experience and Design, approved by the owner
 - **Needed by:** before the logo appears in any screen. The text "Expathio" is used until then (ADR 0028).
 - **Answer (owner, 2026-11-06):** Experience and Design creates the logo.
-- **Still open:** how the artwork is made (by hand, with a tool, or by an external designer). Experience and Design proposes the options. A paid designer needs the owner's approval (`CLAUDE.md`, section 2).
+- **Method chosen (owner, 2026-11-06):** option A, Experience and Design draws the mark in a free vector editor. A paid designer is not contracted. The logo itself is still not approved.
+- **Logo approved (owner, 2026-11-09):** the three-phase ring, in purple tones only (input `purple-400`, process `purple-600`, output `purple-900`). Recorded in `09-DESIGN-SYSTEM.md`, section 11.1, which the shell header now follows. The owner confirmed that tones of one hue satisfy the one-color rule.
+- **Still open:** the MONUMENT identity (the company's own mark and typeface), which is not part of this approval. Closure is the owner's.
 - **Also open:** the MONUMENT visual identity. `08-COMPANY.md`, section 2, refers to a "company's visual specification" that does not exist yet. Experience and Design is the natural owner, but this is not yet confirmed.
 - **Proposed answer (Experience and Design, 2026-11-06):**
   - **How the logo is made.** Option A: Experience and Design draws the mark in a free vector editor. Cost R$ 0 per month; needs time, no approval beyond the owner's. Option B: an external designer. Cost not known; needs the owner's approval before any contact (`CLAUDE.md`, section 2), and the contract must transfer the rights of the files to the project. Option C: keep the text "Expathio" with no mark. Cost R$ 0; no visual identity beyond the typeface.
   - **Recommendation:** Option A, since the owner already assigned the logo to this function. Keep the text "Expathio" until the mark is approved (ADR 0028). Option C remains acceptable if the owner prefers no mark in Phase 1.
+  - **Specified in** `09-DESIGN-SYSTEM.md`, section 11.1 (logo rules, proposal, not approved) and section 11.2 (MONUMENT identity, proposal, not approved). No logo draft exists yet; one is shown to the owner before any approval.
   - **MONUMENT identity.** Proposed: a separate document, owned by Experience and Design, linked from `08-COMPANY.md`, section 2. It stays out of the Expathio interface (`03-USER-EXPERIENCE.md`, section 17). Owner to confirm the owner and location.
 - **Closure:** owner decides (not this session).
 
