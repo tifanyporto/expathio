@@ -171,3 +171,37 @@
 - **Needed by:** now that `09-DESIGN-SYSTEM.md` is APPROVED for the Phase 1 scope
 - **Question:** `docs/CURRENT_STATE.md` still lists the visual specification as an open item. The specification (`09-DESIGN-SYSTEM.md`, APPROVED on 2026-11-06 for the sign-in screen and application shell) and ADR 0021 (typeface, APPROVED) are on `main`. Should the open item be closed, and what state should the record show for the implementation, which is not done?
 - **Source:** `docs/CURRENT_STATE.md`; `docs/09-DESIGN-SYSTEM.md`, section 2; `docs/decisions/0021-interface-typeface.md`
+
+### Q-018 — Who may see the member list of an organization
+
+- **Status:** APPROVED
+- **Closed:** 2026-11-09, by the owner. The member list is out of Phase 1. Reopen this entry if the list returns to scope.
+- **Asked by:** Experience and Design
+- **Answered by:** Product and Documentation, approved by the owner
+- **Needed by:** only if the owner approves the member list (Q-011), and before it is built
+- **Question:** the proposed post-login page lists the members of MONUMENT with their roles (`09-DESIGN-SYSTEM.md`, section 14; Q-011). `08-COMPANY.md`, section 6.1, has no row for a member list, so no role is defined as able to see it. Which roles may see the list, and does a member see the roles of colleagues whose records they cannot change?
+- **Source:** `docs/08-COMPANY.md`, section 6.1; `docs/09-DESIGN-SYSTEM.md`, section 14
+- **Answer (owner, 2026-11-09, reported by Product and Documentation and confirmed by the owner):** the member list is out of Phase 1. The post-login page shows only the logged-in account. This entry is reopened if the list returns.
+
+### Q-020 — Direct messages between sessions
+
+- **Status:** APPROVED (decision by the owner, 2026-11-09). Formalized in ADR 0029.
+- **Closed:** 2026-11-09, by the owner.
+- **Asked by:** the owner, through Experience and Design
+- **Answered by:** Product and Documentation (formalization), approved by the owner
+- **Needed by:** before the first direct message between sessions
+- **Decision:** a session may request something of another session by direct message. The owner approves this form of communication the first time. After that it is the default, unless the owner explicitly disapproves it. Each request is recorded in the sending session's record.
+- **Already in `CLAUDE.md`:** section 14 reflects this decision (changed on the owner's request, 2026-11-09).
+- **ADR:** the owner approved ADR 0029 on 2026-11-09 (`docs/decisions/0029-direct-messages-between-sessions.md`), as reported by Product and Documentation. Committed in `72dc0c5` on branch `docs/q-011-screen-map-request`, not pushed (checked with git on 2026-11-09).
+- **To formalize:** a decision record in `docs/decisions/`, with the rules above. Not done yet.
+
+### Q-019 — Reference to the company's visual specification
+
+- **Status:** APPROVED
+- **Closed (owner part):** 2026-11-09, by the owner. The owner of the MONUMENT visual identity document is Experience and Design. The location of the document stays open, and a new entry will be opened when the MONUMENT identity work starts.
+- **Asked by:** Experience and Design
+- **Answered by:** Product and Documentation, approved by the owner
+- **Needed by:** before any MONUMENT identity work starts (Q-016)
+- **Question:** `08-COMPANY.md`, section 2, says the typeface of the MONUMENT logo is chosen in "the company's visual specification". That document does not exist, and no owner is named. Should the reference be corrected to the document that Experience and Design proposes in `09-DESIGN-SYSTEM.md`, section 11.2, and who owns it?
+- **Source:** `docs/08-COMPANY.md`, section 2; `docs/09-DESIGN-SYSTEM.md`, section 11.2; Q-016
+- **Answer (owner, 2026-11-09):** the owner of the MONUMENT visual identity document is Experience and Design. Product and Documentation corrected `08`, section 2, to point to it. The document does not exist yet, and its location is still to be decided (Q-016).
