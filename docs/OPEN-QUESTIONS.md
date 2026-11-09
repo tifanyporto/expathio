@@ -107,6 +107,14 @@
 - **Needed by:** before the first Phase 1 screen is built
 - **Question:** the Phase 1 screens are the login (test accounts only, ADR 0022) and an application shell with header, content area and a place for navigation. Which screens exist in each phase, and what the navigation contains from Phase 2 on. Navigation items stay undefined in Phase 1.
 - **Source:** `06-ROADMAP.md`, section 4
+- **Owner answers (2026-11-09), for Phase 1 screens:**
+  - No navigation menu in Phase 1. Its content is not defined, so it does not enter Phase 1.
+  - No member list of MONUMENT. Phase 1 shows only the logged-in account. This is already the post-login page (ADR 0028), so no separate members screen.
+  - Basic user management (`06-ROADMAP.md`, section 4, item 5) is read-only: it shows the data of the test account. No create, edit or deactivate actions, because there is no backend CRUD in Phase 1.
+  - Whether a separate roles screen exists in Phase 1 is still open. Product's recommendation is no: the role already appears on the post-login page, and the four roles are loaded as data with no behavior (ADR 0024).
+  - The label for simulated data was already shown in the Experience session's demonstration. It awaits the owner's approval as a visual decision (`CLAUDE.md`, section 12).
+  - The typeface is approved (ADR 0021). The visual specification (Q-010) is still in discussion.
+- **Experience and Design is asked to:** redraw the Phase 1 screens with these answers (login, post-login page with the logged-in account, read-only user management), and demonstrate each one visually. Navigation items and any roles screen remain for the owner to decide. Who may see each piece of data is not part of this design; it belongs to the access rules in `08-COMPANY.md`, section 6.1.
 
 ### Q-012 — Adding a role without a code change
 
