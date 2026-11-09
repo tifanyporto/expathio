@@ -56,6 +56,12 @@ Docker Desktop is the program that runs containers on Windows. ADR 0015 already 
 4. Open Docker Desktop and wait until it shows that the engine is running (usually a green status at the bottom left).
 5. Accept only the Docker terms that appear on the screen. Do not sign in if you do not want an account; the local setup does not need one.
 
+**Where it is installed:** on the development computer this installation is per user, in `C:\Users\<your user>\AppData\Local\Programs\DockerDesktop`. The Docker command-line tools are in its `resources\bin` folder. If `docker` is not found in a new PowerShell, run this once in the same PowerShell window and then try again:
+
+```powershell
+$env:Path = "$env:LOCALAPPDATA\Programs\DockerDesktop\resources\bin;$env:Path"
+```
+
 Check it in PowerShell:
 
 ```powershell
