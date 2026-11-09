@@ -71,11 +71,27 @@
 
 ### Q-007 — PostgreSQL and Node.js versions on postmarketOS
 
-- **Status:** PROPOSED
+- **Status:** IN DISCUSSION (local part proposed; phone part open and owner-only)
 - **Asked by:** Architecture and Quality
 - **Answered by:** Infrastructure and Operations
 - **Needed by:** before the Phase 1 development setup is finished
 - **Source:** `05-TECHNICAL-ARCHITECTURE.md`, section 19
+- **Question:** which PostgreSQL and Node.js versions to use, so that the local computer and the phone match (ADR 0015).
+
+**Local part — proposal from Infrastructure and Operations (2026-11-09), for owner approval:**
+
+1. **PostgreSQL 18.4 in Docker** (`postgres:18.4`, file `ops/docker-compose.yml`). The current major line, supported until 2030 according to secondary sources. Alternative: PostgreSQL 17, supported until 2029. Cost R$ 0. The minor version must be checked on postgresql.org before the first image download, and the pin updated if a newer minor exists.
+2. **Node.js 24** (file `ops/.nvmrc`). Already installed on the computer as v24.12.0. Secondary sources say Node 24 moves to maintenance in October 2026, and Node 26 starts its LTS line in October 2026. Alternative: Node 26 once it is confirmed as LTS on nodejs.org. Recommendation: keep 24 for Phase 1 and decide on 26 when Platform Engineering starts. Cost R$ 0.
+3. **Docker Desktop** is already approved by ADR 0015. It is not a new tool, but the owner installs it (`ops/local-setup.md`, section 2).
+
+Facts found on 2026-11-09 (real output, see the session record): Docker is **not installed**; Node v24.12.0; psql 16.13; a **Windows PostgreSQL 16 server** is running on port 5432. Expathio uses port 5433 for its Docker database, so the two do not clash. ADR 0015 chose Docker over native PostgreSQL. The owner decides whether the Windows PostgreSQL 16 service stays, is stopped or is removed. This session does not change it.
+
+**Phone part — OWNER-ONLY, OPEN.** Not planned until the phone is reachable again (ADR 0011). When access returns, the owner (or the session with owner approval for each step) must check on the phone:
+
+- the PostgreSQL major version (`SELECT version();`) and the Node.js version (`node --version`);
+- whether the PostgreSQL major matches the Docker version (ADR 0015). A difference must be recorded and fixed before any production deployment.
+
+**Owner decisions requested:** approve or change items 1 and 2 above (one line each is enough). The phone part waits for phone access.
 
 ### Q-008 — Continuous integration tool
 

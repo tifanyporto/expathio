@@ -1,0 +1,41 @@
+# Local PostgreSQL for Expathio development (ADR 0015).
+# Runs only on the Windows development computer. Not used on the production phone.
+#
+# Start:   docker compose up -d        (run from the ops/ folder)
+# Stop:    docker compose down         (keeps the data)
+# Reset:   docker compose down -v      (DELETES the local development data)
+#
+# Docker Compose reads ops/.env automatically. That file holds the password
+# and is ignored by Git. Copy ops/.env.example to ops/.env and fill it in.
+
+name: expathio-dev
+
+services:
+  postgres:
+    # Pinned to a PostgreSQL minor version so every machine gets the same server.
+    # Version choice is a proposal in docs/OPEN-QUESTIONS.md, entry Q-007.
+    image: postgres:18.4
+    container_name: expathio-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-expathio_dev}
+      POSTGRES_USER: ${POSTGRES_USER:-expathio}
+      # The ":?" makes Compose stop with a clear message if the password is not set.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in ops/.env}
+      TZ: UTC
+    ports:
+      # Only this computer can reach it (127.0.0.1). The host port is 5433 because
+      # the Windows PostgreSQL 16 service already listens on 5432.
+      - "127.0.0.1:${POSTGRES_HOST_PORT:-5433}:5432"
+    volumes:
+      # Named volume that keeps the data between restarts. PostgreSQL 18 images
+      # expect the volume at /var/lib/postgresql (not /var/lib/postgresql/data).
+      - expathio-pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+volumes:
+  expathio-pgdata:
