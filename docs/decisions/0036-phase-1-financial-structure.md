@@ -33,6 +33,8 @@ Phase 1 was otherwise defined as a foundation with no business behavior (ADR 002
 7. Available amount for a department = monthly limit − realized spending − committed amounts. The company's cash balance stays single; the department budget is only a limit on its use (owner, 2026-11-17, Q-043).
 8. An approved budget exception creates a commitment for the requested amount. When the purchase is made, the commitment becomes spending, so it is not counted twice. If the request is cancelled or expires, the commitment is released (owner, 2026-11-17, Q-049).
 9. Only the owner grants or revokes the administrator role. The first version allows one owner and none or one additional administrator. An administrator cannot grant their own role or name other administrators (owner, 2026-11-17, Q-050).
+10. The company's cash balance is a mandatory limit on a budget exception. An exception may exceed the department's available budget, but it can never commit money the company does not have available. Example: department available 500, company available 300, purchase requested 400, rejected even if management approves the departmental exception (owner, 2026-11-17, Q-051).
+11. A commitment has a creation date and an expiry date. The default expiry is the last day of the budget month. A commitment is converted to spending when the purchase is made, released immediately when cancelled, and released when it expires at the end of the month without being realized (owner, 2026-11-17, Q-052).
 
 ## Rationale
 
