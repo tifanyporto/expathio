@@ -29,6 +29,10 @@ Phase 1 was otherwise defined as a foundation with no business behavior (ADR 002
 3. The shared cash balance is the only cash. A budget is a limit over that balance, not separate money.
 4. The only approval flow in the first version is the budget exception. The simulated management is an internal business actor with authority limited by fixed rules, not a participant role and not an AI agent (owner, 2026-11-17, Q-048). Individual purchase approval is left for a later phase.
 5. Owner and administrator supervision is a separate access, outside the business and participant roles, and every action is identified and recorded (owner, 2026-11-17, Q-047).
+6. Budget periods are monthly. A month's budget does not carry over to the next month. Period exceptions are left for a later version (owner, 2026-11-17, Q-042).
+7. Available amount for a department = monthly limit − realized spending − committed amounts. The company's cash balance stays single; the department budget is only a limit on its use (owner, 2026-11-17, Q-043).
+8. An approved budget exception creates a commitment for the requested amount. When the purchase is made, the commitment becomes spending, so it is not counted twice. If the request is cancelled or expires, the commitment is released (owner, 2026-11-17, Q-049).
+9. Only the owner grants or revokes the administrator role. The first version allows one owner and none or one additional administrator. An administrator cannot grant their own role or name other administrators (owner, 2026-11-17, Q-050).
 
 ## Rationale
 
