@@ -255,7 +255,8 @@
 
 ### Q-042 — Budget period
 
-- **Status:** PROPOSED
+- **Status:** APPROVED
+- **Closed by the owner:** 2026-11-17 (closure relayed by Product and Documentation)
 - **Asked by:** Architecture and Quality
 - **Answered by:** Product and Documentation, approved by the owner
 - **Needed by:** before the first budget limit is recorded (Phase 1)
@@ -265,7 +266,8 @@
 
 ### Q-043 — Definition of "department available"
 
-- **Status:** PROPOSED
+- **Status:** APPROVED
+- **Closed by the owner:** 2026-11-17 (closure relayed by Product and Documentation)
 - **Asked by:** Architecture and Quality
 - **Answered by:** Product and Documentation, approved by the owner
 - **Needed by:** before the query of available amounts is specified (Phase 1)
@@ -325,7 +327,8 @@
 
 ### Q-049 — Does an approved budget exception create a commitment?
 
-- **Status:** PROPOSED
+- **Status:** APPROVED
+- **Closed by the owner:** 2026-11-17 (closure relayed by Product and Documentation)
 - **Asked by:** Architecture and Quality
 - **Answered by:** owner, with Product and Documentation
 - **Needed by:** before Amendment 2 of ADR 0032 is approved
@@ -335,7 +338,8 @@
 
 ### Q-050 — Who grants the owner or administrator role
 
-- **Status:** PROPOSED
+- **Status:** APPROVED
+- **Closed by the owner:** 2026-11-17 (closure relayed by Product and Documentation)
 - **Asked by:** Architecture and Quality
 - **Answered by:** owner
 - **Needed by:** before `platform_roles` is built
@@ -345,7 +349,8 @@
 
 ### Q-051 — Does the company's balance also cap a budget exception?
 
-- **Status:** PROPOSED
+- **Status:** APPROVED
+- **Closed by the owner:** 2026-11-17 (closure relayed by Product and Documentation)
 - **Asked by:** Architecture and Quality
 - **Answered by:** owner, with Product and Documentation
 - **Needed by:** before the evaluation rule of Amendment 2 is implemented
@@ -355,7 +360,8 @@
 
 ### Q-052 — Expiry of an open commitment
 
-- **Status:** PROPOSED
+- **Status:** APPROVED
+- **Closed by the owner:** 2026-11-17 (closure relayed by Product and Documentation)
 - **Asked by:** Architecture and Quality
 - **Answered by:** owner, with Product and Documentation
 - **Needed by:** before commitments are created (Phase 1, from the first approved exception)
