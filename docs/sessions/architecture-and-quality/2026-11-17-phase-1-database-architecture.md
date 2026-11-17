@@ -72,6 +72,21 @@ No file under `server/`, `web/`, `shared/` or `ops/` was changed. The only files
 
 Records 1 and 2 are written. Implementation waits for two inputs: Q-007 (PostgreSQL version on the phone, which fixes the Docker image) and the procedure to create the two database roles (Infrastructure and Operations). Q-029 blocks only the permission seed rows.
 
+## Financial scope (ADR 0036), third part of the day
+
+The owner approved a scope change (`docs/decisions/0036-phase-1-financial-structure.md`, on branch `docs/first-business-cycle`, commit `96b4d3e`, not merged). Phase 1 now includes the initial capital and contributions, one cash balance, budgets as department limits, and queries for the available balance and committed amounts. Purchases, payments, sales, receivables and the purchase budget check stay in Phase 3.
+
+What was done here:
+
+- Proposal section 17 added: entities `departments`, `capital_contributions`, `cash_ledger_entries`, `budget_limits`, `commitments`; rules (integer money in centavos, one balance, append-only ledger and limits, idempotent contributions); queries as SQL functions so row-level security applies; tests added; open points.
+- New diagram `docs/database/phase-1-financial-entities.svg`, plus a Mermaid diagram in section 17.3.
+- Proposal, section 2 and 15 and section 0 updated for the scope change.
+- Open questions Q-042 to Q-046 added (Q-040 and Q-041 are used on other branches).
+- ADR 0032 is not revised or amended in its file. The answer to the peer: an **amendment** (additive), not a formal revision. Its text is proposed in the proposal, section 17.6, for the owner's approval. ADR 0036 says ADR 0032 "must be revised"; the owner should confirm whether an amendment is enough.
+- ADRs 0034 and 0035 are reserved for another revision (store count and roles), as the peer said. This session did not use them.
+
+Not decided here: Q-042 (budget period), Q-043 (department available), Q-044 (departments in Phase 1, against `05`, section 4), Q-045 (phase of the exception flow), Q-046 (who acts as management).
+
 ## Tests and Results
 
 No tests were run. This session wrote documents only, and there is no application code or database to test. The RLS design has not been run against PostgreSQL; the policies in section 5.4 are an approved design, and the tests in section 11.2 are the proof still to come. The migration of the draft was not generated or executed.

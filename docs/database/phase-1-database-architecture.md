@@ -27,6 +27,8 @@ The owner reviewed the first version and decided the following. The decisions ar
 | Q-030 (customer data) | Accepted as a provisional recommendation. The schema is prepared for protected columns. | Section 8.4 |
 | Q-033 (glossary terms) | Section 3 is the proposed text. Approval is pending. | Section 3 |
 
+Scope change, 2026-11-17 (ADR 0036): Phase 1 also includes the financial entities of section 17 (capital and contributions, one cash balance, departments, budget limits and committed amounts). They follow the approved rules of ADR 0032 unchanged. Purchases, payments, sales, receivables and the purchase budget check stay in Phase 3.
+
 Context from the owner, not designed here: the MONUMENT organization will be founded with one store at the first opening, instead of two. Product will review roles and stores. This may change the stock-by-location design (ADR 0017). Stock tables are not part of Phase 1 and are not changed by this proposal.
 
 ---
@@ -608,7 +610,7 @@ Points still open, and the answered ones, are registered in `docs/OPEN-QUESTIONS
 
 ## 15. Deliberately left out of Phase 1
 
-- **Business tables** of later phases: products, stock, orders, cases, ledgers, reports (Phases 2 and 3).
+- **Business tables** of later phases: products, stock, orders, cases, payment and refund ledgers, reports (Phases 2 and 3). Purchases, payments, sales, receivables and the purchase budget check are Phase 3 (ADR 0036).
 - **Customer tables**, including the customer contact table of section 8.4 (Phase 2).
 - **Audit and event tables** (`05`, section 12; first needed in Phase 3).
 - **Vacancy and application tables** (ADR 0005, ADR 0023, ADR 0026: Phase 2 or later).
@@ -629,3 +631,124 @@ Points still open, and the answered ones, are registered in `docs/OPEN-QUESTIONS
 2. Records 1 and 2 are written: ADR 0032 (architecture) and ADR 0033 (membership rules).
 3. The Platform Engineering session rebuilds the draft from section 12, regenerates its migration, and adds the database and isolation tests of section 11. Its branch is not changed by this session.
 4. Infrastructure and Operations answers Q-007 before the Docker image is pinned, and defines how the two database roles are created on the phone and on the development computer.
+5. The owner decides whether the financial entities of section 17 are approved as an amendment to ADR 0032 (section 17.6).
+
+---
+
+## 17. Financial entities for Phase 1 (ADR 0036)
+
+Status of this section: PROPOSED. The scope is approved (ADR 0036, 2026-11-17). The table design below is a proposal awaiting the owner's approval as an amendment to ADR 0032.
+
+### 17.1 What Phase 1 records, and what it does not
+
+Phase 1 records the initial capital and later contributions, with the matching entry in the company's bank account. It sets an operational budget and a limit per department, after the capital and before operations start. It answers two questions: the available balance, and the committed amounts. No purchase, payment, sale, receivable or budget check on a purchase runs in Phase 1 (ADR 0036; Phase 3 for those).
+
+### 17.2 Entities
+
+| Table | Group | Purpose | Key and unique constraints |
+|---|---|---|---|
+| `departments` | Organization-owned catalog | The eight departments of the organization (`08-COMPANY.md`, section 4). Budget limits point to them. | `id` uuid; unique `(organization_id, key)`; unique `(organization_id, id)` for composite keys |
+| `capital_contributions` | Organization-owned, append-only | Each contribution of capital by the founder or a partner, with the bank account it went to. | `id` uuid; unique `(organization_id, client_request_id)` (idempotency, ADR 0010) |
+| `cash_ledger_entries` | Organization-owned, append-only | The one cash balance of the company. Each row is a signed amount. Phase 1 creates one kind of row: a capital contribution. | `id` uuid; unique `source_contribution_id` (one entry per contribution) |
+| `budget_limits` | Organization-owned, append-only | The limit for one department, effective from a date. A new limit is a new row. | `id` uuid; index `(organization_id, department_id, effective_from)` |
+| `commitments` | Organization-owned | An amount already promised to a department, not yet paid. Phase 1 has no code that creates one; the tables and queries exist for Phase 3. | `id` uuid; `status` is `open` or `released` |
+
+Money is stored as an integer in the smallest unit (centavos, `bigint`), never as a decimal or a float. Currency is `BRL` only (a `CHECK`), so the design can be extended later by a decision.
+
+### 17.3 Relations
+
+- `capital_contributions` 1 to 1 `cash_ledger_entries` (a contribution creates exactly one ledger entry, in the same transaction).
+- `departments` 1 to many `budget_limits`; the current limit is the latest row with `effective_from` in the past.
+- `departments` 1 to many `commitments`.
+- Every table has `organization_id` and row-level security (ADR 0032). The links `budget_limits`, `commitments` and `cash_ledger_entries` to their parents use composite foreign keys that include `organization_id`, so a row cannot point to another organization's department or contribution.
+
+```mermaid
+erDiagram
+    ORGANIZATION ||--o{ DEPARTMENT : "has"
+    CAPITAL_CONTRIBUTION ||--|| CASH_LEDGER_ENTRY : "creates"
+    DEPARTMENT ||--o{ BUDGET_LIMIT : "has limits"
+    DEPARTMENT ||--o{ COMMITMENT : "has committed"
+
+    CAPITAL_CONTRIBUTION {
+        uuid id PK
+        uuid organization_id FK
+        bigint amount_minor "> 0"
+        text currency "BRL"
+        text bank_account_label
+        timestamptz occurred_at
+        text client_request_id UK
+    }
+    CASH_LEDGER_ENTRY {
+        uuid id PK
+        uuid organization_id FK
+        text entry_type "capital_contribution"
+        bigint amount_minor "signed, one balance"
+        uuid source_contribution_id FK
+    }
+    DEPARTMENT {
+        uuid id PK
+        uuid organization_id FK
+        text key
+        text name
+    }
+    BUDGET_LIMIT {
+        uuid id PK
+        uuid organization_id FK
+        uuid department_id FK
+        bigint limit_minor ">= 0"
+        timestamptz effective_from
+    }
+    COMMITMENT {
+        uuid id PK
+        uuid organization_id FK
+        uuid department_id FK
+        bigint amount_minor "> 0"
+        text status "open or released"
+    }
+```
+
+Image version: `docs/database/phase-1-financial-entities.svg`.
+
+### 17.4 Rules the database enforces
+
+- **One balance.** The company has one cash balance, the sum of `cash_ledger_entries.amount_minor` for the organization. No table holds a separate budget balance. A budget is a limit over that balance (ADR 0036, decision 3).
+- **Append-only.** `capital_contributions`, `cash_ledger_entries` and `budget_limits` allow insert and select for `expathio_app`. Update and delete are not granted, and a trigger refuses them for every role, so a correction is a new row (a reversing entry or a new limit). `commitments` allows status changes only, not delete.
+- **Positive contributions.** `amount_minor > 0` for contributions and commitments; `limit_minor >= 0` for budgets.
+- **Idempotent recording.** A contribution carries a `client_request_id` that is unique per organization, so a repeated request creates no second entry (ADR 0010).
+- **Limits after capital.** A department limit can be set only after at least one contribution exists. This is a business rule, enforced by the application and tested; the database does not check it.
+
+### 17.5 Queries (no new stored balance)
+
+Queries are SQL functions that run with the caller's rights, so row-level security applies to them. They are not views owned by the table owner: a view would bypass row-level security unless it runs with the caller's rights, which depends on the PostgreSQL version (Q-007).
+
+- **Available balance** = sum of cash entries − sum of open commitments.
+- **Committed amount** = sum of open commitments, per department or for the company.
+- **Department available** = current limit of the department − its open commitments, and never more than the available balance. Whether the cap applies is open (Q-043).
+
+### 17.6 Changes to approved decisions, and the ADR question
+
+- ADR 0032 is not formally revised. Its rules are unchanged: one database, `organization_id` on organization-owned tables, row-level security, two database roles, permissions as data, migrations and Docker tests. The financial tables add to the Phase 1 tables and follow those rules. The change is an **amendment** (additive), not a formal revision. ADR 0036 says ADR 0032 "must be revised"; the owner should confirm whether an amendment satisfies that.
+- Proposed amendment text for ADR 0032, for the owner's approval: "Amendment 1 (2026-11-17, proposed): Phase 1 also includes the tables `departments`, `capital_contributions`, `cash_ledger_entries`, `budget_limits` and `commitments`, as in `docs/database/phase-1-database-architecture.md`, section 17. They are organization-owned and follow decisions 2 to 8 of this record. The ledger and budget tables are append-only."
+- ADR 0032 keeps its status APPROVED. The amendment is not written into the ADR file until the owner approves it.
+
+### 17.7 Tests added (section 11.2 extended)
+
+| Test | What it checks |
+|---|---|
+| Contribution creates one ledger entry | The entry has the same amount and organization, in one transaction |
+| Balance is the sum of entries | Available balance equals the sum of entries minus open commitments |
+| Zero or negative amounts refused | The database refuses `amount_minor <= 0` for contributions and commitments |
+| Ledger and budget rows cannot be changed | `UPDATE` and `DELETE` refused for `expathio_app` and by the trigger |
+| Repeated request creates no second entry | The same `client_request_id` returns the existing contribution |
+| Department from another organization refused | Composite foreign key refuses a budget or commitment that points to another organization's department |
+| Released commitment is not counted | Available balance ignores commitments with status `released` |
+| Budget before capital refused | The application refuses a limit when no contribution exists (business rule) |
+| Other organization's cash invisible | Row-level security hides another organization's entries and commitments |
+
+### 17.8 Open points for this section
+
+- **Q-042 (Product):** the period of a budget (for example monthly, or per business cycle).
+- **Q-043 (Product, with the owner):** the definition of "department available": whether it is capped by the company's available balance.
+- **Q-044 (owner):** `departments` is needed in Phase 1 for the budget limits. `05-TECHNICAL-ARCHITECTURE.md`, section 4, places the Departments domain in Phase 2. Confirm the exception, or keep the eight departments as seeded reference data.
+- **Q-045 (owner, Product):** ADR 0036 decision 4 describes a budget-exception approval flow as the only approval in the first version, while Phase 1 has no purchase. Confirm that the exception flow is Phase 3, like the purchase check.
+- **Q-046 (owner):** who acts as management when an exception is requested. ADR 0036 lists it as open.

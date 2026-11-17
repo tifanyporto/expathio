@@ -252,3 +252,48 @@
 - **Question:** can one account hold an active membership in two organizations at the same time? The owner's answer on Q-027 (one role per account per organization) does not say. The proposed schema allows it (the unique rules are per organization). Should it be allowed, or should a change of organization end the active membership in the other one?
 - **Owner answer (2026-11-17, relayed by Product and Documentation):** one account is in one organization at a time. A change of organization ends the active membership in the earlier organization, which stays in the history. Two active organizations at the same time are not accepted. Product's business text is `docs/08-COMPANY.md`, section 10.6 (commit `56c5e56`, branch `docs/company-revision-proposal`). ADR 0033 was written on 2026-11-17.
 - **Source:** `docs/database/phase-1-database-architecture.md`, sections 7.3 and 14; `docs/decisions/0010-scalability-foundations.md`
+
+### Q-042 — Budget period
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** Product and Documentation, approved by the owner
+- **Needed by:** before the first budget limit is recorded (Phase 1)
+- **Question:** how long is a budget period: a calendar month, a business cycle, or another length? The database stores a limit with an effective date, so it can support any of these, but the rule must be written.
+- **Source:** `docs/database/phase-1-database-architecture.md`, section 17.2 and 17.8; ADR 0036
+
+### Q-043 — Definition of "department available"
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** Product and Documentation, approved by the owner
+- **Needed by:** before the query of available amounts is specified (Phase 1)
+- **Question:** is the amount a department can still commit its limit minus its open commitments, and is that amount also capped by the company's available balance? The proposal assumes the cap applies.
+- **Source:** `docs/database/phase-1-database-architecture.md`, section 17.5; ADR 0036, decision 3
+
+### Q-044 — Departments in Phase 1
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** owner
+- **Needed by:** before the budget limits are seeded (Phase 1)
+- **Question:** budget limits need a department. `docs/05-TECHNICAL-ARCHITECTURE.md`, section 4, places the Departments domain in Phase 2. Should the eight departments of `docs/08-COMPANY.md`, section 4, be seeded as reference data in Phase 1 (the proposal's choice), or should the limit point to a simpler key until Phase 2?
+- **Source:** `docs/database/phase-1-database-architecture.md`, section 17.8; `docs/05-TECHNICAL-ARCHITECTURE.md`, section 4
+
+### Q-045 — Phase of the budget-exception flow
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** owner, with Product and Documentation
+- **Needed by:** before the Phase 1 scope is closed
+- **Question:** ADR 0036, decision 4, describes a budget-exception approval as "the only approval flow in the first version". Phase 1 has no purchase, so no exception can be requested in Phase 1. Is the exception flow a Phase 3 item together with the purchase check?
+- **Source:** `docs/decisions/0036-phase-1-financial-structure.md`, decisions 2 and 4
+
+### Q-046 — Who acts as management for budget exceptions
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** owner
+- **Needed by:** before the exception flow is specified (Phase 3, unless Q-045 says otherwise)
+- **Question:** who approves or rejects a budget exception when management is simulated? ADR 0036 lists this as open.
+- **Source:** `docs/decisions/0036-phase-1-financial-structure.md`, consequences

@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" width="960" height="600" font-family="Arial, Helvetica, sans-serif">
+  <title>Expathio Phase 1 financial entities (ADR 0036, PROPOSED design, 2026-11-17)</title>
+  <desc>Financial tables added to Phase 1 by ADR 0036. Blue = organization-owned. One cash balance; budgets are limits over it; commitments reduce what is available.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#444"/>
+    </marker>
+  </defs>
+
+  <rect width="960" height="600" fill="#ffffff"/>
+  <text x="30" y="28" font-size="18" font-weight="bold" fill="#111">Phase 1 financial entities (ADR 0036)</text>
+  <text x="30" y="48" font-size="12" fill="#444">Design proposed, scope approved 2026-11-17. Blue = organization-owned, append-only where noted. One cash balance for the company.</text>
+
+  <!-- Relation lines (under the boxes) -->
+  <line x1="300" y1="240" x2="340" y2="240" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="302" y="232" font-size="11" fill="#444">1 : 1</text>
+  <line x1="700" y1="280" x2="700" y2="360" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="708" y="324" font-size="11" fill="#444">1 : many</text>
+  <path d="M 660 280 L 660 330 L 470 330 L 470 360" fill="none" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="560" y="322" font-size="11" fill="#444">1 : many</text>
+
+  <!-- ORGANIZATION (reference) -->
+  <rect x="380" y="90" width="240" height="60" rx="4" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="392" y="112" font-size="14" font-weight="bold" fill="#111">organizations (ref)</text>
+  <text x="392" y="132" font-size="11" fill="#222">every row below has organization_id</text>
+
+  <!-- CAPITAL_CONTRIBUTION -->
+  <rect x="40" y="170" width="260" height="150" rx="4" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="52" y="192" font-size="14" font-weight="bold" fill="#111">capital_contributions</text>
+  <text x="52" y="212" font-size="11" fill="#222">id (PK, uuid), organization_id (RLS)</text>
+  <text x="52" y="228" font-size="11" fill="#222">amount_minor (bigint, above 0)</text>
+  <text x="52" y="244" font-size="11" fill="#222">currency (BRL), occurred_at</text>
+  <text x="52" y="260" font-size="11" fill="#222">bank_account_label (no number)</text>
+  <text x="52" y="276" font-size="11" fill="#222">client_request_id (unique, idempotent)</text>
+  <text x="52" y="300" font-size="11" font-weight="bold" fill="#1d4ed8">append-only</text>
+
+  <!-- CASH_LEDGER_ENTRY -->
+  <rect x="340" y="170" width="260" height="150" rx="4" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="352" y="192" font-size="14" font-weight="bold" fill="#111">cash_ledger_entries</text>
+  <text x="352" y="212" font-size="11" fill="#222">id (PK, uuid), organization_id (RLS)</text>
+  <text x="352" y="228" font-size="11" fill="#222">entry_type (capital_contribution)</text>
+  <text x="352" y="244" font-size="11" fill="#222">amount_minor (signed)</text>
+  <text x="352" y="260" font-size="11" fill="#222">source_contribution_id (unique)</text>
+  <text x="352" y="276" font-size="11" fill="#222">one balance = sum of entries</text>
+  <text x="352" y="300" font-size="11" font-weight="bold" fill="#1d4ed8">append-only</text>
+
+  <!-- DEPARTMENT -->
+  <rect x="640" y="170" width="280" height="110" rx="4" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="652" y="192" font-size="14" font-weight="bold" fill="#111">departments</text>
+  <text x="652" y="212" font-size="11" fill="#222">id (PK, uuid), organization_id (RLS)</text>
+  <text x="652" y="228" font-size="11" fill="#222">key, name (unique per organization)</text>
+  <text x="652" y="244" font-size="11" fill="#222">eight departments, 08-COMPANY 4</text>
+  <text x="652" y="260" font-size="11" fill="#222">open point Q-044 (Phase 2 in 05)</text>
+
+  <!-- COMMITMENT -->
+  <rect x="340" y="360" width="260" height="140" rx="4" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="352" y="382" font-size="14" font-weight="bold" fill="#111">commitments</text>
+  <text x="352" y="402" font-size="11" fill="#222">id (PK, uuid), organization_id (RLS)</text>
+  <text x="352" y="418" font-size="11" fill="#222">department_id (composite FK)</text>
+  <text x="352" y="434" font-size="11" fill="#222">amount_minor (above 0), status</text>
+  <text x="352" y="450" font-size="11" fill="#222">status: open or released</text>
+  <text x="352" y="474" font-size="11" font-weight="bold" fill="#1d4ed8">no code creates them in Phase 1</text>
+
+  <!-- BUDGET_LIMIT -->
+  <rect x="640" y="360" width="280" height="140" rx="4" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="652" y="382" font-size="14" font-weight="bold" fill="#111">budget_limits</text>
+  <text x="652" y="402" font-size="11" fill="#222">id (PK, uuid), organization_id (RLS)</text>
+  <text x="652" y="418" font-size="11" fill="#222">department_id (composite FK)</text>
+  <text x="652" y="434" font-size="11" fill="#222">limit_minor (0 or more), effective_from</text>
+  <text x="652" y="458" font-size="11" font-weight="bold" fill="#1d4ed8">append-only, a new limit is a new row</text>
+
+  <!-- Legend and footer -->
+  <rect x="60" y="540" width="18" height="14" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="86" y="552" font-size="12" fill="#222">organization-owned (organization_id required, RLS)</text>
+  <text x="60" y="576" font-size="12" fill="#222">Budget is a limit over the single cash balance, not a separate cash box.</text>
+  <text x="30" y="596" font-size="11" fill="#444">Source: docs/database/phase-1-database-architecture.md, section 17. Column lists are abbreviated.</text>
+</svg>
