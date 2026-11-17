@@ -261,3 +261,38 @@ Total: three participants. The Sales Support Assistant role has no occupant in t
 Simulated, not participants: Executive Management, Technology, Marketing, Product and Design (section 4). Their manager agents are the ones that vacancies report to (section 7).
 
 When the company grows, Sales Support can be restored as a role under section 9.
+
+### 10.9 Formal revision (PROPOSED, for owner approval)
+
+Status: PROPOSED. Nothing here changes an approved decision until the owner approves it. When approved, it becomes two ADRs: **0034** (store count, superseding the store count in `0017`) and **0035** (participant roles, superseding `0009` for the role list and `0027` for the titles; `0024` is changed so that Phase 1 loads three roles). Section 6.1 is replaced by the table below when 0035 is approved.
+
+**Store count.** One physical store in the opening (owner, 2026-11-17). The location model does not change: online store and physical store are separate locations, each with its own stock (`02-BUSINESS-SIMULATION.md`, section 6.3). The data model must still allow more than one physical store.
+
+**Participant roles.** Three roles: Operations Assistant, Customer Service Representative and Finance Assistant (section 10.8). Sales Support Assistant is removed as a role for now.
+
+**Permissions by role (replaces section 6.1 when approved).**
+
+Key: same as section 6.1. Changed rows are marked "new" or "changed".
+
+| Record | Operations Assistant | Customer Service Representative | Finance Assistant |
+|---|---|---|---|
+| Stock levels (per location) | Change (replenishment requests) | — | — |
+| Purchase orders for materials and finished goods (new) | Change | — | Read |
+| Orders | Read (includes orders at risk, changed) | Read (only the customer's own orders, for a case) | Read |
+| Fulfillment queue and deliveries | Change | — | — |
+| Customer cases | — | Change (own cases) | — |
+| Customer contact history | — | Read | — |
+| Refund or exchange requests | — | Request (sent to Finance) | Read; approves or rejects (ADR 0025) |
+| Payment and refund ledger | — | — | Change |
+| Revenue report, including sales figures (changed) | — | — | Change |
+| Sales dashboard (removed) | — | — | — |
+
+Common to all roles: unchanged from section 6.1.
+
+**Open points for the owner before approval:**
+
+1. The sales dashboard was read-only for every role. In this revision it is folded into the revenue report, and Customer Service loses access to it. Is that intended?
+2. Purchase orders (new row) are a new record. Its approval flow (who approves a purchase) is not defined. Proposed: Operations creates and Finance reads, with no approval step in the first version.
+3. Phase 1 seeds three roles. Section 9 (adding a role) applies to the removal of Sales Support: it is a removal, so the owner decides when the function catalog (Q-013) is revised.
+
+**Documents affected when approved:** `08-COMPANY.md` (sections 2, 4, 5, 6.1, 7); `02-BUSINESS-SIMULATION.md` (section 3, store count); `01-PRODUCT.md` (section 3.5 tools reference); `docs/decisions/0009`, `0017`, `0024`, `0027` (status notes); `docs/CURRENT_STATE.md`; Architecture's seed of role data (ADR 0032 and the permissions file).
