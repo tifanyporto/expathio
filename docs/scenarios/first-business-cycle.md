@@ -16,7 +16,7 @@ Owner decisions, 2026-11-17:
 - Phase 1 stays a foundation: option A. The business loop is in Phase 3 (`06-ROADMAP.md`, section 6).
 - The counter seller is a simulated cashier, not a participant.
 - The initial capital enters the system when the company is created, as a contribution from the founder or partners.
-- Purchase approval exists in the product, but is left for later, except for the budget exception described in section 5.
+- The only approval flow in the first version is the budget exception (section 5). Individual purchase approval is left for a later phase.
 
 Owner decisions on the open points (2026-11-17), recorded in section 7.
 
@@ -102,6 +102,6 @@ These checks describe what a test must verify. They are not tests yet.
 
 ## 9. Phase mapping
 
-- **Phase 1 (structure):** the company is created with its initial capital and its budgets. The owner's note says Phase 1 "cares for the initial structure of the company". The current Phase 1 scope (`06-ROADMAP.md`, section 4) does not yet list capital or budget setup. This needs a scope decision.
+- **Phase 1 (structure):** the company is created with its initial capital and contributions, the cash and bank entry, the operational budget, the department limits, and queries for the available balance and the committed amounts (owner, 2026-11-17; ADR 0036).
 - **Phase 3 (operation):** sales registration, purchase orders with budget checks, receipts, payables and receivables, manufacturing orders, and the cycle in steps 2 to 13.
 - **Phase 5 (automation):** the engine that generates sales and the customer behavior that drives them.

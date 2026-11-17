@@ -85,6 +85,8 @@ Scope approved by the owner on 2026-11-06. Accounts are test accounts only (`doc
 7. Organization membership: a direct link between an account, the organization and a role.
 8. Basic role and permission structure: the four business roles from `08-COMPANY.md`, section 5, with the permissions in section 6.1.
 9. Data isolation by organization from the start (`docs/decisions/0010-scalability-foundations.md`).
+10. Initial capital and contributions, recorded in the company's bank account (owner decision, 2026-11-17; `docs/decisions/0036-phase-1-financial-structure.md`).
+11. Operational budget and department limits, with queries for the available balance and the committed amounts (owner decision, 2026-11-17; `docs/decisions/0036-phase-1-financial-structure.md`).
 
 Item 3 is read as the initial layout for computer screens, confirmed by the owner on 2026-11-06. The application is a web application (`docs/decisions/0012-initial-technology-direction.md`).
 
@@ -112,6 +114,7 @@ A functional platform where a user can authenticate, access an organization, and
 - Data is scoped to its organization from the start.
 - Automated tests cover essential functionality.
 - Development setup is reproducible.
+- Initial capital and budgets are recorded, and the available balance and the committed amounts can be queried.
 
 ## 5. Phase 2 — First Functional Organization
 
