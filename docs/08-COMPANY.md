@@ -232,3 +232,14 @@ These rules are owner decisions and are recorded here so that the membership mod
 - Membership history is kept from Phase 1. It records the start and end date of each membership, and it is the basis for promotions, changes of company and, later, the weight of each company in a career.
 
 Source: owner answers to Q-027, Q-032 and Q-041 (`docs/OPEN-QUESTIONS.md`).
+
+### 10.7 Direction for the first version (owner, 2026-11-17)
+
+The owner accepted the following reading for the founding stage. It is a direction, not yet a formal decision: the formal decisions on roles and stores stay open in Q-040.
+
+- **Production:** outsourced to contract manufacturers. No in-house production role in the first version.
+- **Product and Design:** stays simulated (section 4).
+- **Physical space and people (hiring, payroll):** outside the first version for now.
+- **Purchasing:** inside Operations, not a separate role.
+
+The owner also noted that MONUMENT is expected to grow. Departments and roles that are left out now may be needed later. When the company grows, the role set must be reviewed under section 9.
