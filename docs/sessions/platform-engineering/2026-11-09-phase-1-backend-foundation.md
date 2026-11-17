@@ -244,3 +244,16 @@ Must not change:
 - Passwords are kept in the user's temp folder, outside the repository.
 - Not done: Vitest integration tests against this database (ADR 0016, level 2); Playwright flows.
 - The backend process started in this session is still running on port 3000 (stop it with the owner's approval).
+
+## Update 2026-11-17: schema is a draft, paused
+
+- Owner decision (relayed by Product and Documentation): Phase 1 ends with the local environment and the deploy script; the phone is not a prerequisite. The database architecture has not been designed yet and the owner considers it essential.
+- The current schema is a DRAFT, not an approved decision. Architecture and Quality will design the database architecture. Platform Engineering does not decide it.
+- Draft files involved:
+  - `server/db/schema.ts`: tables `user`, `session`, `account`, `verification` (names and columns required by the better-auth library, ADR 0014), `organizations`, `roles`, `role_permissions`, `memberships`.
+  - `server/db/migrations/0000_phase1_foundation.sql` and `server/db/migrations/meta/`: generated from the draft. Applied only to the local development database (`expathio-postgres`, `127.0.0.1:5432`).
+  - `server/db/seed.ts`, `server/db/seed-data.ts`, `server/db/run-seed.ts`: depend on the draft tables.
+  - `server/access/membership.ts`, `server/me/me.controller.ts`: read `memberships`, `organizations` and `roles` through the draft.
+- Frozen until the architecture is approved: no changes to `schema.ts`, no new migrations (except local test runs of the existing draft), no integration tests written against the draft tables.
+- Not affected by the draft and allowed to continue: permission rules in `shared/access-rules.ts` and their tests, configuration, login and logout code as it stands. These are the only items allowed to change.
+- The `feat/phase-1-backend-foundation` branch stays as it is. Not merged into `main`.
