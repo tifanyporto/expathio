@@ -650,15 +650,15 @@ Phase 1 records the initial capital and later contributions, with the matching e
 | `departments` | Organization-owned catalog | The eight departments (`08-COMPANY.md`, section 4), with the minimum scope the owner set (Q-044): only to attach budget limits. No hierarchy, no full structure, no administrative functions (Phase 2). | `id` uuid; unique `(organization_id, key)`; unique `(organization_id, id)` for composite keys |
 | `capital_contributions` | Organization-owned, append-only | Each contribution of capital by the founder or a partner, with the bank account it went to. | `id` uuid; unique `(organization_id, client_request_id)` (idempotency, ADR 0010) |
 | `cash_ledger_entries` | Organization-owned, append-only | The one cash balance of the company. Each row is a signed amount. Phase 1 creates one kind of row: a capital contribution. | `id` uuid; unique `source_contribution_id` (one entry per contribution) |
-| `budget_limits` | Organization-owned, append-only | The limit for one department, effective from a date. A new limit is a new row. | `id` uuid; index `(organization_id, department_id, effective_from)` |
-| `commitments` | Organization-owned | An amount already promised to a department, not yet paid. Phase 1 has no code that creates one; the tables and queries exist for Phase 3. | `id` uuid; `status` is `open` or `released` |
+| `budget_limits` | Organization-owned, append-only | The limit for one department for one calendar month (`period_month`, Q-042). No carry-over: an unused amount does not pass to the next month. A new limit is a new row. | `id` uuid; index `(organization_id, department_id, effective_from)` |
+| `commitments` | Organization-owned | An amount promised to a department, not yet paid. An approved budget exception creates one (Q-049). A purchase converts it to spending in Phase 3; cancellation or expiry releases it. | `id` uuid; `status` is `open`, `converted` or `released`; `source_decision_id` |
 
 Money is stored as an integer in the smallest unit (centavos, `bigint`), never as a decimal or a float. Currency is `BRL` only (a `CHECK`), so the design can be extended later by a decision.
 
 ### 17.3 Relations
 
 - `capital_contributions` 1 to 1 `cash_ledger_entries` (a contribution creates exactly one ledger entry, in the same transaction).
-- `departments` 1 to many `budget_limits`; the current limit is the latest row with `effective_from` in the past.
+- `departments` 1 to many `budget_limits`; the limit of a month is the row with that `period_month`.
 - `departments` 1 to many `commitments`.
 - Every table has `organization_id` and row-level security (ADR 0032). The links `budget_limits`, `commitments` and `cash_ledger_entries` to their parents use composite foreign keys that include `organization_id`, so a row cannot point to another organization's department or contribution.
 
@@ -723,7 +723,8 @@ Queries are SQL functions that run with the caller's rights, so row-level securi
 
 - **Available balance** = sum of cash entries − sum of open commitments.
 - **Committed amount** = sum of open commitments, per department or for the company.
-- **Department available** = current limit of the department − its open commitments, and never more than the available balance. Whether the cap applies is open (Q-043).
+- **Department available** = limit of the month − realized spending of the department − its committed amount (Q-043, owner answer, 2026-11-17). Realized spending is zero in Phase 1. The department limit is only a limit on use of the single company balance; it is not a separate cash box.
+- Whether the decision rule also requires the company's available balance to cover the amount is not stated by the answer to Q-043. It is open (Q-051).
 
 ### 17.6 Changes to approved decisions, and the ADR question
 
@@ -749,8 +750,8 @@ Queries are SQL functions that run with the caller's rights, so row-level securi
 
 ### 17.8 Open points for this section
 
-- **Q-042 (Product):** the period of a budget. Open; Product answers in a separate step (corrected 2026-11-17).
-- **Q-043 (Product):** the definition of "department available". Open; Product answers in a separate step (corrected 2026-11-17).
+- **Q-042 (Product):** the period of a budget. Answer recorded 2026-11-17: monthly, no carry-over; exceptions to the period are for a later version. Entry open for the owner to close.
+- **Q-043 (Product):** the definition of "department available". Answer recorded 2026-11-17: limit minus realized spending minus committed; the company balance stays single. Entry open for the owner to close.
 - **Q-044 (owner):** departments in Phase 1, with minimal scope, only to attach budget limits. Answered 2026-11-17; Amendment 1 covers it.
 - **Q-045 (owner):** the budget exception flow is in Phase 1, tested without purchases. Answered 2026-11-17; the tables of 17.9 need Amendment 2.
 - **Q-046 (owner):** the approver is a simulated manager under fixed rules, with audit. Answered 2026-11-17; section 17.9.
@@ -763,7 +764,7 @@ Entries are kept open for the owner to close, except where the owner says he app
 
 **Owner answer (2026-11-17):** the approver is a simulated manager, an agent acting in a manager role. It works within limits and policies set by the company, not without limit. Every decision is recorded for audit, with the budget, the available balance, the justification and the impact. The owner can follow decisions and intervene as owner or administrator.
 
-**Design.** Status: the exception flow is in Phase 1 (Q-045, owner, 2026-11-17). The tables below need Amendment 2 of ADR 0032 before they are built.
+**Design.** Status: the exception flow is in Phase 1 (Q-045, owner, 2026-11-17). The tables below are approved as Amendment 2 of ADR 0032 (2026-11-17).
 
 1. **The simulated manager is an internal actor, outside the participant roles (Q-048).** It is neither a participant nor an AI agent in Phase 1. Its authority is a rule row, `approval_rules` (organization, actor, action `approve_budget_exception`, maximum amount, department or condition). Another actor or role can later receive a specific authority by a new rule row, without a new mechanism. The rule does not create a fifth participant role (ADR 0024 stays).
 2. **Deterministic, no AI in this phase.** The rule is data and code that the application evaluates. No model decides, and tests run without one. ADR 0003 keeps AI for Phase 6. A future agent may propose a decision, but the application validates it against the rule before any state changes (`05-TECHNICAL-ARCHITECTURE.md`, sections 5.1 and 9).
@@ -773,6 +774,6 @@ Entries are kept open for the owner to close, except where the owner says he app
 6. **Owner and administrator oversight (Q-047, owner answer).** The owner and the administrator have their own supervision access, separate from business roles and participant roles. Their actions are identified and recorded (`supervision_actions`: actor, action, target, time). They are not confused with the actions of simulated employees. Row-level security hides other organizations from ordinary roles; supervision uses this separate, logged path only.
 7. **Simulated manager status (Q-048, owner answer).** The simulated manager is outside the participant roles. It is an internal actor whose business authority is limited by predefined rules. Its decisions are audited under its identity. It is not an AI agent in this phase (ADR 0003).
 
-**Tables and diagram.** The draft of the tables is Amendment 2 of ADR 0032, status PROPOSED, with the diagram `docs/database/phase-1-exception-entities.svg`. It is not approved; the owner must approve it explicitly.
+**Tables and diagram.** The tables are Amendment 2 of ADR 0032 (approved 2026-11-17), with the diagram `docs/database/phase-1-exception-entities.svg`.
 
 **Tests (Phase 1):** every request gets a decision record; a request above the rule's maximum is rejected with its reason; the decision record cannot be changed; the snapshot values match the balance at decision time; the outcome does not depend on any model; the flow runs without any purchase.

@@ -260,7 +260,7 @@
 - **Answered by:** Product and Documentation, approved by the owner
 - **Needed by:** before the first budget limit is recorded (Phase 1)
 - **Question:** how long is a budget period: a calendar month, a business cycle, or another length? The database stores a limit with an effective date, so it can support any of these, but the rule must be written.
-- **Status of the answer:** open, awaiting Product and the owner. Earlier notes said Product had answered this question; that was an error (Product and Documentation, 2026-11-17). No answer is recorded here.
+- **Answer (owner's answer, relayed by Product and Documentation, 2026-11-17):** monthly. A month's budget does not carry over to the next month. Exceptions to the period are for a future version. Entry kept open for the owner to close.
 - **Source:** `docs/database/phase-1-database-architecture.md`, section 17.2 and 17.8; ADR 0036
 
 ### Q-043 — Definition of "department available"
@@ -270,7 +270,7 @@
 - **Answered by:** Product and Documentation, approved by the owner
 - **Needed by:** before the query of available amounts is specified (Phase 1)
 - **Question:** is the amount a department can still commit its limit minus its open commitments, and is that amount also capped by the company's available balance? The proposal assumes the cap applies.
-- **Status of the answer:** open, awaiting Product and the owner. Earlier notes said Product had answered this question; that was an error (Product and Documentation, 2026-11-17). No answer is recorded here.
+- **Answer (owner's answer, relayed by Product and Documentation, 2026-11-17):** available = limit − realized spending − committed. The company's balance stays single; the department budget is only a limit on use of that balance. Whether the company's balance also caps an exception is not stated by this answer and is open as Q-051. Entry kept open for the owner to close.
 - **Source:** `docs/database/phase-1-database-architecture.md`, section 17.5; ADR 0036, decision 3
 
 ### Q-044 — Departments in Phase 1
@@ -330,7 +330,8 @@
 - **Answered by:** owner, with Product and Documentation
 - **Needed by:** before Amendment 2 of ADR 0032 is approved
 - **Question:** when a budget exception is approved, does the approved amount become a commitment of the department (an amount promised, not yet paid), or does nothing change until a purchase exists in Phase 3? The answer depends partly on what "available" means (Q-043), which is open.
-- **Source:** `docs/decisions/0032-phase-1-database-architecture.md`, Amendment 2 (PROPOSED); `docs/decisions/0036-phase-1-financial-structure.md`, decision 4
+- **Answer (owner's answer, relayed by Product and Documentation, 2026-11-17):** yes. The approved amount becomes a commitment of the department, not available to other purchases while open. In Phase 3, the purchase converts the commitment to spending, counted once. Cancellation or expiry releases the amount. Entry kept open for the owner to close.
+- **Source:** `docs/decisions/0032-phase-1-database-architecture.md`, Amendment 2 (approved 2026-11-17); `docs/decisions/0036-phase-1-financial-structure.md`, decision 4
 
 ### Q-050 — Who grants the owner or administrator role
 
@@ -339,4 +340,23 @@
 - **Answered by:** owner
 - **Needed by:** before `platform_roles` is built
 - **Question:** the supervision access of the owner and administrator (Q-047) needs a grant. Who grants the administrator role, and can there be an administrator other than the owner in Phase 1? Is the grant recorded as a supervision action?
-- **Source:** `docs/decisions/0032-phase-1-database-architecture.md`, Amendment 2 (PROPOSED); Q-047
+- **Answer (owner's answer, relayed by Product and Documentation, 2026-11-17):** only the owner grants or revokes the administrator role. The first version has one owner and no administrator, or one additional administrator. The administrator cannot grant its own role or appoint other administrators. Entry kept open for the owner to close.
+- **Source:** `docs/decisions/0032-phase-1-database-architecture.md`, Amendment 2 (approved 2026-11-17); Q-047
+
+### Q-051 — Does the company's balance also cap a budget exception?
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** owner, with Product and Documentation
+- **Needed by:** before the evaluation rule of Amendment 2 is implemented
+- **Question:** the answer to Q-043 defines the department's available amount. It does not say whether an approved exception must also be covered by the company's single balance (balance minus open commitments). Should the rule require both?
+- **Source:** `docs/decisions/0032-phase-1-database-architecture.md`, Amendment 2, evaluation order; `docs/database/phase-1-database-architecture.md`, section 17.5
+
+### Q-052 — Expiry of an open commitment
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** owner, with Product and Documentation
+- **Needed by:** before commitments are created (Phase 1, from the first approved exception)
+- **Question:** the answer to Q-049 says that cancellation or expiry releases a commitment, but not when expiry happens. Does an open commitment expire at the end of its month, after a fixed number of days, or never?
+- **Source:** `docs/decisions/0032-phase-1-database-architecture.md`, Amendment 2, commitment lifecycle; Q-049
