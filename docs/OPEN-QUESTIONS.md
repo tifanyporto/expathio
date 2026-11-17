@@ -296,4 +296,23 @@
 - **Answered by:** owner
 - **Needed by:** before the exception flow is specified (Phase 3, unless Q-045 says otherwise)
 - **Question:** who approves or rejects a budget exception when management is simulated? ADR 0036 lists this as open.
+- **Owner answer (2026-11-17, relayed by Product and Documentation):** the approver is a simulated manager, an agent acting in a manager role. It acts within limits and policies set by the company, not without limit. Every decision is recorded for audit, with the budget, the available balance, the justification and the impact. The owner can follow decisions and intervene as owner or administrator. Design recommendation from the owner: treat the simulated manager as a business role whose approval authority is a deterministic rule, not as a technical approval entity, so other roles can get specific authority later. No AI in this phase (ADR 0003: AI in Phase 6). Design in `docs/database/phase-1-database-architecture.md`, section 17.9. Entry kept open for the owner to close.
 - **Source:** `docs/decisions/0036-phase-1-financial-structure.md`, consequences
+
+### Q-047 — Owner and administrator access across organizations
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** owner
+- **Needed by:** before the owner's oversight of budget decisions is built (Phase 3, or earlier if Q-045 says so)
+- **Question:** the owner follows decisions and can intervene "as owner or administrator" (Q-046 answer). The owner is not a business role, and row-level security (ADR 0032) hides other organizations' rows from every ordinary role. Should the owner and administrator be a platform-level role, with a separate, logged access path to read or intervene? Who holds it, and is it limited to MONUMENT in Phase 1?
+- **Source:** `docs/database/phase-1-database-architecture.md`, section 17.9; ADR 0032
+
+### Q-048 — Simulated manager in the four-role model
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** owner, with Product and Documentation
+- **Needed by:** before the manager role is loaded as data
+- **Question:** ADR 0024 and ADR 0027 load four participant roles in Phase 1. `08-COMPANY.md`, section 4, says Executive Management is simulated by a manager agent. Is the simulated manager a role row in the same catalog with a kind (participant or simulated), or is it outside the catalog until the phase that needs it? Does this need a decision record, since it changes the four-role limit?
+- **Source:** `docs/decisions/0024-phase-1-business-roles-loaded.md`; `docs/decisions/0027-first-version-role-titles.md`; `docs/08-COMPANY.md`, section 4; `docs/database/phase-1-database-architecture.md`, section 17.9

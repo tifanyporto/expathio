@@ -85,7 +85,11 @@ What was done here:
 - ADR 0032 is not revised or amended in its file. The answer to the peer: an **amendment** (additive), not a formal revision. Its text is proposed in the proposal, section 17.6, for the owner's approval. ADR 0036 says ADR 0032 "must be revised"; the owner should confirm whether an amendment is enough.
 - ADRs 0034 and 0035 are reserved for another revision (store count and roles), as the peer said. This session did not use them.
 
-Not decided here: Q-042 (budget period), Q-043 (department available), Q-044 (departments in Phase 1, against `05`, section 4), Q-045 (phase of the exception flow), Q-046 (who acts as management).
+Q-046 answered by the owner on 2026-11-17 (entry kept open for the owner to close): the approver is a simulated manager agent, acting within company limits and policies, with every decision audited. The design is in proposal section 17.9. The manager is a business role whose authority is a deterministic rule, not AI (ADR 0003 keeps AI for Phase 6). New open points: Q-047 (owner and administrator access across organizations) and Q-048 (simulated manager in the four-role model, ADR 0024 and 0027).
+
+Not decided here: Q-042 (budget period), Q-043 (department available), Q-044 (departments in Phase 1, against `05`, section 4), Q-045 (phase of the exception flow).
+
+ADR 0032 amendment: PROPOSED. Architecture decides the form (amendment, not formal revision). The owner has not yet approved the content, so it is not treated as approved.
 
 ## Tests and Results
 
