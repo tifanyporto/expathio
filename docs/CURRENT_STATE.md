@@ -13,7 +13,7 @@ Nothing. There is no application code yet.
 ## In Progress
 
 - Refinement of the documentation. The initial organization in `08-COMPANY.md` is complete: identity, catalog, roles, tools and vacancies.
-- Phase 1 database architecture: APPROVED by the owner on 2026-11-17, Alternative B (`docs/database/phase-1-database-architecture.md`, Q-026). The decision record in `docs/decisions/` is pending. The draft schema on `feat/phase-1-backend-foundation` stays on hold until the record is written.
+- Phase 1 database architecture: APPROVED by the owner on 2026-11-17, Alternative B (`docs/database/phase-1-database-architecture.md`, Q-026). Decision record ADR 0032 written on 2026-11-17 (`docs/decisions/0032-phase-1-database-architecture.md`). ADR 0033 (membership rules) is pending Product's business text. The draft schema on `feat/phase-1-backend-foundation` is on hold until it is rebuilt from ADR 0032.
 
 ## Planned
 

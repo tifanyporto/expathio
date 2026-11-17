@@ -41,9 +41,10 @@ Not read: `docs/decisions/0011` and `0018` in full, the Platform Engineering ses
 | `docs/OPEN-QUESTIONS.md` | Q-026 status APPROVED with the owner's answer. Q-041 status APPROVED with the owner's answer. Q-027, Q-028, Q-030, Q-031, Q-032 and Q-034 carry the owner's answers. Q-029 and Q-033 remain open (Product). Entries are closed only by the owner's answer as recorded here. Q-012 keeps its input note. Q-015 is not used. |
 | `docs/CURRENT_STATE.md` | Line under "In Progress" now says APPROVED on 2026-11-17, decision record pending. |
 | `docs/05-TECHNICAL-ARCHITECTURE.md` | Line under section 19.2 now says APPROVED, decision record pending. |
+| `docs/decisions/0032-phase-1-database-architecture.md` | New. Decision record ADR 0032, status APPROVED, approved by the owner on 2026-11-17 (Q-026). |
 | `docs/sessions/architecture-and-quality/2026-11-17-phase-1-database-architecture.md` | This record. |
 
-No file under `server/`, `web/`, `shared/` or `ops/` was changed. No file in `docs/decisions/` was created.
+No file under `server/`, `web/`, `shared/` or `ops/` was changed. The only file created in `docs/decisions/` is ADR 0032.
 
 ## Decisions
 
@@ -63,14 +64,12 @@ No file under `server/`, `web/`, `shared/` or `ops/` was changed. No file in `do
 
 ## Decision records
 
-Not written yet. The proposal (section 14) says what each one needs; the owner has not asked for them.
-
-- **Record 1, architecture (proposed ADR 0031):** isolation with row-level security, database roles, context, permissions as data, migrations, tests, test accounts on the phone. Ready to write now.
-- **Record 2, business rule (proposed ADR 0032):** membership history and one active membership per account at a time. Product and Documentation confirms the rule in its documents first.
+- **Record 1, architecture: ADR 0032, written 2026-11-17** at `docs/decisions/0032-phase-1-database-architecture.md`. Isolation with row-level security, database roles, context, permissions as data, migrations, tests, test accounts on the phone.
+- **Record 2, business rule: ADR 0033, not written yet.** Membership history, one active membership per account at a time, one active occupant per role per organization. Product and Documentation writes its business text first. The peer confirmed that the rule is consistent with ADR 0007, ADR 0023, Q-027 and Q-041.
 
 ## Readiness
 
-The proposal is ready to become record 1. It is not ready to be implemented until two inputs are answered: Q-007 (PostgreSQL version on the phone, which fixes the Docker image) and the procedure to create the two database roles (Infrastructure and Operations). Q-029 blocks only the permission seed rows.
+Record 1 is written. Implementation waits for two inputs: Q-007 (PostgreSQL version on the phone, which fixes the Docker image) and the procedure to create the two database roles (Infrastructure and Operations). Q-029 blocks only the permission seed rows.
 
 ## Tests and Results
 
@@ -80,7 +79,7 @@ No tests were run. This session wrote documents only, and there is no applicatio
 
 For the owner:
 
-- Decide whether to ask this session to write record 1 (ADR 0031) now. Record 2 waits for Product's confirmation.
+- Nothing needed on the records: ADR 0032 is written. ADR 0033 waits for Product's business text.
 - Q-041 and Q-026: answered and recorded; the owner closes the entries if the register convention requires it.
 
 For Product and Documentation:
@@ -98,7 +97,7 @@ For other functions (inputs, not decided here):
 - **Q-002**: personal data rules, which affect the account removal rule in proposal section 7.4.
 - **ADR 0017** (stock by location): Product reviews the store count and roles; not designed here.
 
-Pending in the Platform Engineering branch: the draft schema needs the changes in proposal section 12 and a regenerated migration. This is not done here. The branch is on hold until record 1 is written.
+Pending in the Platform Engineering branch: the draft schema needs the changes in proposal section 12 and a regenerated migration. This is not done here. ADR 0032 is written, so the rebuild can start; the Platform Engineering session is asked to do it.
 
 ## Git
 
@@ -116,14 +115,14 @@ Read in this order:
 3. `docs/OPEN-QUESTIONS.md`, entries Q-026 to Q-034 and Q-041.
 4. This record, "Decision records" and "Pending".
 
-Starting point: the owner's go-ahead to write record 1 (ADR 0031). Nothing in `docs/decisions/` is written by this session until then.
+Starting point: ADR 0032 is written. Next: Product's business text for the membership rule, then ADR 0033.
 
 Already decided by the owner: Alternative B (Q-026), one organization at a time (Q-041), membership history (Q-032), test accounts on the phone (Q-031), permissions changed only through the file until Phase 2 (Q-034). Not to be asked again: whether the four roles and their titles are loaded as data (ADR 0024 and 0027), and whether Phase 1 uses test accounts only (ADR 0022).
 
-Must not be changed: the draft schema and branch `feat/phase-1-backend-foundation`, until record 1 is written and the Platform Engineering session is asked to rebuild the draft.
+Must not be changed: the draft schema and branch `feat/phase-1-backend-foundation`, until the Platform Engineering session rebuilds it from ADR 0032.
 
 ## Next Step
 
-1. The owner tells this session to write record 1 (ADR 0031), or asks for other changes.
-2. Product and Documentation confirms the membership rule (Q-041), then record 2 (ADR 0032) is written.
-3. Platform Engineering is asked, through `docs/OPEN-QUESTIONS.md` or a direct message, to rebuild the draft as section 12 describes, once record 1 exists.
+1. Done: ADR 0032 is written.
+2. Product and Documentation writes the business text for the membership rule. Then ADR 0033 is written.
+3. Platform Engineering is asked, through a direct message, to rebuild the draft as section 12 of the proposal describes, from ADR 0032.

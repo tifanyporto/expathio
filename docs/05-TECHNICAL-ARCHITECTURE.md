@@ -573,7 +573,7 @@ Every increase in architectural complexity should have a clear justification.
 - **Hosting provider for Phase 4.** Not decided. Required before the first participant is admitted (ADR 0011).
 - **Backup and recovery.** The daily off-device backup is decided (ADR 0011). The restore procedure, retention period and a tested restore are not.
 - **Deployment topology beyond the initial phone.** Not decided. Running more than one application instance or separate worker processes needs a new decision (ADR 0010, ADR 0019).
-- **Phase 1 database architecture.** APPROVED by the owner on 2026-11-17 (Q-026), in `docs/database/phase-1-database-architecture.md`: shared schema with `organization_id`, row-level security enforced by PostgreSQL, composite keys, permissions as seeded data, Drizzle SQL migrations, tests on PostgreSQL in Docker. The decision record in `docs/decisions/` is pending.
+- **Phase 1 database architecture.** APPROVED by the owner on 2026-11-17 (Q-026), in `docs/database/phase-1-database-architecture.md`: shared schema with `organization_id`, row-level security enforced by PostgreSQL, composite keys, permissions as seeded data, Drizzle SQL migrations, tests on PostgreSQL in Docker. Recorded as ADR 0032 on 2026-11-17.
 
 Technology selection should consider developer productivity, ecosystem maturity, operational cost, maintainability, and the learning objectives of the project.
 

@@ -596,13 +596,13 @@ Points still open, and the answered ones, are registered in `docs/OPEN-QUESTIONS
 - **ADR 0017** (stock by location). Product is reviewing the store count and roles; the stock design is not part of this proposal.
 - **Creation of the two database roles** on each machine (section 5.4): who runs it, and when. Proposed for Infrastructure and Operations with the Platform Engineering session.
 
-**Decision records (not written yet; the owner asked for readiness to be checked first):**
+**Decision records:**
 
-- **Record 1, architecture (proposed number ADR 0031).** Phase 1 database isolation with row-level security, the two database roles, the per-transaction context, the permissions as data in a versioned file, Drizzle SQL migrations with tests on PostgreSQL in Docker, and the test accounts on the phone. This is the approved content of Q-026 and can be written from sections 5, 8, 9, 10 and 11.
-- **Record 2, business rule (proposed number ADR 0032).** Memberships are kept as history; one active membership per account at a time, in one organization; one active occupant per role per organization (Q-027, Q-032, Q-041). A separate record, because it is a business rule that affects career progression (Phase 7), and it can change without changing the database design. Product and Documentation confirms the rule in its documents before the record is written.
+- **Record 1, architecture (ADR 0032, written 2026-11-17)** at `docs/decisions/0032-phase-1-database-architecture.md`. Phase 1 database isolation with row-level security, the two database roles, the per-transaction context, the permissions as data in a versioned file, Drizzle SQL migrations with tests on PostgreSQL in Docker, and the test accounts on the phone.
+- **Record 2, business rule (ADR 0033, not written yet).** Memberships are kept as history; one active membership per account at a time, in one organization; one active occupant per role per organization (Q-027, Q-032, Q-041). A separate record, because it is a business rule that affects career progression (Phase 7), and it can change without changing the database design. Product and Documentation writes its business text first, as Product confirmed (peer message, 2026-11-17).
 - **Not records:** customer visibility (Q-030), action names (Q-029) and glossary terms (Q-033) are documentation items for Product. They change data and text, not the architecture.
 
-**Readiness:** the proposal is ready to become record 1 now. It is not ready to be implemented until two inputs are answered: Q-007 (PostgreSQL version on the phone, which also fixes the Docker image) and the procedure to create the two database roles (Infrastructure and Operations). Q-029 blocks only the seed of the permission rows, not the architecture.
+**Readiness:** record 1 is written (ADR 0032). Implementation waits for two inputs: Q-007 (PostgreSQL version on the phone, which also fixes the Docker image) and the procedure to create the two database roles (Infrastructure and Operations). Q-029 blocks only the seed of the permission rows, not the architecture.
 
 ---
 
@@ -626,6 +626,6 @@ Points still open, and the answered ones, are registered in `docs/OPEN-QUESTIONS
 ## 16. Next steps after approval
 
 1. Done: the owner approved Alternative B (Q-026) and answered Q-041 on 2026-11-17.
-2. The decision records of section 14 are written in `docs/decisions/` when the owner asks for them. The numbers are proposed as 0031 and 0032.
+2. Record 1 is written as ADR 0032. Record 2 is written as ADR 0033 after Product and Documentation has the business text for the membership rule.
 3. The Platform Engineering session rebuilds the draft from section 12, regenerates its migration, and adds the database and isolation tests of section 11. Its branch is not changed by this session.
 4. Infrastructure and Operations answers Q-007 before the Docker image is pinned, and defines how the two database roles are created on the phone and on the development computer.
