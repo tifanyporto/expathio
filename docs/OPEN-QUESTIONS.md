@@ -155,6 +155,7 @@
 ### Q-026 — Approve the Phase 1 database architecture
 
 - **Status:** APPROVED
+- **Closed by the owner:** 2026-11-17 (closure relayed by Product and Documentation)
 - **Asked by:** Architecture and Quality
 - **Answered by:** owner
 - **Needed by:** before the Platform Engineering session rebuilds the draft schema (branch `feat/phase-1-backend-foundation`, on hold)
@@ -246,6 +247,7 @@
 ### Q-041 — One account in two organizations at the same time
 
 - **Status:** APPROVED
+- **Closed by the owner:** 2026-11-17 (closure relayed by Product and Documentation)
 - **Asked by:** Architecture and Quality
 - **Answered by:** owner
 - **Needed by:** before Phase 2, when a second organization or a second membership is possible
@@ -277,7 +279,8 @@
 
 ### Q-044 — Departments in Phase 1
 
-- **Status:** PROPOSED
+- **Status:** APPROVED
+- **Closed by the owner:** 2026-11-17 (closure relayed by Product and Documentation)
 - **Asked by:** Architecture and Quality
 - **Answered by:** owner
 - **Needed by:** before the budget limits are seeded (Phase 1)
@@ -287,7 +290,8 @@
 
 ### Q-045 — Phase of the budget-exception flow
 
-- **Status:** PROPOSED
+- **Status:** APPROVED
+- **Closed by the owner:** 2026-11-17 (closure relayed by Product and Documentation)
 - **Asked by:** Architecture and Quality
 - **Answered by:** owner, with Product and Documentation
 - **Needed by:** before the Phase 1 scope is closed
@@ -297,7 +301,8 @@
 
 ### Q-046 — Who acts as management for budget exceptions
 
-- **Status:** PROPOSED
+- **Status:** APPROVED
+- **Closed by the owner:** 2026-11-17 (closure relayed by Product and Documentation)
 - **Asked by:** Architecture and Quality
 - **Answered by:** owner
 - **Needed by:** before the exception flow is specified (Phase 3, unless Q-045 says otherwise)
@@ -307,7 +312,8 @@
 
 ### Q-047 — Owner and administrator access across organizations
 
-- **Status:** PROPOSED
+- **Status:** APPROVED
+- **Closed by the owner:** 2026-11-17 (closure relayed by Product and Documentation)
 - **Asked by:** Architecture and Quality
 - **Answered by:** owner
 - **Needed by:** before the owner's oversight of budget decisions is built (Phase 3, or earlier if Q-045 says so)
@@ -317,7 +323,8 @@
 
 ### Q-048 — Simulated manager in the four-role model
 
-- **Status:** PROPOSED
+- **Status:** APPROVED
+- **Closed by the owner:** 2026-11-17 (closure relayed by Product and Documentation)
 - **Asked by:** Architecture and Quality
 - **Answered by:** owner, with Product and Documentation
 - **Needed by:** before the manager role is loaded as data
