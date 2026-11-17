@@ -260,7 +260,7 @@
 - **Answered by:** Product and Documentation, approved by the owner
 - **Needed by:** before the first budget limit is recorded (Phase 1)
 - **Question:** how long is a budget period: a calendar month, a business cycle, or another length? The database stores a limit with an effective date, so it can support any of these, but the rule must be written.
-- **Product's answer (relayed 2026-11-17):** answered by Product and Documentation. The text is in Product's documents; this session did not receive it, so the content is not recorded here. Entry kept open.
+- **Status of the answer (corrected 2026-11-17, relayed by Product and Documentation):** NOT answered. Open. Product is responsible for the answer and will give it in a separate step.
 - **Source:** `docs/database/phase-1-database-architecture.md`, section 17.2 and 17.8; ADR 0036
 
 ### Q-043 — Definition of "department available"
@@ -270,7 +270,7 @@
 - **Answered by:** Product and Documentation, approved by the owner
 - **Needed by:** before the query of available amounts is specified (Phase 1)
 - **Question:** is the amount a department can still commit its limit minus its open commitments, and is that amount also capped by the company's available balance? The proposal assumes the cap applies.
-- **Product's answer (relayed 2026-11-17):** answered by Product and Documentation. The text is in Product's documents; this session did not receive it, so the content is not recorded here. Entry kept open.
+- **Status of the answer (corrected 2026-11-17, relayed by Product and Documentation):** NOT answered. Open. Product is responsible for the answer and will give it in a separate step.
 - **Source:** `docs/database/phase-1-database-architecture.md`, section 17.5; ADR 0036, decision 3
 
 ### Q-044 — Departments in Phase 1

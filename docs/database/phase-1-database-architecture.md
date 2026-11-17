@@ -749,8 +749,8 @@ Queries are SQL functions that run with the caller's rights, so row-level securi
 
 ### 17.8 Open points for this section
 
-- **Q-042 (Product):** the period of a budget. Answered by Product and Documentation (relayed 2026-11-17); the text is in Product's documents, not received here.
-- **Q-043 (Product):** the definition of "department available". Answered by Product and Documentation (relayed 2026-11-17); the text is in Product's documents, not received here.
+- **Q-042 (Product):** the period of a budget. Open; Product answers in a separate step (corrected 2026-11-17).
+- **Q-043 (Product):** the definition of "department available". Open; Product answers in a separate step (corrected 2026-11-17).
 - **Q-044 (owner):** departments in Phase 1, with minimal scope, only to attach budget limits. Answered 2026-11-17; Amendment 1 covers it.
 - **Q-045 (owner):** the budget exception flow is in Phase 1, tested without purchases. Answered 2026-11-17; the tables of 17.9 need Amendment 2.
 - **Q-046 (owner):** the approver is a simulated manager under fixed rules, with audit. Answered 2026-11-17; section 17.9.
