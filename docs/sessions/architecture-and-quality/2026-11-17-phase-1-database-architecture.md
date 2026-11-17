@@ -87,9 +87,9 @@ What was done here:
 
 Q-046 answered by the owner on 2026-11-17 (entry kept open for the owner to close): the approver is a simulated manager agent, acting within company limits and policies, with every decision audited. The design is in proposal section 17.9. The manager is a business role whose authority is a deterministic rule, not AI (ADR 0003 keeps AI for Phase 6). New open points: Q-047 (owner and administrator access across organizations) and Q-048 (simulated manager in the four-role model, ADR 0024 and 0027).
 
-Not decided here: Q-042 (budget period), Q-043 (department available), Q-044 (departments in Phase 1, against `05`, section 4), Q-045 (phase of the exception flow).
+Final answers relayed on 2026-11-17 (entries recorded, kept open for the owner to close, except where the owner approves): Q-044 (departments in Phase 1, minimal scope), Q-045 (exception flow in Phase 1, no AI, no individual purchase approval), Q-047 (owner and administrator supervision, separate and logged), Q-048 (simulated manager outside the participant roles, not AI). Q-042 and Q-043 are answered by Product and Documentation, but the text was not received here, so their content is not recorded.
 
-ADR 0032 amendment: PROPOSED. Architecture decides the form (amendment, not formal revision). The owner has not yet approved the content, so it is not treated as approved.
+ADR 0032 Amendment 1: APPROVED by the owner on 2026-11-17, as relayed by Product and Documentation. It is recorded in the ADR 0032 file. Its scope: contributions, cash entries, budget limits, committed amounts and the departments that attach the limits. The ADR 0032 decisions are unchanged, and the ADR stays APPROVED. The budget exception tables of section 17.9 are not in this amendment; they need Amendment 2, which is not yet proposed to the owner in writing and must be approved before they are built.
 
 ## Tests and Results
 

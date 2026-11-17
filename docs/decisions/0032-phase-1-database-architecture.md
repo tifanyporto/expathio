@@ -54,6 +54,24 @@ The Phase 1 database uses **Alternative B**:
 - The deployment script must apply migrations as `expathio_owner` and start the application as `expathio_app`. The script and the role setup belong to Infrastructure and Operations (ADR 0016).
 - Rollback still relies on the daily backup or a hand-written reverse migration, because Drizzle does not generate reverse migrations (ADR 0016; Q-009).
 - Implementation is blocked until Q-007 is answered and the role-creation procedure exists. The decision is not blocked.
-- Membership rules are decided separately: one active occupant per role per organization (ADR 0007), one active membership per account at a time in one organization (Q-041), and membership history from Phase 1 (Q-032). They are to be recorded in a separate decision record, proposed as ADR 0033, once Product and Documentation has the business text in its documents.
+- Membership rules are decided separately: one active occupant per role per organization (ADR 0007), one active membership per account at a time in one organization (Q-041), and membership history from Phase 1 (Q-032). They are recorded in a separate decision record, ADR 0033 (2026-11-17).
 - The cost is R$ 0 per month for Phase 1. The cost of Phase 4 hosting is not decided here (Q-006).
 - Business-level text about the rule is a Product and Documentation matter (`08-COMPANY.md`). No change to that file is made by this record.
+
+## Amendment 1 (approved 2026-11-17)
+
+**Approved by:** Project owner, 2026-11-17, as relayed by Product and Documentation. This amendment adds to the record above; it does not replace it. The decisions 1 to 10 stay as they are.
+
+**Why:** ADR 0036 (Phase 1 financial structure, 2026-11-17) adds capital, cash, budget and commitment data to Phase 1, and says this record must be amended to cover it.
+
+**What is added to Phase 1.** All of these are organization-owned, with row-level security under decisions 2 to 8:
+
+- `departments`: the eight departments of `08-COMPANY.md`, section 4, with the minimum scope set by the owner (Q-044). They exist only to attach budget limits. No hierarchy, no full structure and no administrative functions (Phase 2).
+- `capital_contributions`: each contribution of capital, with the label of the bank account it went to. Append-only.
+- `cash_ledger_entries`: the one cash balance of the company, as signed entries. Append-only.
+- `budget_limits`: a limit per department, effective from a date. Append-only.
+- `commitments`: amounts committed to a department, with status `open` or `released`.
+
+Money is stored as integer minor units (`bigint`) in `BRL`. The available balance and the committed amounts are queries, not stored balances. The design is in `docs/database/phase-1-database-architecture.md`, section 17.
+
+**Not in this amendment.** The budget exception tables (requests, decisions, approval rules, the internal actor that decides, and the owner's and administrator's oversight records). ADR 0036 makes the exception flow part of Phase 1, so these need a second amendment, which the owner must approve. The proposal, section 17.9, holds the design.

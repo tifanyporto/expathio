@@ -50,7 +50,7 @@
   <text x="652" y="212" font-size="11" fill="#222">id (PK, uuid), organization_id (RLS)</text>
   <text x="652" y="228" font-size="11" fill="#222">key, name (unique per organization)</text>
   <text x="652" y="244" font-size="11" fill="#222">eight departments, 08-COMPANY 4</text>
-  <text x="652" y="260" font-size="11" fill="#222">open point Q-044 (Phase 2 in 05)</text>
+  <text x="652" y="260" font-size="11" fill="#222">minimal scope only (Q-044)</text>
 
   <!-- COMMITMENT -->
   <rect x="340" y="360" width="260" height="140" rx="4" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>

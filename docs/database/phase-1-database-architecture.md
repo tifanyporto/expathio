@@ -637,17 +637,17 @@ Points still open, and the answered ones, are registered in `docs/OPEN-QUESTIONS
 
 ## 17. Financial entities for Phase 1 (ADR 0036)
 
-Status of this section: PROPOSED. The scope is approved (ADR 0036, 2026-11-17). The table design below is a proposal awaiting the owner's approval as an amendment to ADR 0032.
+Status of this section: the scope is approved (ADR 0036, 2026-11-17). The tables of 17.2 to 17.5 are approved as Amendment 1 of ADR 0032 (owner, 2026-11-17, relayed by Product and Documentation). The budget exception tables of 17.9 are not yet approved; they need a second amendment.
 
 ### 17.1 What Phase 1 records, and what it does not
 
-Phase 1 records the initial capital and later contributions, with the matching entry in the company's bank account. It sets an operational budget and a limit per department, after the capital and before operations start. It answers two questions: the available balance, and the committed amounts. No purchase, payment, sale, receivable or budget check on a purchase runs in Phase 1 (ADR 0036; Phase 3 for those).
+Phase 1 records the initial capital and later contributions, with the matching entry in the company's bank account. It sets an operational budget and a limit per department, after the capital and before operations start. It answers two questions: the available balance, and the committed amounts. No purchase, payment, sale, receivable or budget check on a purchase runs in Phase 1 (ADR 0036; Phase 3 for those). The budget exception flow is in Phase 1 and runs without any purchase (Q-045; section 17.9).
 
 ### 17.2 Entities
 
 | Table | Group | Purpose | Key and unique constraints |
 |---|---|---|---|
-| `departments` | Organization-owned catalog | The eight departments of the organization (`08-COMPANY.md`, section 4). Budget limits point to them. | `id` uuid; unique `(organization_id, key)`; unique `(organization_id, id)` for composite keys |
+| `departments` | Organization-owned catalog | The eight departments (`08-COMPANY.md`, section 4), with the minimum scope the owner set (Q-044): only to attach budget limits. No hierarchy, no full structure, no administrative functions (Phase 2). | `id` uuid; unique `(organization_id, key)`; unique `(organization_id, id)` for composite keys |
 | `capital_contributions` | Organization-owned, append-only | Each contribution of capital by the founder or a partner, with the bank account it went to. | `id` uuid; unique `(organization_id, client_request_id)` (idempotency, ADR 0010) |
 | `cash_ledger_entries` | Organization-owned, append-only | The one cash balance of the company. Each row is a signed amount. Phase 1 creates one kind of row: a capital contribution. | `id` uuid; unique `source_contribution_id` (one entry per contribution) |
 | `budget_limits` | Organization-owned, append-only | The limit for one department, effective from a date. A new limit is a new row. | `id` uuid; index `(organization_id, department_id, effective_from)` |
@@ -729,8 +729,9 @@ Queries are SQL functions that run with the caller's rights, so row-level securi
 
 - ADR 0032 is not formally revised. Its rules are unchanged: one database, `organization_id` on organization-owned tables, row-level security, two database roles, permissions as data, migrations and Docker tests. The financial tables add to the Phase 1 tables and follow those rules. The change is an **amendment** (additive), not a formal revision. ADR 0036 says ADR 0032 "must be revised"; the owner should confirm whether an amendment satisfies that.
 - Proposed amendment text for ADR 0032, for the owner's approval: "Amendment 1 (2026-11-17, proposed): Phase 1 also includes the tables `departments`, `capital_contributions`, `cash_ledger_entries`, `budget_limits` and `commitments`, as in `docs/database/phase-1-database-architecture.md`, section 17. They are organization-owned and follow decisions 2 to 8 of this record. The ledger and budget tables are append-only."
-- ADR 0032 keeps its status APPROVED. The amendment is not written into the ADR file until the owner approves it.
-- Status of the amendment: PROPOSED. Whether the change is an amendment or a formal revision is Architecture's decision; the approval of its content is the owner's, and it must be explicit before the amendment is treated as approved.
+- ADR 0032 keeps its status APPROVED, with Amendment 1 recorded in its file.
+- Status of the amendment: APPROVED by the owner on 2026-11-17, as relayed by Product and Documentation. Recorded in ADR 0032 as Amendment 1. Its scope: contributions, cash entries, budget limits, committed amounts and the departments that attach the limits. It is not a formal revision; the decisions of ADR 0032 are unchanged.
+- The budget exception tables of 17.9 are not in Amendment 1. They are proposed for Amendment 2.
 
 ### 17.7 Tests added (section 11.2 extended)
 
@@ -748,24 +749,28 @@ Queries are SQL functions that run with the caller's rights, so row-level securi
 
 ### 17.8 Open points for this section
 
-- **Q-042 (Product):** the period of a budget (for example monthly, or per business cycle).
-- **Q-043 (Product, with the owner):** the definition of "department available": whether it is capped by the company's available balance.
-- **Q-044 (owner):** `departments` is needed in Phase 1 for the budget limits. `05-TECHNICAL-ARCHITECTURE.md`, section 4, places the Departments domain in Phase 2. Confirm the exception, or keep the eight departments as seeded reference data.
-- **Q-045 (owner, Product):** ADR 0036 decision 4 describes a budget-exception approval flow as the only approval in the first version, while Phase 1 has no purchase. Confirm that the exception flow is Phase 3, like the purchase check.
-- **Q-046 (owner):** who acts as management when an exception is requested. ADR 0036 lists it as open. **Answered 2026-11-17** (section 17.9); entry kept open for the owner to close.
+- **Q-042 (Product):** the period of a budget. Answered by Product and Documentation (relayed 2026-11-17); the text is in Product's documents, not received here.
+- **Q-043 (Product):** the definition of "department available". Answered by Product and Documentation (relayed 2026-11-17); the text is in Product's documents, not received here.
+- **Q-044 (owner):** departments in Phase 1, with minimal scope, only to attach budget limits. Answered 2026-11-17; Amendment 1 covers it.
+- **Q-045 (owner):** the budget exception flow is in Phase 1, tested without purchases. Answered 2026-11-17; the tables of 17.9 need Amendment 2.
+- **Q-046 (owner):** the approver is a simulated manager under fixed rules, with audit. Answered 2026-11-17; section 17.9.
+- **Q-047 (owner):** owner and administrator have separate supervision access. Answered 2026-11-17; section 17.9, item 6.
+- **Q-048 (owner):** the simulated manager is outside the participant roles, an internal actor with rule-limited authority, not AI. Answered 2026-11-17; section 17.9, item 7.
+
+Entries are kept open for the owner to close, except where the owner says he approves (the amendment).
 
 ### 17.9 Budget exception authority (answer to Q-046)
 
 **Owner answer (2026-11-17):** the approver is a simulated manager, an agent acting in a manager role. It works within limits and policies set by the company, not without limit. Every decision is recorded for audit, with the budget, the available balance, the justification and the impact. The owner can follow decisions and intervene as owner or administrator.
 
-**Proposed design.** Status: PROPOSED. Phase: the design is recorded now; it enters Phase 1 only if Q-045 says the exception flow is Phase 1 (the current reading is Phase 3).
+**Design.** Status: the exception flow is in Phase 1 (Q-045, owner, 2026-11-17). The tables below need Amendment 2 of ADR 0032 before they are built.
 
-1. **The simulated manager is a business role, not a technical approval entity.** Its authority is a rule row, `approval_rules` (organization, role key, action `approve_budget_exception`, maximum amount, department or condition). Another role can later receive a specific authority by a new rule row, without a new mechanism.
+1. **The simulated manager is an internal actor, outside the participant roles (Q-048).** It is neither a participant nor an AI agent in Phase 1. Its authority is a rule row, `approval_rules` (organization, actor, action `approve_budget_exception`, maximum amount, department or condition). Another actor or role can later receive a specific authority by a new rule row, without a new mechanism. The rule does not create a fifth participant role (ADR 0024 stays).
 2. **Deterministic, no AI in this phase.** The rule is data and code that the application evaluates. No model decides, and tests run without one. ADR 0003 keeps AI for Phase 6. A future agent may propose a decision, but the application validates it against the rule before any state changes (`05-TECHNICAL-ARCHITECTURE.md`, sections 5.1 and 9).
 3. **Checks made by the rule, in order:** the requested amount is within the rule's maximum; the department's available amount covers it (Q-043); the request has a justification. Any failure is an automatic rejection with a stated reason. Nothing is approved silently, and nothing is approved by default.
-4. **Audit record, append-only (`budget_exception_decisions`).** One row per decision, with the request, the budget limit that applied, a snapshot of the available balance and of the department's committed amount at the time, the justification, the impact (the available amount after the decision), the outcome (approved or rejected), the role that decided, the rule version that applied, and the time. Snapshots keep the record correct even after later changes.
-5. **Request record (`budget_exception_requests`).** The request, its amount, justification, requester and status. Created by the business flow (Phase 3 unless Q-045 says otherwise).
-6. **Owner and administrator oversight.** The owner is not a business role, and row-level security hides other organizations from every ordinary role. Oversight and intervention need a platform-level role with its own logged access path. An owner override is itself a decision record, with the platform role as its actor. Design and scope are Q-047.
-7. **Simulated status.** The manager role is simulated (`08-COMPANY.md`, section 4). Whether it is a row in the same role catalog, with a kind (participant or simulated), is Q-048, because ADR 0024 limits Phase 1 to four participant roles.
+4. **Audit record, append-only (`budget_exception_decisions`).** One row per decision, with the request, the budget limit that applied, a snapshot of the available balance and of the department's committed amount at the time, the justification, the impact (the available amount after the decision), the outcome (approved or rejected), the internal actor that decided (its own identity, not a participant role), the rule version that applied, and the time. Snapshots keep the record correct even after later changes.
+5. **Request record (`budget_exception_requests`).** The flow in Phase 1: a request with justification; evaluation by the fixed rules; approval or rejection; the audit record. No purchase is needed, and no AI takes part.
+6. **Owner and administrator oversight (Q-047, owner answer).** The owner and the administrator have their own supervision access, separate from business roles and participant roles. Their actions are identified and recorded (`supervision_actions`: actor, action, target, time). They are not confused with the actions of simulated employees. Row-level security hides other organizations from ordinary roles; supervision uses this separate, logged path only.
+7. **Simulated manager status (Q-048, owner answer).** The simulated manager is outside the participant roles. It is an internal actor whose business authority is limited by predefined rules. Its decisions are audited under its identity. It is not an AI agent in this phase (ADR 0003).
 
-**Tests when built:** every request gets a decision record; a request above the rule's maximum is rejected with its reason; the decision record cannot be changed; the snapshot values match the balance at decision time; the outcome does not depend on any model.
+**Tests (Phase 1):** every request gets a decision record; a request above the rule's maximum is rejected with its reason; the decision record cannot be changed; the snapshot values match the balance at decision time; the outcome does not depend on any model; the flow runs without any purchase.

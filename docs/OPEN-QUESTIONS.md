@@ -260,6 +260,7 @@
 - **Answered by:** Product and Documentation, approved by the owner
 - **Needed by:** before the first budget limit is recorded (Phase 1)
 - **Question:** how long is a budget period: a calendar month, a business cycle, or another length? The database stores a limit with an effective date, so it can support any of these, but the rule must be written.
+- **Product's answer (relayed 2026-11-17):** answered by Product and Documentation. The text is in Product's documents; this session did not receive it, so the content is not recorded here. Entry kept open.
 - **Source:** `docs/database/phase-1-database-architecture.md`, section 17.2 and 17.8; ADR 0036
 
 ### Q-043 — Definition of "department available"
@@ -269,6 +270,7 @@
 - **Answered by:** Product and Documentation, approved by the owner
 - **Needed by:** before the query of available amounts is specified (Phase 1)
 - **Question:** is the amount a department can still commit its limit minus its open commitments, and is that amount also capped by the company's available balance? The proposal assumes the cap applies.
+- **Product's answer (relayed 2026-11-17):** answered by Product and Documentation. The text is in Product's documents; this session did not receive it, so the content is not recorded here. Entry kept open.
 - **Source:** `docs/database/phase-1-database-architecture.md`, section 17.5; ADR 0036, decision 3
 
 ### Q-044 — Departments in Phase 1
@@ -278,6 +280,7 @@
 - **Answered by:** owner
 - **Needed by:** before the budget limits are seeded (Phase 1)
 - **Question:** budget limits need a department. `docs/05-TECHNICAL-ARCHITECTURE.md`, section 4, places the Departments domain in Phase 2. Should the eight departments of `docs/08-COMPANY.md`, section 4, be seeded as reference data in Phase 1 (the proposal's choice), or should the limit point to a simpler key until Phase 2?
+- **Owner answer (2026-11-17, relayed by Product and Documentation):** departments are in Phase 1, with minimal scope: only to attach budget limits. No hierarchy, no full structure and no administrative functions (Phase 2). Entry kept open for the owner to close.
 - **Source:** `docs/database/phase-1-database-architecture.md`, section 17.8; `docs/05-TECHNICAL-ARCHITECTURE.md`, section 4
 
 ### Q-045 — Phase of the budget-exception flow
@@ -287,6 +290,7 @@
 - **Answered by:** owner, with Product and Documentation
 - **Needed by:** before the Phase 1 scope is closed
 - **Question:** ADR 0036, decision 4, describes a budget-exception approval as "the only approval flow in the first version". Phase 1 has no purchase, so no exception can be requested in Phase 1. Is the exception flow a Phase 3 item together with the purchase check?
+- **Owner answer (2026-11-17, relayed by Product and Documentation):** the budget exception flow is in Phase 1: a request with justification, evaluation by fixed rules of the simulated management, approval or rejection, and the audit record. No AI. No individual purchase approval. Tested without purchases. Entry kept open for the owner to close.
 - **Source:** `docs/decisions/0036-phase-1-financial-structure.md`, decisions 2 and 4
 
 ### Q-046 — Who acts as management for budget exceptions
@@ -306,6 +310,7 @@
 - **Answered by:** owner
 - **Needed by:** before the owner's oversight of budget decisions is built (Phase 3, or earlier if Q-045 says so)
 - **Question:** the owner follows decisions and can intervene "as owner or administrator" (Q-046 answer). The owner is not a business role, and row-level security (ADR 0032) hides other organizations' rows from every ordinary role. Should the owner and administrator be a platform-level role, with a separate, logged access path to read or intervene? Who holds it, and is it limited to MONUMENT in Phase 1?
+- **Owner answer (2026-11-17, relayed by Product and Documentation):** yes. The owner and the administrator have their own supervision access, separate from business and participant roles. Their actions are identified and recorded. They are not confused with the actions of simulated employees. Entry kept open for the owner to close.
 - **Source:** `docs/database/phase-1-database-architecture.md`, section 17.9; ADR 0032
 
 ### Q-048 — Simulated manager in the four-role model
@@ -315,4 +320,5 @@
 - **Answered by:** owner, with Product and Documentation
 - **Needed by:** before the manager role is loaded as data
 - **Question:** ADR 0024 and ADR 0027 load four participant roles in Phase 1. `08-COMPANY.md`, section 4, says Executive Management is simulated by a manager agent. Is the simulated manager a role row in the same catalog with a kind (participant or simulated), or is it outside the catalog until the phase that needs it? Does this need a decision record, since it changes the four-role limit?
+- **Owner answer (2026-11-17, relayed by Product and Documentation):** the simulated manager is outside the participant roles. It is neither a participant nor an AI agent in Phase 1. It is an internal actor whose business authority is limited by predefined rules, and its decisions are audited under its own identity. It does not create a fifth participant role. Entry kept open for the owner to close.
 - **Source:** `docs/decisions/0024-phase-1-business-roles-loaded.md`; `docs/decisions/0027-first-version-role-titles.md`; `docs/08-COMPANY.md`, section 4; `docs/database/phase-1-database-architecture.md`, section 17.9
