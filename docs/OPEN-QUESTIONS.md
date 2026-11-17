@@ -71,7 +71,7 @@
 
 ### Q-007 — PostgreSQL and Node.js versions on postmarketOS
 
-- **Status:** IN DISCUSSION (local part proposed; phone part open and owner-only)
+- **Status:** IN DISCUSSION (phone checked 2026-11-17; proposal for both machines below, waiting for the owner)
 - **Asked by:** Architecture and Quality
 - **Answered by:** Infrastructure and Operations
 - **Needed by:** before the Phase 1 development setup is finished
@@ -86,12 +86,46 @@
 
 Facts found on 2026-11-09 (real output, see the session record): Docker is **not installed**; Node v24.12.0; psql 16.13; a **Windows PostgreSQL 16 server** is running on port 5432. Expathio uses port 5433 for its Docker database, so the two do not clash. ADR 0015 chose Docker over native PostgreSQL. The owner decides whether the Windows PostgreSQL 16 service stays, is stopped or is removed. This session does not change it.
 
-**Phone part — OWNER-ONLY, OPEN.** Not planned until the phone is reachable again (ADR 0011). When access returns, the owner (or the session with owner approval for each step) must check on the phone:
+**Phone part — checked on 2026-11-17 (read-only, real output in `docs/sessions/infrastructure-and-operations/2026-11-17-phone-check-and-ops-scripts.md`):**
 
-- the PostgreSQL major version (`SELECT version();`) and the Node.js version (`node --version`);
-- whether the PostgreSQL major matches the Docker version (ADR 0015). A difference must be recorded and fixed before any production deployment.
+- Operating system: `/etc/os-release` reports **"Nura edge"** (`ID=nura`, `ID_LIKE=alpine`, support links to postmarketOS). It follows the **edge** (rolling) package line of postmarketOS and Alpine, with systemd. It is not a numbered stable release.
+- **PostgreSQL is not installed. Node.js is not installed.** Nothing has to be migrated or kept.
+- Versions offered by the phone's package index (local copy of the index, not refreshed during the check):
 
-**Owner decisions requested:** approve or change items 1 and 2 above (one line each is enough). The phone part waits for phone access.
+  | Package | Version |
+  |---|---|
+  | `postgresql16` | 16.15 |
+  | `postgresql17` | 17.11 |
+  | `postgresql18` | 18.6 |
+  | `nodejs` (Alpine's LTS track) | 24.22.1 |
+  | `nodejs-current` (Alpine's newest track) | 26.12.1 |
+
+- Kernel name ends in `-pipa`. "pipa" is not the code name of the POCO F3 ("alioth"). The device model was not checked. See the session record.
+
+**Proposal for both machines — Infrastructure and Operations (2026-11-17), for owner decision:**
+
+*PostgreSQL* (ADR 0015: the major version must be the same in Docker and on the phone):
+
+| Option | Phone | Docker | Supported until (secondary sources, not checked on postgresql.org) | Impact |
+|---|---|---|---|---|
+| **A. PostgreSQL 18** (recommended) | `postgresql18` 18.6 | `postgres:18.6` (today `18.4`; pin changed to the same minor) | Nov 2030 | No change of major in Docker; only the minor pin moves from 18.4 to 18.6. Longest support. Row-level security (ADR 0032) needs 9.5 or later. |
+| B. PostgreSQL 17 | `postgresql17` 17.11 | `postgres:17.11` | Nov 2029 | The local container `expathio-postgres-dev` must be recreated with 17 (its data is deleted; test data only, deletion needs the owner's written confirmation). One year less of support. No feature Phase 1 needs is missing. |
+| C. PostgreSQL 16 | `postgresql16` 16.15 | `postgres:16.15` | Nov 2028 | Same as B, plus the shortest support. Matches the other local container `expathio-postgres` (postgres:16), which the backend uses today, but that container is not this function's and does not decide the version. |
+
+*Node.js:*
+
+| Option | Phone | Computer (`ops/.nvmrc`) | Supported until (secondary sources) | Impact |
+|---|---|---|---|---|
+| **A. Node.js 24** (recommended) | `nodejs` 24.22.1 | `24` (no change) | Apr 2028 (maintenance LTS) | No change to the repository. The home computer has Node 22.17.0 and must install Node 24 (owner action). |
+| B. Node.js 26 | `nodejs-current` 26.12.1 | `26` | Apr 2029 | One more year of support. On Alpine, `nodejs-current` follows the newest Node line and is expected to jump to 27 in 2027, so the phone could change major on a routine update. Both computers must install Node 26. |
+
+*Recommendation:* PostgreSQL 18 (option A) and Node.js 24 (option A). They need the smallest change, the phone offers both in its normal package tracks, and both are supported beyond Phase 3. Revisit Node 26 when Alpine's `nodejs` package moves to 26.
+
+*Risk to note, whatever the choice:* the phone runs the **edge** line, which changes packages on every update. A routine `apk upgrade` can change minor versions, and over time the edge line drops old major versions. Mitigation proposed: update the phone only on purpose, after a backup, and check the PostgreSQL and Node versions after each update (runbook). Moving the phone to a stable numbered release would remove this risk but means reinstalling the operating system; not proposed now.
+
+*Cost:* R$ 0 per month for every option. *Maintenance:* low; one minor-version pin to keep in step.
+
+**Owner decisions requested:** choose the PostgreSQL option (A, B or C) and the Node.js option (A or B). The entry stays open until the owner answers.
 
 ### Q-008 — Continuous integration tool
 
