@@ -151,7 +151,7 @@
 - **Needed by:** deferred
 - **Question:** whether a lint tool should block imports that cross folder rules (ADR 0019, consequences). Adding a new tool needs the owner's approval.
 
-### Q-017 — Docker Desktop is not installed on the Windows computer
+### Q-035 — Docker Desktop is not installed on the Windows computer
 
 - **Status:** PROPOSED
 - **Asked by:** Platform Engineering
@@ -161,7 +161,7 @@
 - **Alternative (owner decision):** a native PostgreSQL on Windows. ADR 0015 discarded it, so it needs a new decision.
 - **Source:** `docs/decisions/0015-development-environment-and-repository.md`, decision 1 and consequences
 
-### Q-018 — PostgreSQL driver for Drizzle (`pg`) is not an approved dependency
+### Q-036 — PostgreSQL driver for Drizzle (`pg`) is not an approved dependency
 
 - **Status:** APPROVED
 - **Asked by:** Platform Engineering
@@ -172,7 +172,7 @@
 - **Recommendation:** approve `pg`. It is the driver that the approved Drizzle line documents for PostgreSQL. Cost R$ 0 per month. Maintenance is low.
 - **Source:** `docs/decisions/0013-backend-framework-and-orm.md`; `docs/decisions/0014-remaining-stack-tools.md`
 
-### Q-019 — Confirm build and migration tooling outside the named ADR libraries
+### Q-037 — Confirm build and migration tooling outside the named ADR libraries
 
 - **Status:** PROPOSED
 - **Asked by:** Platform Engineering
@@ -185,7 +185,7 @@
   - `vitest` 5.1.0 is named by ADR 0014.
 - **Source:** `docs/decisions/0013-backend-framework-and-orm.md`; `docs/decisions/0014-remaining-stack-tools.md`
 
-### Q-020 — npm audit reports four moderate vulnerabilities
+### Q-038 — npm audit reports four moderate vulnerabilities
 
 - **Status:** PROPOSED
 - **Asked by:** Platform Engineering
@@ -194,11 +194,11 @@
 - **Question:** `npm install` on 2026-11-09 reported four moderate-severity advisories. The fix `npm audit fix --force` changes major versions, so the session did not run it. Decide how to handle the advisories, and whether `npm audit` is run before each merge (ADR 0016).
 - **Source:** `package-lock.json` at branch `feat/phase-1-backend-foundation`
 
-### Q-021 — A PostgreSQL server already listens on localhost:5432
+### Q-039 — A PostgreSQL server already listens on localhost:5432
 
 - **Status:** PROPOSED
 - **Asked by:** Platform Engineering
 - **Answered by:** owner
 - **Needed by:** before the first migration is run on this computer
-- **Question:** on 2026-11-09 a PostgreSQL server answered on localhost:5432, and password login for user `expathio` failed. The session did not try any password. ADR 0015 requires Docker for local PostgreSQL, and Docker is not installed (Q-017). Is this server yours, and should Platform Engineering use it, or should it be stopped so that the Docker container can use port 5432?
+- **Question:** on 2026-11-09 a PostgreSQL server answered on localhost:5432, and password login for user `expathio` failed. The session did not try any password. ADR 0015 requires Docker for local PostgreSQL, and Docker is not installed (Q-035). Is this server yours, and should Platform Engineering use it, or should it be stopped so that the Docker container can use port 5432?
 - **Source:** `docs/decisions/0015-development-environment-and-repository.md`

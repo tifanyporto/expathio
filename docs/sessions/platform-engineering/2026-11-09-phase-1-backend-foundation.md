@@ -91,10 +91,10 @@ Repository root (changed):
 ## Decisions
 
 - Proposed (not approved), recorded in `docs/OPEN-QUESTIONS.md`:
-  - Q-017: install Docker Desktop with WSL2 on the Windows computer (owner).
-  - Q-018: approve the PostgreSQL driver `pg` for Drizzle (owner). Strict reading of `CLAUDE.md`, section 2 and the task's constraint: no dependency outside the approved ADRs without the owner.
-  - Q-019: confirm drizzle-kit, TypeScript, type packages, reflect-metadata and rxjs (owner).
-  - Q-020: four moderate npm audit findings (Architecture and Quality, owner).
+  - Q-035: install Docker Desktop with WSL2 on the Windows computer (owner).
+  - Q-036: approve the PostgreSQL driver `pg` for Drizzle (owner). Strict reading of `CLAUDE.md`, section 2 and the task's constraint: no dependency outside the approved ADRs without the owner.
+  - Q-037: confirm drizzle-kit, TypeScript, type packages, reflect-metadata and rxjs (owner).
+  - Q-038: four moderate npm audit findings (Architecture and Quality, owner).
 - Taken by this session, within the approved scope (`CLAUDE.md`, section 2; to be reviewed by the owner):
   - Public sign-up is closed at HTTP level, but the library keeps sign-up enabled for the server-side seed. The alternative (disabling it in the library) would also block the seed.
   - Roles and their permission rows are reference data without `organization_id` (ADR 0010 covers business tables; these are catalog tables).
@@ -145,17 +145,17 @@ Commands run (in the worktree `C:\expathio\.claude\worktrees\phase-1-backend-fou
 
 | Command | Result |
 |---|---|
-| `npm install --save-exact` (first run, after pinning versions) | Added 180 packages. Reported 4 moderate vulnerabilities (Q-020). Deprecation warnings come from drizzle-kit's dependencies. |
+| `npm install --save-exact` (first run, after pinning versions) | Added 180 packages. Reported 4 moderate vulnerabilities (Q-038). Deprecation warnings come from drizzle-kit's dependencies. |
 | `npm uninstall @nestjs/testing` | Removed; not used. |
 | `npx drizzle-kit generate --config server/drizzle.config.ts --name phase1_foundation` | "8 tables" read from `schema.ts`; created `server/db/migrations/0000_phase1_foundation.sql`. |
 | `npx tsc -p tsconfig.json --noEmit` (run 1) | 4 errors: implicit `any` in `mount-auth.ts` (fixed with Express types) and `useBodyParser("json", false)` signature (fixed to `useBodyParser("json")`). |
 | `npx tsc -p tsconfig.json --noEmit` (run 2) | No errors (exit code 0 after the fixes). |
 | `npx vitest run` | **5 test files passed, 41 tests passed, 0 failed.** |
 | `npm run build` | Compiled to `dist/` without errors. |
-| `DATABASE_URL=... AUTH_SECRET=... node dist/server/main.js` | Stopped at once with the expected message: "The PostgreSQL driver is not approved yet" (Q-018). The application does not start without a database. This is the expected result today. |
+| `DATABASE_URL=... AUTH_SECRET=... node dist/server/main.js` | Stopped at once with the expected message: "The PostgreSQL driver is not approved yet" (Q-036). The application does not start without a database. This is the expected result today. |
 | `node -e "import('./dist/server/auth/auth-routes.js')..."` | Module loads; route allowlist returns `true` for sign-in. |
 | `node -e "import('./dist/server/app.module.js')..."` | Module loads. |
-| `docker --version` (Git Bash), `docker version` (PowerShell) | Not found. Docker is not installed (Q-017). |
+| `docker --version` (Git Bash), `docker version` (PowerShell) | Not found. Docker is not installed (Q-035). |
 | `node -v`, `npm -v` | v24.12.0, 11.6.2. |
 | `git ls-remote origin` | Connected; branches exist (see git log). |
 
@@ -177,8 +177,8 @@ Test coverage in terms of rules:
 
 ## Pending
 
-1. **Database driver (Q-018): approved and done on 2026-11-09.** `pg` 8.23.1 and `@types/pg` 8.23.1 are installed. `server/db/database.ts` creates the Drizzle client; `server/db/migrate.ts` (`npm run db:migrate`) applies migrations. Not yet run successfully against a database: see Q-021.
-2. **Docker (Q-017).** Docker Desktop with WSL2 must be installed on the Windows computer. Then start PostgreSQL with a fixed major version (to be matched to the phone, Q-007).
+1. **Database driver (Q-036): approved and done on 2026-11-09.** `pg` 8.23.1 and `@types/pg` 8.23.1 are installed. `server/db/database.ts` creates the Drizzle client; `server/db/migrate.ts` (`npm run db:migrate`) applies migrations. Not yet run successfully against a database: see Q-039.
+2. **Docker (Q-035).** Docker Desktop with WSL2 must be installed on the Windows computer. Then start PostgreSQL with a fixed major version (to be matched to the phone, Q-007).
 3. **Run and check the backend** once 1 and 2 are done:
    - `npm run db:generate` is already run; apply the migration to the local database.
    - `TEST_ACCOUNT_PASSWORD=<12+ chars> npm run build && node dist/server/db/run-seed.js` (with `DATABASE_URL` and `AUTH_SECRET` set).
@@ -191,14 +191,14 @@ Test coverage in terms of rules:
 9. **`docs/CURRENT_STATE.md`**: still says "Nothing implemented". Product and Documentation should update it after this backend is tested. Not changed here.
 10. **Branch merge**: the branch is pushed but not merged into `main`. Per ADR 0016, the owner merges only after all tests pass, and the integration and flow levels are not yet run.
 
-Waiting for the owner: Q-017, Q-018, Q-019, Q-020 (see `docs/OPEN-QUESTIONS.md`).
+Waiting for the owner: Q-035, Q-036, Q-037, Q-038 (see `docs/OPEN-QUESTIONS.md`).
 
 ## How to Resume
 
 Read first, in order:
 1. `C:\expathio\CLAUDE.md`, sections 6, 7, 10, 11.
 2. This record.
-3. `docs/OPEN-QUESTIONS.md`, entries Q-017 to Q-020: check whether the owner answered.
+3. `docs/OPEN-QUESTIONS.md`, entries Q-035 to Q-038: check whether the owner answered.
 4. `docs/decisions/0013`, `0014`, `0016`, `0019`, `0022`, `0023`, `0024`.
 
 Starting point:
@@ -220,14 +220,14 @@ Must not change:
 
 ## Update 2026-11-09: pg approved
 
-- Owner approved `pg` (Q-018). Added `pg` and `@types/pg` at exact versions. `createDatabase` now builds a real Drizzle client. Added `server/db/migrate.ts`.
+- Owner approved `pg` (Q-036). Added `pg` and `@types/pg` at exact versions. `createDatabase` now builds a real Drizzle client. Added `server/db/migrate.ts`.
 - `npx tsc --noEmit`: exit 0. `npx vitest run`: 5 files, 41 tests passed. `npm run build`: exit 0.
-- `node dist/server/db/migrate.js` with `DATABASE_URL` pointing at localhost:5432: a PostgreSQL server answered, and password authentication failed for user `expathio`. No password was tried. The migration did not run. Docker is still not installed (Q-017). Asked in Q-021 whether this server is to be used.
+- `node dist/server/db/migrate.js` with `DATABASE_URL` pointing at localhost:5432: a PostgreSQL server answered, and password authentication failed for user `expathio`. No password was tried. The migration did not run. Docker is still not installed (Q-035). Asked in Q-039 whether this server is to be used.
 - Still pending: migrations, seed, login and logout against a real database (see Pending 2 to 4).
 
 ## Update 2026-11-09: local PostgreSQL in Docker verified
 
-- Owner installed Docker Desktop 29.9.3 (daemon running). Q-017 awaits the owner's closing.
+- Owner installed Docker Desktop 29.9.3 (daemon running). Q-035 awaits the owner's closing.
 - The old PostgreSQL 16 on Windows was removed at the owner's request (service, data folder, pgAdmin settings). Port 5432 is free.
 - Container: `postgres:16` named `expathio-postgres`, port 5432, volume `expathio-pgdata`. Server reports PostgreSQL 16.15. The major version still has to match the phone (Q-007).
 - Real results:

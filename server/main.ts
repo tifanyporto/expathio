@@ -2,7 +2,7 @@
 // and starts the HTTP server on PORT.
 //
 // BLOCKED for now: createDatabase stops with an error until the PostgreSQL driver is approved
-// (see server/db/database.ts and docs/OPEN-QUESTIONS.md, Q-018).
+// (see server/db/database.ts and docs/OPEN-QUESTIONS.md, Q-036).
 
 import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";

@@ -3,7 +3,7 @@
 //
 //   node dist/server/db/run-seed.js
 //
-// NOT RUN YET: it needs the PostgreSQL driver (see server/db/database.ts, entry Q-018).
+// NOT RUN YET: it needs the PostgreSQL driver (see server/db/database.ts, entry Q-036).
 
 import { createAuth } from "../auth/auth.js";
 import { loadConfig } from "../config/config.js";
