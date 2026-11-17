@@ -42,9 +42,10 @@ Not read: `docs/decisions/0011` and `0018` in full, the Platform Engineering ses
 | `docs/CURRENT_STATE.md` | Line under "In Progress" now says APPROVED on 2026-11-17, decision record pending. |
 | `docs/05-TECHNICAL-ARCHITECTURE.md` | Line under section 19.2 now says APPROVED, decision record pending. |
 | `docs/decisions/0032-phase-1-database-architecture.md` | New. Decision record ADR 0032, status APPROVED, approved by the owner on 2026-11-17 (Q-026). |
+| `docs/decisions/0033-membership-history-and-one-active-organization.md` | New. Decision record ADR 0033, status APPROVED. Business text from `docs/08-COMPANY.md`, section 10.6, commit `56c5e56` (branch `docs/company-revision-proposal`). |
 | `docs/sessions/architecture-and-quality/2026-11-17-phase-1-database-architecture.md` | This record. |
 
-No file under `server/`, `web/`, `shared/` or `ops/` was changed. The only file created in `docs/decisions/` is ADR 0032.
+No file under `server/`, `web/`, `shared/` or `ops/` was changed. The only files created in `docs/decisions/` are ADR 0032 and ADR 0033.
 
 ## Decisions
 
@@ -65,11 +66,11 @@ No file under `server/`, `web/`, `shared/` or `ops/` was changed. The only file 
 ## Decision records
 
 - **Record 1, architecture: ADR 0032, written 2026-11-17** at `docs/decisions/0032-phase-1-database-architecture.md`. Isolation with row-level security, database roles, context, permissions as data, migrations, tests, test accounts on the phone.
-- **Record 2, business rule: ADR 0033, not written yet.** Membership history, one active membership per account at a time, one active occupant per role per organization. Product and Documentation writes its business text first. The peer confirmed that the rule is consistent with ADR 0007, ADR 0023, Q-027 and Q-041.
+- **Record 2, business rule: ADR 0033, written 2026-11-17** at `docs/decisions/0033-membership-history-and-one-active-organization.md`. Membership history, one active membership per account at a time, one active occupant per role per organization. Business text: `docs/08-COMPANY.md`, section 10.6, commit `56c5e56` on branch `docs/company-revision-proposal` (not merged into `main`; read with `git show`). Sources: Q-027, Q-032, Q-041.
 
 ## Readiness
 
-Record 1 is written. Implementation waits for two inputs: Q-007 (PostgreSQL version on the phone, which fixes the Docker image) and the procedure to create the two database roles (Infrastructure and Operations). Q-029 blocks only the permission seed rows.
+Records 1 and 2 are written. Implementation waits for two inputs: Q-007 (PostgreSQL version on the phone, which fixes the Docker image) and the procedure to create the two database roles (Infrastructure and Operations). Q-029 blocks only the permission seed rows.
 
 ## Tests and Results
 
@@ -79,12 +80,12 @@ No tests were run. This session wrote documents only, and there is no applicatio
 
 For the owner:
 
-- Nothing needed on the records: ADR 0032 is written. ADR 0033 waits for Product's business text.
+- Nothing needed on the records: ADR 0032 and ADR 0033 are written.
 - Q-041 and Q-026: answered and recorded; the owner closes the entries if the register convention requires it.
 
 For Product and Documentation:
 
-- **Q-027, Q-028:** confirm the answers in `08-COMPANY.md` and the roadmap, including the one-organization-at-a-time rule (Q-041).
+- **Q-027, Q-028:** merge the membership text of `08-COMPANY.md`, section 10.6 (commit `56c5e56`, branch `docs/company-revision-proposal`), which ADR 0033 cites; and confirm the "own" meaning in the roadmap or company text.
 - **Q-029:** propose more natural action names.
 - **Q-030:** confirm the provisional customer visibility rule in `08-COMPANY.md`.
 - **Q-033:** approve or change the glossary terms (proposal section 3).
@@ -115,7 +116,7 @@ Read in this order:
 3. `docs/OPEN-QUESTIONS.md`, entries Q-026 to Q-034 and Q-041.
 4. This record, "Decision records" and "Pending".
 
-Starting point: ADR 0032 is written. Next: Product's business text for the membership rule, then ADR 0033.
+Starting point: ADR 0032 and ADR 0033 are written. Next: the Platform Engineering rebuild, and Product's merge of `08-COMPANY.md`, section 10.6.
 
 Already decided by the owner: Alternative B (Q-026), one organization at a time (Q-041), membership history (Q-032), test accounts on the phone (Q-031), permissions changed only through the file until Phase 2 (Q-034). Not to be asked again: whether the four roles and their titles are loaded as data (ADR 0024 and 0027), and whether Phase 1 uses test accounts only (ADR 0022).
 
@@ -124,5 +125,5 @@ Must not be changed: the draft schema and branch `feat/phase-1-backend-foundatio
 ## Next Step
 
 1. Done: ADR 0032 is written.
-2. Product and Documentation writes the business text for the membership rule. Then ADR 0033 is written.
+2. Done: ADR 0033 is written from `docs/08-COMPANY.md`, section 10.6 (commit `56c5e56`).
 3. Platform Engineering is asked, through a direct message, to rebuild the draft as section 12 of the proposal describes, from ADR 0032.
