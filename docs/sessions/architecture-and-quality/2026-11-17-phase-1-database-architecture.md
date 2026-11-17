@@ -26,7 +26,7 @@ In order:
 10. Draft on `origin/feat/phase-1-backend-foundation`: `server/db/schema.ts` and `server/db/migrations/0000_phase1_foundation.sql` (read with `git show`; not checked out).
 11. `docs/sessions/TEMPLATE.md`.
 
-Not read: `docs/decisions/0011` and `0018` in full, the Platform Engineering session record, `docs/GLOSSARY.md`. None is needed for the database decisions proposed here, but the glossary is the subject of open point Q-024.
+Not read: `docs/decisions/0011` and `0018` in full, the Platform Engineering session record, `docs/GLOSSARY.md`. None is needed for the database decisions proposed here, but the glossary is the subject of open point Q-033.
 
 ## Files Changed
 
@@ -34,7 +34,7 @@ Not read: `docs/decisions/0011` and `0018` in full, the Platform Engineering ses
 |---|---|
 | `docs/database/phase-1-database-architecture.md` | New. The proposal: entities, ownership, keys, permissions as data, seed, migrations, Docker tests, review of the draft, three alternatives, recommendation, out-of-scope list, open points. Status PROPOSED. |
 | `docs/database/phase-1-entities.svg` | New. Image of the entity diagram, readable in a browser without a Markdown viewer. |
-| `docs/OPEN-QUESTIONS.md` | Nine entries added, Q-017 to Q-025. Q-012 received an input note (not an answer). Q-015 is not used, because the register has no Q-015 and numbering is not reused. |
+| `docs/OPEN-QUESTIONS.md` | Nine entries added, Q-026 to Q-034. Q-012 received an input note (not an answer). Q-015 is not used, because the register has no Q-015 and numbering is not reused. |
 | `docs/CURRENT_STATE.md` | One line added under "In Progress": the database proposal is PROPOSED and waits for the owner. |
 | `docs/05-TECHNICAL-ARCHITECTURE.md` | One line added under section 19.2 "Still open": the database proposal, labelled as not yet a decision. |
 | `docs/sessions/architecture-and-quality/2026-11-17-phase-1-database-architecture.md` | This record. |
@@ -53,8 +53,8 @@ No file under `server/`, `web/`, `shared/` or `ops/` was changed. No file in `do
 - Approved by the owner: none.
 - Choices made by this session without owner input (listed so they can be changed):
   - Branch name: see "Git" below.
-  - Resource names and the action vocabulary (`read`, `change`, `request`, `decide`) are proposals; Q-019 and Q-020 ask Product to confirm them.
-  - Scope values (`organization`, `own`, `case`): `own` is open (Q-019).
+  - Resource names and the action vocabulary (`read`, `change`, `request`, `decide`) are proposals; Q-028 and Q-029 ask Product to confirm them.
+  - Scope values (`organization`, `own`, `case`): `own` is open (Q-028).
   - Location of the test-account seed: `server/db/seed/`, and the Docker Compose file in `ops/`, which is Infrastructure's folder (ADR 0019).
 
 ## Tests and Results
@@ -65,18 +65,18 @@ No tests were run. This session wrote documents only, and there is no applicatio
 
 For the owner:
 
-- **Q-017:** approve or change Alternative A; decide whether row-level security is decided before Phase 2.
-- **Q-022:** whether the phone holds test accounts.
-- **Q-023:** whether membership keeps history from Phase 1.
-- **Q-025:** whether permission rows are changed only through the versioned file.
+- **Q-026:** approve or change Alternative A; decide whether row-level security is decided before Phase 2.
+- **Q-031:** whether the phone holds test accounts.
+- **Q-032:** whether membership keeps history from Phase 1.
+- **Q-034:** whether permission rows are changed only through the versioned file.
 
 For Product and Documentation (business rules and vocabulary):
 
-- **Q-018:** one role per account per organization.
-- **Q-019:** the meaning of "own" and of the case scope.
-- **Q-020:** the action vocabulary and the messages case.
-- **Q-021:** which customer data each role may see.
-- **Q-024:** glossary terms, including the two meanings of "account".
+- **Q-027:** one role per account per organization.
+- **Q-028:** the meaning of "own" and of the case scope.
+- **Q-029:** the action vocabulary and the messages case.
+- **Q-030:** which customer data each role may see.
+- **Q-033:** glossary terms, including the two meanings of "account".
 
 For other functions (inputs, not decided here):
 
@@ -85,7 +85,7 @@ For other functions (inputs, not decided here):
 - **Q-009**: rollback steps. Drizzle has no down migrations, so rollback needs a backup or a hand-written reverse migration (proposal, section 10.3).
 - **Q-002**: personal data rules, which affect the deletion rules in proposal section 7.4.
 
-Pending in the Platform Engineering branch: the draft schema needs the changes in proposal section 12 and a regenerated migration. This is not done here. The branch is on hold until Q-017 is answered.
+Pending in the Platform Engineering branch: the draft schema needs the changes in proposal section 12 and a regenerated migration. This is not done here. The branch is on hold until Q-026 is answered.
 
 ## Git
 
@@ -100,10 +100,10 @@ Read in this order:
 
 1. `CLAUDE.md`, sections 2, 5, 7 and 8.
 2. `docs/database/phase-1-database-architecture.md`, sections 1, 4 and 13 (summary, diagram, alternatives).
-3. `docs/OPEN-QUESTIONS.md`, entries Q-017 to Q-025 and the note added to Q-012.
+3. `docs/OPEN-QUESTIONS.md`, entries Q-026 to Q-034 and the note added to Q-012.
 4. This record, "Pending".
 
-Starting point: the owner's answers to Q-017 and the Product and Documentation answers. Until then, nothing here changes.
+Starting point: the owner's answers to Q-026 and the Product and Documentation answers. Until then, nothing here changes.
 
 Already decided (proposed; the owner may approve it or not): see "Decisions". Not to be asked again: whether the four roles and their titles are loaded as data (ADR 0024 and 0027 already say so), and whether Phase 1 uses test accounts only (ADR 0022).
 
@@ -111,6 +111,6 @@ Must not be changed: the draft schema and branch `feat/phase-1-backend-foundatio
 
 ## Next Step
 
-1. The owner reads the proposal (diagram in section 4, alternatives in section 13) and answers Q-017.
+1. The owner reads the proposal (diagram in section 4, alternatives in section 13) and answers Q-026.
 2. On approval, this session records the decision as a new ADR in `docs/decisions/` and updates this record and `docs/CURRENT_STATE.md`.
 3. The Platform Engineering session is asked (through `docs/OPEN-QUESTIONS.md` or a direct message) to rebuild the draft as section 12 describes, once the decision is recorded.

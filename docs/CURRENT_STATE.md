@@ -13,7 +13,7 @@ Nothing. There is no application code yet.
 ## In Progress
 
 - Refinement of the documentation. The initial organization in `08-COMPANY.md` is complete: identity, catalog, roles, tools and vacancies.
-- Phase 1 database architecture: PROPOSED on 2026-11-17 (`docs/database/phase-1-database-architecture.md`). Waits for the owner (Q-017). The draft schema on `feat/phase-1-backend-foundation` is on hold until then.
+- Phase 1 database architecture: PROPOSED on 2026-11-17 (`docs/database/phase-1-database-architecture.md`). Waits for the owner (Q-026). The draft schema on `feat/phase-1-backend-foundation` is on hold until then.
 
 ## Planned
 

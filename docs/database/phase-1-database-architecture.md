@@ -480,15 +480,15 @@ Open points are registered in `docs/OPEN-QUESTIONS.md`, with their destination f
 
 | Question | Destination | Entry |
 |---|---|---|
-| Approve Alternative A as the Phase 1 direction (and whether RLS is decided before Phase 2) | Owner | Q-017 |
-| Can one account hold more than one role in the same organization? (Proposal: no.) | Product and Documentation | Q-018 |
-| What "own" means for tasks, cases and messages (owned by the occupant, assigned to them, created by them) | Product and Documentation | Q-019 |
-| Vocabulary for permissions: are `request` and `decide` the right actions? Do messages count as `change`? | Product and Documentation | Q-020 |
-| Which customer data each role may see (for example, contact history for Operations) | Product and Documentation | Q-021 |
-| Should the phone get test accounts, or only the test setup and the owner's local runs? | Owner | Q-022 |
-| Should a membership keep history (role changes, departures) from Phase 1, or only the current state? | Owner | Q-023 |
-| Is "account" the person's login identity, and should the glossary define the table-level terms in section 3? | Product and Documentation | Q-024 |
-| Should the permission rows be editable by the owner at runtime, or only through the file? | Owner | Q-025 |
+| Approve Alternative A as the Phase 1 direction (and whether RLS is decided before Phase 2) | Owner | Q-026 |
+| Can one account hold more than one role in the same organization? (Proposal: no.) | Product and Documentation | Q-027 |
+| What "own" means for tasks, cases and messages (owned by the occupant, assigned to them, created by them) | Product and Documentation | Q-028 |
+| Vocabulary for permissions: are `request` and `decide` the right actions? Do messages count as `change`? | Product and Documentation | Q-029 |
+| Which customer data each role may see (for example, contact history for Operations) | Product and Documentation | Q-030 |
+| Should the phone get test accounts, or only the test setup and the owner's local runs? | Owner | Q-031 |
+| Should a membership keep history (role changes, departures) from Phase 1, or only the current state? | Owner | Q-032 |
+| Is "account" the person's login identity, and should the glossary define the table-level terms in section 3? | Product and Documentation | Q-033 |
+| Should the permission rows be editable by the owner at runtime, or only through the file? | Owner | Q-034 |
 
 **Inputs, not decided here:**
 
@@ -505,7 +505,7 @@ Open points are registered in `docs/OPEN-QUESTIONS.md`, with their destination f
 - **Business tables** of later phases: products, stock, orders, cases, ledgers, reports (Phases 2 and 3).
 - **Audit and event tables** (`05`, section 12; first needed in Phase 3).
 - **Vacancy and application tables** (ADR 0005, ADR 0023, ADR 0026: Phase 2 or later).
-- **Membership history tables**, unless Q-023 is answered otherwise.
+- **Membership history tables**, unless Q-032 is answered otherwise.
 - **Row-level security** (Alternative B), until its decision.
 - **Partitioning, read replicas, connection pooling beyond the library default** (ADR 0010, `05`, section 18: not needed for one organization on one phone).
 - **pg-boss job tables.** The library creates and manages them in its own schema. They are not designed here, but background jobs must carry `organization_id` (section 5.3).
@@ -519,7 +519,7 @@ Open points are registered in `docs/OPEN-QUESTIONS.md`, with their destination f
 
 ## 16. Next steps after approval
 
-1. Owner decides on this proposal (Q-017), and on the Phase 1 questions that block the seed (Q-018, Q-022, Q-023).
+1. Owner decides on this proposal (Q-026), and on the Phase 1 questions that block the seed (Q-027, Q-031, Q-032).
 2. The approved decision is recorded in `docs/decisions/` by this session (new ADR, sequential number).
 3. The Platform Engineering session rebuilds the draft from section 12, regenerates its migration, and adds the isolation tests of section 11. Its branch is not changed by this session.
 4. Infrastructure and Operations answers Q-007 before the Docker image is pinned.
