@@ -47,7 +47,7 @@ Phase 1 was otherwise defined as a foundation with no business behavior (ADR 002
 - `06-ROADMAP.md`, section 4: scope items 10 and 11 and one exit criterion added.
 - Architecture must include the financial entities and the budget exception flow in the Phase 1 database design. ADR 0032 must be amended, not replaced, in two steps:
   - Amendment 1 (approved 2026-11-17): capital contributions, cash ledger entries, budget limits, committed amounts and the departments that attach those limits.
-  - Amendment 2 (proposed, awaiting owner approval): the budget exception flow, with internal actors, approval rules, exception requests, exception decisions, platform roles and supervision actions.
+  - Amendment 2 (approved by the owner, 2026-11-17): the budget exception flow, with internal actors, approval rules, exception requests, exception decisions, platform roles and supervision actions.
 - The Platform Engineering schema draft on hold (`feat/phase-1-backend-foundation`) is replaced by the revised design, not extended.
 - Cost: R$ 0 per month. Maintenance: the ledger and budget tables, and their tests.
 - Management is simulated in the first version. Who acts as management when an exception is requested is an open point for the owner.
