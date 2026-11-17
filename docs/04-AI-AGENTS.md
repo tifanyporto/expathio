@@ -486,3 +486,32 @@ The following decisions require further exploration:
 - How should agent activity be paused, resumed, or limited?
 
 These decisions must be resolved before AI Integration starts in Phase 6 (`docs/06-ROADMAP.md`, section 9). AI is outside the first release (`docs/decisions/0003-ai-timing-and-scope.md`). They should be validated against the available infrastructure, expected operating costs, and the desired level of organizational realism.
+
+## 17. Candidate Provider Resources
+
+**Status:** PROPOSED. Nothing in this section is a decision. ADR 0003 (AI in Phase 6) and ADR 0004 (R$ 0 per month for AI calls) remain in force.
+
+### 17.1. Google AI Ultra Subscription
+
+The owner subscribed to Google AI Ultra on 2026-11-17, for one year. The owner's intent is to use it for the platform's agents (this document), not now, but when AI Integration starts.
+
+What the subscription offers that is relevant to Expathio, as read from public sources on 2026-11-17 and not yet verified in the owner's account:
+
+- Monthly Google Cloud credits, part of the Google Developer Program benefits included in AI Pro and Ultra since 2026-01-27. The credits can be spent on the Gemini API or on Vertex AI.
+- The benefit must be activated by the subscriber (developer profile opt-in).
+- Using the Gemini API against these credits requires a Cloud billing account with a minimum prepayment of USD 5.
+- Public sources disagree on the Ultra credit amount (USD 40 or USD 100 per month, depending on the plan). The real amount must be read in the owner's account.
+- The subscription does not give unlimited API use. Usage above the credits is billed to the billing account.
+
+### 17.2. Points to Resolve Before Any Use
+
+1. **Timing.** The subscription ends around 2027-11. Phase 6 may start after that. The resource may expire before it is used, unless the owner renews or AI starts earlier, which would require a change to ADR 0003.
+2. **Budget.** Any API call, even one paid by credits, needs a new decision that replaces or amends ADR 0004. That decision must state the monthly limit and how overage is prevented: a budget alert, a hard spending cap, or a project quota in the Cloud console.
+3. **Unused credits.** Whether unused monthly credits carry over must be verified. If they expire each month, they do not accumulate for Phase 6.
+4. **Provider lock-in.** Business code must not depend on Gemini directly. The model abstraction in `05-TECHNICAL-ARCHITECTURE.md`, section 9.1, keeps the provider replaceable.
+5. **Data.** No participant personal data is sent to a model provider without a decision on it (`CLAUDE.md`, section 11; ADR 0022).
+6. **Secrets.** API keys stay outside the repository, in environment variables or ignored files (`CLAUDE.md`, section 7).
+
+### 17.3. What Happens Now
+
+Nothing is configured, and no API key is created. When the owner wants to use the resource, the AI Integration session prepares the decision in point 2 with alternatives, cost and a recommendation.
