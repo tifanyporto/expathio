@@ -221,3 +221,14 @@ Marketing, Product and Design, Technology and Executive Management remain simula
 3. Whether the revised roles change the approved permission matrix (section 6.1). If option 2 is chosen, the matrix is revised and approved again.
 
 Open question: `docs/OPEN-QUESTIONS.md`, Q-040.
+
+### 10.6 Membership history (decided by the owner, 2026-11-17)
+
+These rules are owner decisions and are recorded here so that the membership model and the career rules (`07-PROGRESSION-AND-REWARDS.md`) refer to the same text:
+
+- An account holds one role at a time in one organization.
+- An account belongs to one organization at a time. Changing organization ends the active membership, and the previous membership stays in the history.
+- Each role has one active occupant per organization (`docs/decisions/0007-first-version-participant-rules.md`).
+- Membership history is kept from Phase 1. It records the start and end date of each membership, and it is the basis for promotions, changes of company and, later, the weight of each company in a career.
+
+Source: owner answers to Q-027, Q-032 and Q-041 (`docs/OPEN-QUESTIONS.md`).
