@@ -142,3 +142,12 @@
 - **Answered by:** Architecture and Quality, approved by the owner
 - **Needed by:** deferred
 - **Question:** whether a lint tool should block imports that cross folder rules (ADR 0019, consequences). Adding a new tool needs the owner's approval.
+
+### Q-040 — Revision for a newly founded company: store count and participant roles
+
+- **Status:** PROPOSED
+- **Asked by:** Product and Documentation
+- **Answered by:** owner
+- **Needed by:** before the role list and the store count are used in Phase 1 or Phase 2 design
+- **Question:** MONUMENT opens one physical store, not two (owner, 2026-11-17). Should the first version keep the four participant roles or merge Sales Support into Operations (`08-COMPANY.md`, section 10.3)? If the permission matrix changes, it must be approved again (section 6.1).
+- **Source:** `docs/08-COMPANY.md`, section 10; `docs/decisions/0009-first-version-tools-and-roles.md`; `docs/decisions/0017-physical-stores-in-first-release.md`

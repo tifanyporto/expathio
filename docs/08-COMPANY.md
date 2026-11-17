@@ -172,3 +172,52 @@ Rules:
 Open technical question for Architecture and Quality: functions are built in code, so a kind B addition requires a code change. Whether a kind A addition can be made without a code change (roles stored as data) is still open. Product recommends it, but only for kind A. The decision belongs to Architecture and Quality, in a new ADR, after owner approval.
 
 The function catalog (the list of existing functions, with the records each one uses and the roles that use it) does not exist yet. It is created when the first Phase 1 functions are specified.
+
+## 10. Revision Proposal for a Newly Founded Company (PROPOSED)
+
+Status: PROPOSED. Nothing in this section changes sections 1 to 9 until the owner approves it. Owner approval is required because it changes approved decisions (`docs/decisions/0009-first-version-tools-and-roles.md`, `0017-physical-stores-in-first-release.md`, `0027-first-version-role-titles.md`).
+
+### 10.1 Context
+
+MONUMENT is being founded now, in the simulation's first state. The owner decided that the first physical store opens alone: one physical store instead of two. The owner also asked whether the four participant roles fit a newly founded company with one store.
+
+### 10.2 Store count
+
+Alternatives:
+
+1. **Keep two stores.** No change. The current decision stays in force.
+2. **One physical store, online store kept.** Chosen by the owner for the first opening (this proposal assumes it).
+
+Consequence: the stock model does not change. Stock is still tracked per location (`02`, section 6.3), and there are two locations: the online store and the physical store. Only the number of physical stores changes. The data model must still allow more than one physical store, because the owner may open more later.
+
+Documents that would change if approved: `02-BUSINESS-SIMULATION.md`, section 3 (two stores); this document, section 2 (two stores); `docs/CURRENT_STATE.md`, approved decision `0017`. Decision `0017` needs a new ADR that replaces the store count.
+
+### 10.3 Participant roles
+
+Alternatives:
+
+1. **Keep four roles** (Operations Assistant, Customer Service Representative, Sales Support Assistant, Finance Assistant). Smallest change. Sales Support's order monitoring and sales dashboard are separate from Operations, although one store makes that split small.
+2. **Three roles: merge Sales Support into Operations.** Order monitoring and "orders at risk" go to the Operations Assistant. The sales dashboard becomes part of the Finance Assistant's revenue report. Fewer roles to fill, which suits a newly founded company. Changes the permission matrix in section 6.1 (approved), so it needs a new approval.
+3. **Four roles plus a store role.** Adds a role for store staff. Not recommended for Phase 1, because store operations (sales at the counter, store stock) are not in the Phase 1 scope or the Phase 3 workflows.
+
+Recommendation: option 2 for the first version, so the platform starts with the functions a newly founded company uses most. Option 2 needs the function catalog (`docs/OPEN-QUESTIONS.md`, Q-013) to be built with the new role list in mind. Adding roles later stays possible under section 9.
+
+### 10.4 What a newly founded company needs first
+
+The owner asked which functions matter most at founding. The Product proposal, for the owner to confirm:
+
+- Stock per location, and replenishment requests (Operations).
+- Orders from both channels, in one list (Operations, with Finance for payment).
+- Customer cases and refund or exchange requests (Customer Service, decided by Finance under ADR 0025).
+- Payment and refund ledger, and a revenue report (Finance).
+- Monitoring of orders at risk (Operations under option 2).
+
+Marketing, Product and Design, Technology and Executive Management remain simulated (section 4), as they are now.
+
+### 10.5 Decisions the owner needs to make
+
+1. Store count: one physical store (proposal) or two.
+2. Role set: option 1, 2 or 3 in section 10.3.
+3. Whether the revised roles change the approved permission matrix (section 6.1). If option 2 is chosen, the matrix is revised and approved again.
+
+Open question: `docs/OPEN-QUESTIONS.md`, Q-040.
