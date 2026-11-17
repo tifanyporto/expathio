@@ -28,7 +28,7 @@ In order:
 10. Draft on `origin/feat/phase-1-backend-foundation`: `server/db/schema.ts` and `server/db/migrations/0000_phase1_foundation.sql` (read with `git show`; not checked out).
 11. `docs/sessions/TEMPLATE.md`.
 
-Second part: the proposal file, the diagram, and the register entries Q-026 to Q-035.
+Second part: the proposal file, the diagram, and the register entries Q-026 to Q-034 and Q-041.
 
 Not read: `docs/decisions/0011` and `0018` in full, the Platform Engineering session record, `docs/GLOSSARY.md`.
 
@@ -38,7 +38,7 @@ Not read: `docs/decisions/0011` and `0018` in full, the Platform Engineering ses
 |---|---|
 | `docs/database/phase-1-database-architecture.md` | New, revised twice. Entities, ownership, row-level security (section 5.4), keys, membership history, permissions as data, customer visibility (section 8.4), seed, migrations, Docker tests, review of the draft, three alternatives with B recommended, open points. Status PROPOSED. |
 | `docs/database/phase-1-entities.svg` | New, revised. Diagram with membership history (start and end dates) and the row-level security mark. |
-| `docs/OPEN-QUESTIONS.md` | Q-026 to Q-034 (renumbered earlier) now carry the owner's answers, relayed by Product and Documentation. Q-035 added (one account active in two organizations). Entries are not closed; only the owner closes them. Q-012 keeps its input note. Q-015 is not used. |
+| `docs/OPEN-QUESTIONS.md` | Q-026 to Q-034 (renumbered earlier) now carry the owner's answers, relayed by Product and Documentation. Q-041 added (one account active in two organizations). Entries are not closed; only the owner closes them. Q-012 keeps its input note. Q-015 is not used. |
 | `docs/CURRENT_STATE.md` | Line under "In Progress" still says the proposal is PROPOSED and waits for the owner. |
 | `docs/05-TECHNICAL-ARCHITECTURE.md` | Line under section 19.2 updated to say row-level security is recommended, not decided. |
 | `docs/sessions/architecture-and-quality/2026-11-17-phase-1-database-architecture.md` | This record. |
@@ -73,7 +73,7 @@ No tests were run. This session wrote documents only, and there is no applicatio
 For the owner:
 
 - **Q-026:** review the diagram (`docs/database/phase-1-entities.svg`) and the revised proposal, then approve or change Alternative B.
-- **Q-035:** whether one account can be active in two organizations at once (the schema allows it).
+- **Q-041:** whether one account can be active in two organizations at once (the schema allows it).
 - Confirm later: Q-027, Q-028, Q-031, Q-032, Q-034 are answered in the register, but only the owner closes entries.
 
 For Product and Documentation:
@@ -106,7 +106,7 @@ Read in this order:
 
 1. `CLAUDE.md`, sections 2, 5, 7 and 8.
 2. `docs/database/phase-1-database-architecture.md`, section 0 (revision notes), then 1, 4 and 13 (summary, diagram, alternatives).
-3. `docs/OPEN-QUESTIONS.md`, entries Q-026 to Q-035.
+3. `docs/OPEN-QUESTIONS.md`, entries Q-026 to Q-034 and Q-041.
 4. This record, "Pending".
 
 Starting point: the owner's review of the diagram (Q-026). Until then, nothing here changes.

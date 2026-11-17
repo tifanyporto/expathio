@@ -242,7 +242,7 @@
 - **Owner answer (2026-11-17, relayed by Product and Documentation):** until Phase 2, permissions change only through the versioned file and a deployment. No editing in the application now.
 - **Source:** `docs/database/phase-1-database-architecture.md`, section 8.1
 
-### Q-035 — One account in two organizations at the same time
+### Q-041 — One account in two organizations at the same time
 
 - **Status:** PROPOSED
 - **Asked by:** Architecture and Quality

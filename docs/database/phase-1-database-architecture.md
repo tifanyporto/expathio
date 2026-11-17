@@ -21,7 +21,7 @@ The owner reviewed the first version and decided the following. The decisions ar
 | Q-031 (test accounts on the phone) | Approved: test accounts stay on the phone, together with the MONUMENT reference data. | Section 9 |
 | Q-032 (membership history) | Keep the history of memberships from Phase 1, with start and end dates. | Sections 6, 7.3, 12 |
 | Q-034 (runtime editing of permissions) | No editing in the application until Phase 2. The versioned file stays the only way to change permissions. | Section 8.1 |
-| Q-027 (one role per account) | One role per account in one organization. Whether one account can be linked to two organizations at the same time is left open (new entry Q-035). | Sections 7.3, 14 |
+| Q-027 (one role per account) | One role per account in one organization. Whether one account can be linked to two organizations at the same time is left open (new entry Q-041). | Sections 7.3, 14 |
 | Q-028 ("own") | "Own" means assigned to the occupant of the role. | Section 8.2 |
 | Q-029 (action vocabulary) | Not changed yet. Product will propose more natural names. The four actions stay in this document until then. | Section 8.2 |
 | Q-030 (customer data) | Accepted as a provisional recommendation. The schema is prepared for protected columns. | Section 8.4 |
@@ -305,7 +305,7 @@ Notes:
 - `created_at`, `updated_at` `timestamptz` not null.
 - Row-level security with the policies of 5.4.
 
-A role change or departure is one transaction: the active row gets `ended_at`, and a new row is inserted when there is a new role. Whether one account may be active in two organizations at once is not decided by these indexes (they are per organization). It is an open point (Q-035).
+A role change or departure is one transaction: the active row gets `ended_at`, and a new row is inserted when there is a new role. Whether one account may be active in two organizations at once is not decided by these indexes (they are per organization). It is an open point (Q-041).
 
 **`user`**
 - `id text` primary key (better-auth), `email` unique on `lower(email)`, `simulated boolean` not null default `true` (proposed, section 9).
@@ -584,7 +584,7 @@ Open points are registered in `docs/OPEN-QUESTIONS.md`, with their destination f
 | Membership history from Phase 1. Answered: yes. | Owner | Q-032 |
 | Glossary terms (section 3) | Product and Documentation | Q-033 |
 | Runtime editing of permissions. Answered: not before Phase 2. | Owner | Q-034 |
-| Can one account be active in two organizations at the same time? | Owner | Q-035 |
+| Can one account be active in two organizations at the same time? | Owner | Q-041 |
 
 **Inputs, not decided here:**
 
@@ -617,7 +617,7 @@ Open points are registered in `docs/OPEN-QUESTIONS.md`, with their destination f
 
 ## 16. Next steps after approval
 
-1. The owner reviews the diagram and decides Q-026 (Alternative B). The owner also confirms Q-035, which can be decided later.
+1. The owner reviews the diagram and decides Q-026 (Alternative B). The owner also confirms Q-041, which can be decided later.
 2. The approved decision is recorded in `docs/decisions/` by this session (new ADR, sequential number).
 3. The Platform Engineering session rebuilds the draft from section 12, regenerates its migration, and adds the database and isolation tests of section 11. Its branch is not changed by this session.
 4. Infrastructure and Operations answers Q-007 before the Docker image is pinned, and defines how the two database roles are created on the phone and on the development computer.
