@@ -285,14 +285,13 @@ Key: same as section 6.1. Changed rows are marked "new" or "changed".
 | Refund or exchange requests | — | Request (sent to Finance) | Read; approves or rejects (ADR 0025) |
 | Payment and refund ledger | — | — | Change |
 | Revenue report, including sales figures (changed) | — | — | Change |
-| Sales dashboard (removed) | — | — | — |
+| Sales dashboard (read-only) | Read | Read | Read |
 
 Common to all roles: unchanged from section 6.1.
 
 **Open points for the owner before approval:**
 
-1. The sales dashboard was read-only for every role. In this revision it is folded into the revenue report, and Customer Service loses access to it. Is that intended?
-2. Purchase orders (new row) are a new record. Its approval flow (who approves a purchase) is not defined. Proposed: Operations creates and Finance reads, with no approval step in the first version.
-3. Phase 1 seeds three roles. Section 9 (adding a role) applies to the removal of Sales Support: it is a removal, so the owner decides when the function catalog (Q-013) is revised.
+1. Purchase orders (new row) are a new record. Its approval flow (who approves a purchase) is not defined. Proposed: Operations creates and Finance reads, with no approval step in the first version.
+2. Phase 1 seeds three roles. The owner decides when the function catalog (Q-013) is revised to match the removal of Sales Support.
 
 **Documents affected when approved:** `08-COMPANY.md` (sections 2, 4, 5, 6.1, 7); `02-BUSINESS-SIMULATION.md` (section 3, store count); `01-PRODUCT.md` (section 3.5 tools reference); `docs/decisions/0009`, `0017`, `0024`, `0027` (status notes); `docs/CURRENT_STATE.md`; Architecture's seed of role data (ADR 0032 and the permissions file).
