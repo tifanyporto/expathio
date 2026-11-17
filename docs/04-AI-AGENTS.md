@@ -495,23 +495,64 @@ These decisions must be resolved before AI Integration starts in Phase 6 (`docs/
 
 The owner subscribed to Google AI Ultra on 2026-11-17, for one year. The owner's intent is to use it for the platform's agents (this document), not now, but when AI Integration starts.
 
-What the subscription offers that is relevant to Expathio, as read from public sources on 2026-11-17 and not yet verified in the owner's account:
+What the subscription offers that is relevant to Expathio, read from Google's pages on 2026-11-17 (Google Developer Program Benefits FAQ; Google blog post on claiming credits in AI Studio):
 
-- Monthly Google Cloud credits, part of the Google Developer Program benefits included in AI Pro and Ultra since 2026-01-27. The credits can be spent on the Gemini API or on Vertex AI.
-- The benefit must be activated by the subscriber (developer profile opt-in). Confirmed in the owner's developer profile on 2026-11-17: the credit can only be claimed after a Google Cloud billing account is set up. The owner has an existing billing account, closed, with no linked projects. The credit was not claimed.
-- Using the Gemini API against these credits requires a Cloud billing account with a minimum prepayment of USD 5.
-- Public sources disagree on the Ultra credit amount (USD 40 or USD 100 per month, depending on the plan). The real amount must be read in the owner's account.
-- The subscription does not give unlimited API use. Usage above the credits is billed to the billing account.
+- Monthly credits in "GenAI and Google Cloud developer credits": USD 10 for AI Pro, USD 40 for AI Ultra 5x, USD 100 for AI Ultra 20x. The owner's Ultra tier (5x or 20x) is not confirmed yet.
+- The credits can be spent on Google Cloud products, including the Gemini API and Google AI Studio, apart from Google's standard discount exclusions.
+- Each monthly credit is valid for 12 months from the date it is granted. Unused credits remain until then, and the earliest-expiring credit is spent first.
+- Monthly grants follow the anniversary of the date the benefit was first claimed. A month that passes before the first claim produces no credit.
+- Only the primary subscriber can use the credits.
+- Claiming requires a Google Cloud billing account. Confirmed in the owner's developer profile on 2026-11-17. The owner has an existing billing account, closed, with no linked projects. The credit was not claimed.
+- Using the Gemini API against the credits requires a prepayment of at least USD 5, kept as a balance.
+- The subscription does not give unlimited API use. Usage above the credits is charged to the billing account.
+
+Not confirmed: what happens to credits already granted if the subscription is not renewed. The FAQ says benefits of a membership period "don't roll over into future periods", which may mean they end with the subscription.
 
 ### 17.2. Points to Resolve Before Any Use
 
-1. **Timing.** The subscription ends around 2027-11. Phase 6 may start after that. The resource may expire before it is used, unless the owner renews or AI starts earlier, which would require a change to ADR 0003.
-2. **Budget.** Any API call, even one paid by credits, needs a new decision that replaces or amends ADR 0004. That decision must state the monthly limit and how overage is prevented: a budget alert, a hard spending cap, or a project quota in the Cloud console.
-3. **Unused credits.** Whether unused monthly credits carry over must be verified. If they expire each month, they do not accumulate for Phase 6.
-4. **Provider lock-in.** Business code must not depend on Gemini directly. The model abstraction in `05-TECHNICAL-ARCHITECTURE.md`, section 9.1, keeps the provider replaceable.
-5. **Data.** No participant personal data is sent to a model provider without a decision on it (`CLAUDE.md`, section 11; ADR 0022).
-6. **Secrets.** API keys stay outside the repository, in environment variables or ignored files (`CLAUDE.md`, section 7).
+1. **Timing.** The subscription ends around 2027-11. Each credit lasts 12 months, so credits granted now expire in 2027-11 or 2028. Phase 6 is not expected by then. Credits help only if they are used before Phase 6, for preparation work.
+2. **Budget.** Any API call, even one paid by credits, needs a decision that amends ADR 0004. See section 17.4.
+3. **Provider lock-in.** Business code must not depend on Gemini directly. The model abstraction in `05-TECHNICAL-ARCHITECTURE.md`, section 9.1, keeps the provider replaceable.
+4. **Data.** No participant personal data is sent to a model provider without a decision on it (`CLAUDE.md`, section 11; ADR 0022).
+5. **Secrets.** API keys stay outside the repository, in environment variables or ignored files (`CLAUDE.md`, section 7).
 
-### 17.3. What Happens Now
+### 17.3. Cost Controls Available
 
-Nothing is configured, and no API key is created. When the owner wants to use the resource, the AI Integration session prepares the decision in point 2 with alternatives, cost and a recommendation.
+- **Project spend cap (Gemini API).** Since 2026-03, Google AI Studio lets a project owner set a monthly spend cap per project (Spend page, "Monthly spend cap"). Requests stop when the cap is reached.
+- **Billing tier cap.** Gemini API billing accounts have a monthly cap per usage tier (USD 250 on Tier 1), enforced by Google.
+- **Cloud budget alert.** A budget in Cloud Billing sends e-mail alerts at chosen thresholds. It warns, it does not stop usage.
+- **One dedicated project.** Only one project, used for Expathio AI work, is linked to the billing account. Any other link needs the owner's approval.
+
+Not confirmed: whether the project spend cap counts usage paid by credits, or only real charges. This must be checked in AI Studio before the cap is relied on.
+
+### 17.4. Proposal: Use of the Ultra Credits Before Phase 6
+
+**Status:** PROPOSED. Prepared on 2026-11-17 at the owner's request. Not approved.
+
+**Context.** ADR 0004 sets the AI budget at R$ 0 per month. ADR 0003 places AI in the product in Phase 6. The Ultra credits are already paid for by the subscription, but they need a billing account, a USD 5 prepayment, and they expire before Phase 6 if unused.
+
+**Alternatives.**
+
+1. **Do not claim now.** Claim when Phase 6 approaches, if the subscription is renewed.
+   - Cost: R$ 0. Maintenance: none.
+   - Downside: no credit is granted until the first claim. Everything the subscription offers this year is lost.
+2. **Claim now, without using the API.** Set up billing and claim the credits, but make no API calls.
+   - Cost: none in money, unless the USD 5 prepayment is also made. Maintenance: none.
+   - Downside: the credits expire unused, because Phase 6 is not expected before they do. A billing account with a card is open with no benefit.
+3. **Claim now and allow preparation experiments paid by credits only (recommended).**
+   - Scope: the AI Integration session runs small experiments outside the product code, to answer the open questions in section 16: which roles need AI, cost per agent action, how context size affects cost, how a model handles organization rules. No product feature uses AI before Phase 6, so ADR 0003 is unchanged.
+   - Money limit: R$ 0 per month beyond the credits. The only real expense is the USD 5 prepayment (about R$ 30 at current rates), paid once and kept as a balance.
+   - Controls: one dedicated project; project spend cap set to the lowest value allowed; Cloud budget alerts at 50%, 90% and 100% of USD 5; API key kept outside the repository; only fictional data sent to the model.
+   - Cost: USD 5 once. Maintenance: low. The owner checks the monthly e-mail alert or the AI Studio billing page.
+   - Downside: a card is linked to the account, so a failure of the controls could cause a real charge. The unconfirmed point in section 17.3 must be checked first.
+4. **Claim now and start AI in the product earlier.**
+   - Changes ADR 0003 and the roadmap. Not recommended: Phase 6 depends on a stable deterministic simulation, which does not exist yet.
+
+**Recommendation.** Alternative 3. It turns credits that would otherwise expire into answers the project needs before Phase 6, with a real cost limited to the USD 5 prepayment.
+
+**Consequences if approved.**
+
+- A new decision record amends ADR 0004: budget of R$ 0 per month in real charges, use of the Ultra credits allowed for preparation experiments, USD 5 prepayment approved. Its number is chosen at approval, after checking the numbers already used on other branches.
+- The owner reopens the existing billing account, or creates one, without starting the Google Cloud free trial, so the trial remains available for later.
+- The AI Integration session writes the setup steps for the owner, and records each experiment and its cost in its session records.
+- Experiment code lives outside `server/` and `web/`, in a folder agreed with Architecture and Quality.
