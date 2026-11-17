@@ -243,3 +243,21 @@ The owner accepted the following reading for the founding stage. It is a directi
 - **Purchasing:** inside Operations, not a separate role.
 
 The owner also noted that MONUMENT is expected to grow. Departments and roles that are left out now may be needed later. When the company grows, the role set must be reviewed under section 9.
+
+### 10.8 Initial staff list (owner, 2026-11-17)
+
+Owner decisions: one physical store (the opening), and Sales Support joins Operations for now. These decisions are not yet formalized: the formal changes (ADR superseding `0017`, changes to `0009`, `0027`, sections 5 to 7 and the matrix in 6.1) need their own approval.
+
+Participant roles with one vacancy each (`docs/decisions/0007-first-version-participant-rules.md`):
+
+| Role | Vacancies | Responsibilities in the first version |
+|---|---|---|
+| Operations Assistant | 1 | Stock for the online store and the physical store; replenishment and purchasing of materials and finished goods from outsourced suppliers; fulfillment queue and delivery tracking; monitoring of orders at risk (taken from Sales Support) |
+| Customer Service Representative | 1 | Customer cases and contact history; refund or exchange requests sent to Finance |
+| Finance Assistant | 1 | Payment and refund ledger; revenue report, including the sales dashboard (taken from Sales Support); approves or rejects refund and exchange requests (`docs/decisions/0025-refund-decision-by-financial-analyst.md`) |
+
+Total: three participants. The Sales Support Assistant role has no occupant in this list.
+
+Simulated, not participants: Executive Management, Technology, Marketing, Product and Design (section 4). Their manager agents are the ones that vacancies report to (section 7).
+
+When the company grows, Sales Support can be restored as a role under section 9.
