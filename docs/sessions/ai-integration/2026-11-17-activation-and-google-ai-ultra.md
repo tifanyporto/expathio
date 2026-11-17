@@ -41,7 +41,7 @@ Out of scope:
 
 ## Tests and Results
 
-Nothing was executed.
+Nothing was executed. The owner checked the developer profile: claiming the credit requires a Google Cloud billing account. The owner's existing billing account is closed and has no linked projects. It was not reopened, and the credit was not claimed.
 
 ## Pending
 

@@ -498,7 +498,7 @@ The owner subscribed to Google AI Ultra on 2026-11-17, for one year. The owner's
 What the subscription offers that is relevant to Expathio, as read from public sources on 2026-11-17 and not yet verified in the owner's account:
 
 - Monthly Google Cloud credits, part of the Google Developer Program benefits included in AI Pro and Ultra since 2026-01-27. The credits can be spent on the Gemini API or on Vertex AI.
-- The benefit must be activated by the subscriber (developer profile opt-in).
+- The benefit must be activated by the subscriber (developer profile opt-in). Confirmed in the owner's developer profile on 2026-11-17: the credit can only be claimed after a Google Cloud billing account is set up. The owner has an existing billing account, closed, with no linked projects. The credit was not claimed.
 - Using the Gemini API against these credits requires a Cloud billing account with a minimum prepayment of USD 5.
 - Public sources disagree on the Ultra credit amount (USD 40 or USD 100 per month, depending on the plan). The real amount must be read in the owner's account.
 - The subscription does not give unlimited API use. Usage above the credits is billed to the billing account.
