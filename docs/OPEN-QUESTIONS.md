@@ -124,6 +124,7 @@
 - **Needed by:** before the first role is added after the four in ADR 0009
 - **Question:** can a role that uses only existing functions be stored as data, without a code change? Product recommends yes, for that case only.
 - **Source:** `08-COMPANY.md`, section 9; ADR 0009 says the workflow decision must be revisited before a new role is added
+- **Input (Architecture and Quality, 2026-11-17, not an answer):** in the proposal `docs/database/phase-1-database-architecture.md`, roles and permissions are stored as data (section 8). A role that uses only existing resources can be added as data. A new resource still needs a code change, because the resource list is in the seed file. Entry stays open for the owner.
 
 ### Q-013 — Function catalog
 
@@ -150,3 +151,84 @@
 - **Answered by:** Architecture and Quality, approved by the owner
 - **Needed by:** deferred
 - **Question:** whether a lint tool should block imports that cross folder rules (ADR 0019, consequences). Adding a new tool needs the owner's approval.
+
+### Q-017 — Approve the Phase 1 database architecture
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** owner
+- **Needed by:** before the Platform Engineering session rebuilds the draft schema (branch `feat/phase-1-backend-foundation`, on hold)
+- **Question:** approve Alternative A of `docs/database/phase-1-database-architecture.md` (shared schema, `organization_id` on organization-owned tables, composite keys, isolation tests, permissions as seeded data). Also decide whether row-level security (Alternative B) is decided before the first Phase 2 table is designed.
+- **Source:** `docs/database/phase-1-database-architecture.md`, sections 13 and 14
+
+### Q-018 — Can one account hold more than one role in one organization?
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** Product and Documentation, approved by the owner
+- **Needed by:** before the membership unique constraints are written
+- **Question:** the proposal allows one role per account per organization. ADR 0007 says one occupant per role, and does not say whether one person can hold two roles. Is the rule correct?
+- **Source:** `docs/database/phase-1-database-architecture.md`, section 7.3; ADR 0007
+
+### Q-019 — What "own" means for tasks, cases and messages
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** Product and Documentation, approved by the owner
+- **Needed by:** before the permission rows for tasks, cases and messages are seeded
+- **Question:** `08-COMPANY.md`, section 6.1, says "own cases", "own tasks" and "own role" messages, but does not define "own". Does it mean assigned to the occupant, created by the occupant, or belonging to the occupant's role area? The "Read (only the customer's own orders, for a case)" row is a different meaning: orders of a customer in an open case. Which definition applies to each row?
+- **Source:** `docs/08-COMPANY.md`, section 6.1; `docs/database/phase-1-database-architecture.md`, section 8
+
+### Q-020 — Vocabulary of permission actions
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** Product and Documentation, approved by the owner
+- **Needed by:** before the permission rows are seeded
+- **Question:** the proposal uses four actions: `read`, `change`, `request` and `decide`. Are these the right words for the matrix? Does sending an internal message count as `change`, or is it a separate action? For refund and exchange requests, does "Finance Assistant: read; approves or rejects" need both `read` and `decide`?
+- **Source:** `docs/database/phase-1-database-architecture.md`, sections 8.2 and 8.3
+
+### Q-021 — Which customer data each role may see
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** Product and Documentation, approved by the owner
+- **Needed by:** before the first Phase 2 customer table is designed
+- **Question:** `08-COMPANY.md`, section 6.1, does not say which personal data of a customer each role may see. For example, may Operations Assistants see a customer's contact details, or only the order? May Sales Support see contact history? The database must know which columns to protect, so this rule has to be written as a business rule.
+- **Source:** `docs/08-COMPANY.md`, sections 5 and 6.1; `docs/database/phase-1-database-architecture.md`, section 12
+
+### Q-022 — Test accounts on the production phone
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** owner
+- **Needed by:** before the first deployment of Phase 1
+- **Question:** should the phone hold the four test accounts and the MONUMENT seed, so the owner can sign in there, or should test accounts exist only in the test setup and on the development computer? The seed of reference data (roles and permissions) runs on the phone in both cases.
+- **Source:** ADR 0022; `docs/database/phase-1-database-architecture.md`, section 9
+
+### Q-023 — Membership history from Phase 1
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** owner
+- **Needed by:** before the first role change or departure is built (ADR 0007)
+- **Question:** should memberships keep their history (each role change and departure, with dates) from Phase 1, or store only the current membership? The proposal stores only the current state and records the choice as open, because `05-TECHNICAL-ARCHITECTURE.md`, section 12, asks for history of permission changes.
+- **Source:** ADR 0007; `docs/05-TECHNICAL-ARCHITECTURE.md`, section 12; `docs/database/phase-1-database-architecture.md`, section 15
+
+### Q-024 — Terms for accounts and tables in the glossary
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** Product and Documentation, approved by the owner
+- **Needed by:** before Phase 1 code is written
+- **Question:** the library table `account` (login method) and the business "account" have the same word. Should `docs/GLOSSARY.md` define "account", "membership", "role", "permission" and "test account" with the meanings of `docs/database/phase-1-database-architecture.md`, section 3?
+- **Source:** `docs/database/phase-1-database-architecture.md`, section 3; `docs/GLOSSARY.md`
+
+### Q-025 — Runtime editing of permissions
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** owner
+- **Needed by:** before Phase 2 (when roles get behavior)
+- **Question:** should the permission rows be changed only through the versioned file and a deployment (the proposal), or should the owner be able to edit them in the application? Editing in the application needs an administration screen and an audit record, which are not in Phase 1.
+- **Source:** `docs/database/phase-1-database-architecture.md`, section 8.1
