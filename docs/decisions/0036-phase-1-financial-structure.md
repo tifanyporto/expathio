@@ -22,11 +22,13 @@ Phase 1 was otherwise defined as a foundation with no business behavior (ADR 002
 
 1. Phase 1 includes:
    - the record of the initial capital and of later contributions, with the entry in the company's bank account;
-   - the operational budget and the limit for each department, set by management after the capital is recorded and before operations start;
-   - queries for the available balance and for the committed amounts.
-2. Phase 1 does not include purchases, payments, sales, receivables or any budget check on a purchase. These are Phase 3 (`06-ROADMAP.md`, section 6).
+   - the operational budget and the limit for each department, set by management after the capital is recorded and before operations start. Departments are identified only to attach limits: minimal scope, with no hierarchy or administrative functions (owner, 2026-11-17, Q-044);
+   - queries for the available balance and for the committed amounts;
+   - the budget exception flow: a request with justification, an evaluation by fixed rules of the simulated management, an approval or rejection, and the audit record of the decision (owner, 2026-11-17, Q-045). No AI in this flow.
+2. Phase 1 does not include purchases, payments, sales or receivables. The check that blocks a purchase above a department's limit is Phase 3, when purchases exist (`06-ROADMAP.md`, section 6). The exception flow in Phase 1 is tested without purchases.
 3. The shared cash balance is the only cash. A budget is a limit over that balance, not separate money.
-4. The only approval flow in the first version is the budget exception: a purchase above a department's limit is blocked, and the employee can request an exception that management approves or rejects. Individual purchase approval is left for a later phase.
+4. The only approval flow in the first version is the budget exception. The simulated management is an internal business actor with authority limited by fixed rules, not a participant role and not an AI agent (owner, 2026-11-17, Q-048). Individual purchase approval is left for a later phase.
+5. Owner and administrator supervision is a separate access, outside the business and participant roles, and every action is identified and recorded (owner, 2026-11-17, Q-047).
 
 ## Rationale
 
