@@ -773,4 +773,6 @@ Entries are kept open for the owner to close, except where the owner says he app
 6. **Owner and administrator oversight (Q-047, owner answer).** The owner and the administrator have their own supervision access, separate from business roles and participant roles. Their actions are identified and recorded (`supervision_actions`: actor, action, target, time). They are not confused with the actions of simulated employees. Row-level security hides other organizations from ordinary roles; supervision uses this separate, logged path only.
 7. **Simulated manager status (Q-048, owner answer).** The simulated manager is outside the participant roles. It is an internal actor whose business authority is limited by predefined rules. Its decisions are audited under its identity. It is not an AI agent in this phase (ADR 0003).
 
+**Tables and diagram.** The draft of the tables is Amendment 2 of ADR 0032, status PROPOSED, with the diagram `docs/database/phase-1-exception-entities.svg`. It is not approved; the owner must approve it explicitly.
+
 **Tests (Phase 1):** every request gets a decision record; a request above the rule's maximum is rejected with its reason; the decision record cannot be changed; the snapshot values match the balance at decision time; the outcome does not depend on any model; the flow runs without any purchase.

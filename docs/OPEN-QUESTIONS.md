@@ -260,7 +260,7 @@
 - **Answered by:** Product and Documentation, approved by the owner
 - **Needed by:** before the first budget limit is recorded (Phase 1)
 - **Question:** how long is a budget period: a calendar month, a business cycle, or another length? The database stores a limit with an effective date, so it can support any of these, but the rule must be written.
-- **Status of the answer (corrected 2026-11-17, relayed by Product and Documentation):** NOT answered. Open. Product is responsible for the answer and will give it in a separate step.
+- **Status of the answer:** open, awaiting Product and the owner. Earlier notes said Product had answered this question; that was an error (Product and Documentation, 2026-11-17). No answer is recorded here.
 - **Source:** `docs/database/phase-1-database-architecture.md`, section 17.2 and 17.8; ADR 0036
 
 ### Q-043 — Definition of "department available"
@@ -270,7 +270,7 @@
 - **Answered by:** Product and Documentation, approved by the owner
 - **Needed by:** before the query of available amounts is specified (Phase 1)
 - **Question:** is the amount a department can still commit its limit minus its open commitments, and is that amount also capped by the company's available balance? The proposal assumes the cap applies.
-- **Status of the answer (corrected 2026-11-17, relayed by Product and Documentation):** NOT answered. Open. Product is responsible for the answer and will give it in a separate step.
+- **Status of the answer:** open, awaiting Product and the owner. Earlier notes said Product had answered this question; that was an error (Product and Documentation, 2026-11-17). No answer is recorded here.
 - **Source:** `docs/database/phase-1-database-architecture.md`, section 17.5; ADR 0036, decision 3
 
 ### Q-044 — Departments in Phase 1
@@ -322,3 +322,21 @@
 - **Question:** ADR 0024 and ADR 0027 load four participant roles in Phase 1. `08-COMPANY.md`, section 4, says Executive Management is simulated by a manager agent. Is the simulated manager a role row in the same catalog with a kind (participant or simulated), or is it outside the catalog until the phase that needs it? Does this need a decision record, since it changes the four-role limit?
 - **Owner answer (2026-11-17, relayed by Product and Documentation):** the simulated manager is outside the participant roles. It is neither a participant nor an AI agent in Phase 1. It is an internal actor whose business authority is limited by predefined rules, and its decisions are audited under its own identity. It does not create a fifth participant role. Entry kept open for the owner to close.
 - **Source:** `docs/decisions/0024-phase-1-business-roles-loaded.md`; `docs/decisions/0027-first-version-role-titles.md`; `docs/08-COMPANY.md`, section 4; `docs/database/phase-1-database-architecture.md`, section 17.9
+
+### Q-049 — Does an approved budget exception create a commitment?
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** owner, with Product and Documentation
+- **Needed by:** before Amendment 2 of ADR 0032 is approved
+- **Question:** when a budget exception is approved, does the approved amount become a commitment of the department (an amount promised, not yet paid), or does nothing change until a purchase exists in Phase 3? The answer depends partly on what "available" means (Q-043), which is open.
+- **Source:** `docs/decisions/0032-phase-1-database-architecture.md`, Amendment 2 (PROPOSED); `docs/decisions/0036-phase-1-financial-structure.md`, decision 4
+
+### Q-050 — Who grants the owner or administrator role
+
+- **Status:** PROPOSED
+- **Asked by:** Architecture and Quality
+- **Answered by:** owner
+- **Needed by:** before `platform_roles` is built
+- **Question:** the supervision access of the owner and administrator (Q-047) needs a grant. Who grants the administrator role, and can there be an administrator other than the owner in Phase 1? Is the grant recorded as a supervision action?
+- **Source:** `docs/decisions/0032-phase-1-database-architecture.md`, Amendment 2 (PROPOSED); Q-047

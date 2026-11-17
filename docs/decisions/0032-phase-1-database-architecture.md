@@ -75,3 +75,49 @@ The Phase 1 database uses **Alternative B**:
 Money is stored as integer minor units (`bigint`) in `BRL`. The available balance and the committed amounts are queries, not stored balances. The design is in `docs/database/phase-1-database-architecture.md`, section 17.
 
 **Not in this amendment.** The budget exception tables (requests, decisions, approval rules, the internal actor that decides, and the owner's and administrator's oversight records). ADR 0036 makes the exception flow part of Phase 1, so these need a second amendment, which the owner must approve. The proposal, section 17.9, holds the design.
+
+## Amendment 2 (PROPOSED, not approved)
+
+**Status:** PROPOSED. This text is not part of the decision until the project owner approves it explicitly. Until then, the budget exception tables are not to be built.
+
+**Why:** ADR 0036 (decision 1) puts the budget exception flow in Phase 1: a request with justification, an evaluation by fixed rules of the simulated management, an approval or rejection, and an audit record. The owner's answers of 2026-11-17 set the authority (Q-046), the supervision access (Q-047) and the status of the simulated manager (Q-048). Amendment 1 does not cover these tables.
+
+**What is added (all organization-owned, under decisions 2 to 8 of this record, unless marked global):**
+
+- `internal_actors`: an internal actor of the organization, of kind `simulated_manager` in Phase 1. It is not a participant role, not a user account, and not an AI agent (Q-048). Decisions are recorded under its identity.
+- `approval_rules`: the business authority of an actor, by action (`approve_budget_exception`), a maximum amount, and optionally one department. A new version is a new row (append-only). Rules are data, evaluated by the application in a fixed order; no model is involved.
+- `budget_exception_requests`: a request, with department, amount, justification (required, not empty) and the requesting account. Append-only.
+- `budget_exception_decisions`: one row per request, with the outcome (`approved` or `rejected`), a reason code, the rule version used, the internal actor that decided, the budget limit that applied, and snapshots of the available amount and of the department's committed amount at decision time, and the amount available after the decision. Append-only. One decision per request.
+- `platform_roles` (global, not organization-owned): the owner and the administrator, with the grant record. Supervision is separate from business and participant roles (Q-047).
+- `supervision_actions` (global, not organization-owned): an identified record of each action taken by the owner or administrator, with actor, action, target and time. Append-only. Written only through one logged function.
+
+**Evaluation order (fixed, deterministic):**
+
+1. The justification is not empty.
+2. An active rule for the actor and the action exists, and the amount is within its maximum.
+3. The department has an available amount that covers the requested amount. What "available" means is Q-043.
+4. The budget limit applied is the one in force on the decision date. Which period the limit covers is Q-042.
+
+Any failed check is a rejection with its reason code. Nothing is approved by default, and nothing is approved silently.
+
+**Demonstration:** `docs/database/phase-1-exception-entities.svg`, and the diagram below.
+
+```mermaid
+erDiagram
+    INTERNAL_ACTOR ||--o{ APPROVAL_RULE : "holds authority"
+    BUDGET_EXCEPTION_REQUEST ||--|| BUDGET_EXCEPTION_DECISION : "receives one"
+    INTERNAL_ACTOR ||--o{ BUDGET_EXCEPTION_DECISION : "decides"
+    APPROVAL_RULE ||--o{ BUDGET_EXCEPTION_DECISION : "applied in"
+    BUDGET_LIMIT ||--o{ BUDGET_EXCEPTION_DECISION : "applied in"
+    DEPARTMENT ||--o{ BUDGET_EXCEPTION_REQUEST : "asks for"
+    PLATFORM_ROLE ||--o{ SUPERVISION_ACTION : "is recorded in"
+```
+
+**Consequences if approved:**
+
+- Phase 1 includes the six tables above in the database design. The Platform Engineering rebuild (ADR 0032, section 12) includes them.
+- Tests for the flow run without any purchase: every request gets one decision; an amount above the maximum is rejected with its reason; an ended or missing rule rejects; decisions and rules cannot be changed; snapshots match the balances at decision time; the outcome does not depend on any model.
+- Approving an exception does not, by this amendment, create a commitment or a cash movement. Whether it does is open (Q-049).
+- Who grants the owner or administrator role, and whether there can be an administrator other than the owner, is open (Q-050).
+- The definitions that the tables depend on are open: what "available" means (Q-043) and which period a budget limit covers (Q-042). The snapshot columns and the evaluation order are written without their answers, so they may need a change after Product answers.
+- No change to the decisions 1 to 10 of this record.
