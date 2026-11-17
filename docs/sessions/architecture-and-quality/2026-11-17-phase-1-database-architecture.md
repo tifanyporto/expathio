@@ -4,13 +4,13 @@
 
 Propose the database architecture of Phase 1: entities, organization ownership, keys and constraints, permissions as data, test-account seed, migrations, tests on PostgreSQL in Docker (ADR 0016), and what is left out. Evaluate the draft schema on `feat/phase-1-backend-foundation` as one option. Write no application code.
 
-Second part of the same day: revise the proposal after the owner's review (relayed by Product and Documentation). The owner asked for Alternative B (row-level security) as the recommendation, membership history from Phase 1, test accounts on the phone, and an updated diagram. Architecture is not yet approved.
+Later the same day the owner reviewed the proposal (relayed by Product and Documentation). The owner asked for Alternative B (row-level security), membership history, test accounts on the phone and an updated diagram, and then approved Alternative B (Q-026) and answered Q-041 (one organization at a time). This session did not write any decision record yet.
 
 ## Scope
 
 **In scope:** the proposal document, alternatives with cost, a visible demonstration of the entities, open questions registered with their destination function, this record.
 
-**Out of scope:** any change to the draft schema or to branch `feat/phase-1-backend-foundation`; any decision record in `docs/decisions/` (the proposal is PROPOSED); Q-007 (PostgreSQL version on the phone), which is an input only; the deployment script; application code; the stock design by location (ADR 0017), which Product is reviewing with the store count.
+**Out of scope:** any change to the draft schema or to branch `feat/phase-1-backend-foundation`; writing decision records in `docs/decisions/` (not yet asked for); Q-007 (PostgreSQL version on the phone), which is an input only; the deployment script; application code; the stock design by location (ADR 0017), which Product is reviewing with the store count.
 
 ## Documents Read
 
@@ -28,7 +28,7 @@ In order:
 10. Draft on `origin/feat/phase-1-backend-foundation`: `server/db/schema.ts` and `server/db/migrations/0000_phase1_foundation.sql` (read with `git show`; not checked out).
 11. `docs/sessions/TEMPLATE.md`.
 
-Second part: the proposal file, the diagram, and the register entries Q-026 to Q-034 and Q-041.
+Later passes: the proposal file, the diagram, the register entries Q-026 to Q-034 and Q-041, and the status lines in `05` and `CURRENT_STATE.md`.
 
 Not read: `docs/decisions/0011` and `0018` in full, the Platform Engineering session record, `docs/GLOSSARY.md`.
 
@@ -36,62 +36,69 @@ Not read: `docs/decisions/0011` and `0018` in full, the Platform Engineering ses
 
 | File | Change |
 |---|---|
-| `docs/database/phase-1-database-architecture.md` | New, revised twice. Entities, ownership, row-level security (section 5.4), keys, membership history, permissions as data, customer visibility (section 8.4), seed, migrations, Docker tests, review of the draft, three alternatives with B recommended, open points. Status PROPOSED. |
-| `docs/database/phase-1-entities.svg` | New, revised. Diagram with membership history (start and end dates) and the row-level security mark. |
-| `docs/OPEN-QUESTIONS.md` | Q-026 to Q-034 (renumbered earlier) now carry the owner's answers, relayed by Product and Documentation. Q-041 added (one account active in two organizations). Entries are not closed; only the owner closes them. Q-012 keeps its input note. Q-015 is not used. |
-| `docs/CURRENT_STATE.md` | Line under "In Progress" still says the proposal is PROPOSED and waits for the owner. |
-| `docs/05-TECHNICAL-ARCHITECTURE.md` | Line under section 19.2 updated to say row-level security is recommended, not decided. |
+| `docs/database/phase-1-database-architecture.md` | New, revised three times. Status APPROVED by the owner on 2026-11-17 (Alternative B). Membership rule changed to one active membership per account at a time, in one organization (Q-041). Section 14 now holds the decision and the list of decision records needed. |
+| `docs/database/phase-1-entities.svg` | Revised: layout fixed in an earlier pass; membership index text now "one active membership per account"; header says APPROVED. |
+| `docs/OPEN-QUESTIONS.md` | Q-026 status APPROVED with the owner's answer. Q-041 status APPROVED with the owner's answer. Q-027, Q-028, Q-030, Q-031, Q-032 and Q-034 carry the owner's answers. Q-029 and Q-033 remain open (Product). Entries are closed only by the owner's answer as recorded here. Q-012 keeps its input note. Q-015 is not used. |
+| `docs/CURRENT_STATE.md` | Line under "In Progress" now says APPROVED on 2026-11-17, decision record pending. |
+| `docs/05-TECHNICAL-ARCHITECTURE.md` | Line under section 19.2 now says APPROVED, decision record pending. |
 | `docs/sessions/architecture-and-quality/2026-11-17-phase-1-database-architecture.md` | This record. |
 
 No file under `server/`, `web/`, `shared/` or `ops/` was changed. No file in `docs/decisions/` was created.
 
 ## Decisions
 
-- Proposed (not approved):
-  - Alternative B as the recommendation: shared schema with `organization_id`, row-level security in PostgreSQL with two database roles (`expathio_owner` for migrations, `expathio_app` for the application), per-transaction context (`app.organization_id`, `app.user_id`, `app.role_key`), fail-closed policies. Keys, backend rules and tests on top (`docs/database/phase-1-database-architecture.md`, sections 5, 7, 13, 14).
-  - Membership history: `started_at` and `ended_at`, with partial unique indexes so that one active role per account per organization and one active occupant per role hold, while past rows remain (section 7.3). Owner answer, Q-032.
-  - Test accounts and reference data on the phone (section 9). Owner answer, Q-031.
-  - Permissions as data, changed only through the versioned file until Phase 2 (section 8.1). Owner answer, Q-034.
-  - Customer visibility as a provisional rule (section 8.4), with the schema prepared for protected columns in their own table. Owner accepted it as a provisional recommendation, Q-030.
-  - UUID keys generated by the application, `timestamptz`, `lower(email)` unique, `ON DELETE RESTRICT` for memberships (section 7).
-- Owner answers recorded, not approved as architecture: Q-027 (one role at a time per account in one organization), Q-028 ("own" means assigned to the occupant).
-- Not changed, per the owner: action vocabulary (`read`, `change`, `request`, `decide`) stays until Product proposes names (Q-029). Glossary terms (section 3) await approval (Q-033).
-- Approved by the owner: none. The owner asked to see the diagram first (Q-026).
+- Approved by the owner on 2026-11-17 (Q-026): Alternative B. Shared schema with `organization_id`; row-level security in PostgreSQL with two database roles (`expathio_owner` for migrations, `expathio_app` for the application); per-transaction context (`app.organization_id`, `app.user_id`, `app.role_key`); fail-closed policies; keys, backend rules and tests on top (`docs/database/phase-1-database-architecture.md`, sections 5, 7, 13, 14).
+- Owner answers, recorded (Q-041, Q-027 and Q-032 are part of the membership rule):
+  - One account is in one organization at a time. A change of organization ends the active row in the earlier organization, which stays in the history. Two active organizations at once are not accepted. Enforced by a partial unique index on `(user_id) WHERE ended_at IS NULL`.
+  - One active occupant per role per organization (ADR 0007), by a partial unique index on `(organization_id, role_key) WHERE ended_at IS NULL`.
+  - Membership history is kept from Phase 1 (Q-032).
+- Other owner answers, recorded: test accounts and reference data on the phone (Q-031); permissions change only through the versioned file until Phase 2 (Q-034); "own" means assigned to the occupant (Q-028); customer visibility accepted as a provisional rule (Q-030).
+- Not changed: the action vocabulary (`read`, `change`, `request`, `decide`) waits for Product's proposal (Q-029). Glossary terms wait for approval (Q-033).
 - Choices made by this session without owner input (listed so they can be changed):
   - Branch name: see "Git" below.
   - Resource names are proposals; the messages case is part of Q-029.
   - Location of the test-account seed: `server/db/seed/`, and the Docker Compose file in `ops/`, which is Infrastructure's folder (ADR 0019).
-  - Creating the two database roles: proposed for Infrastructure and Operations with Platform Engineering, not decided (section 14).
-  - How RLS policies are written (schema declaration or custom SQL migration): left to the Platform Engineering session (section 10.1).
+  - Creating the two database roles: proposed for Infrastructure and Operations with Platform Engineering, not decided.
+  - How RLS policies are written (schema declaration or custom SQL migration): left to the Platform Engineering session.
+
+## Decision records
+
+Not written yet. The proposal (section 14) says what each one needs; the owner has not asked for them.
+
+- **Record 1, architecture (proposed ADR 0031):** isolation with row-level security, database roles, context, permissions as data, migrations, tests, test accounts on the phone. Ready to write now.
+- **Record 2, business rule (proposed ADR 0032):** membership history and one active membership per account at a time. Product and Documentation confirms the rule in its documents first.
+
+## Readiness
+
+The proposal is ready to become record 1. It is not ready to be implemented until two inputs are answered: Q-007 (PostgreSQL version on the phone, which fixes the Docker image) and the procedure to create the two database roles (Infrastructure and Operations). Q-029 blocks only the permission seed rows.
 
 ## Tests and Results
 
-No tests were run. This session wrote documents only, and there is no application code or database to test. The RLS design has not been run against PostgreSQL; the policies in section 5.4 are a design, and the tests in section 11.2 are the proof still to come. The migration of the draft was not generated or executed.
+No tests were run. This session wrote documents only, and there is no application code or database to test. The RLS design has not been run against PostgreSQL; the policies in section 5.4 are an approved design, and the tests in section 11.2 are the proof still to come. The migration of the draft was not generated or executed.
 
 ## Pending
 
 For the owner:
 
-- **Q-026:** review the diagram (`docs/database/phase-1-entities.svg`) and the revised proposal, then approve or change Alternative B.
-- **Q-041:** whether one account can be active in two organizations at once (the schema allows it).
-- Confirm later: Q-027, Q-028, Q-031, Q-032, Q-034 are answered in the register, but only the owner closes entries.
+- Decide whether to ask this session to write record 1 (ADR 0031) now. Record 2 waits for Product's confirmation.
+- Q-041 and Q-026: answered and recorded; the owner closes the entries if the register convention requires it.
 
 For Product and Documentation:
 
-- **Q-027, Q-028:** confirm the answers in their documents.
+- **Q-027, Q-028:** confirm the answers in `08-COMPANY.md` and the roadmap, including the one-organization-at-a-time rule (Q-041).
 - **Q-029:** propose more natural action names.
 - **Q-030:** confirm the provisional customer visibility rule in `08-COMPANY.md`.
 - **Q-033:** approve or change the glossary terms (proposal section 3).
 
 For other functions (inputs, not decided here):
 
-- **Q-007** (Infrastructure and Operations): PostgreSQL and Node.js versions on the phone. The Docker image version and the UUID decision depend on it. Also needs the creation of the two database roles on the phone and on the development computer.
+- **Q-007** (Infrastructure and Operations): PostgreSQL and Node.js versions on the phone. The Docker image version depends on it. Also needs the creation of the two database roles on the phone and on the development computer.
 - **Q-006**: hosting for Phase 4; decides the Phase 4 database cost.
 - **Q-009**: rollback steps. Drizzle has no down migrations (proposal, section 10.3).
 - **Q-002**: personal data rules, which affect the account removal rule in proposal section 7.4.
 - **ADR 0017** (stock by location): Product reviews the store count and roles; not designed here.
 
-Pending in the Platform Engineering branch: the draft schema needs the changes in proposal section 12 and a regenerated migration. This is not done here. The branch is on hold until Q-026 is answered.
+Pending in the Platform Engineering branch: the draft schema needs the changes in proposal section 12 and a regenerated migration. This is not done here. The branch is on hold until record 1 is written.
 
 ## Git
 
@@ -105,18 +112,18 @@ Pending in the Platform Engineering branch: the draft schema needs the changes i
 Read in this order:
 
 1. `CLAUDE.md`, sections 2, 5, 7 and 8.
-2. `docs/database/phase-1-database-architecture.md`, section 0 (revision notes), then 1, 4 and 13 (summary, diagram, alternatives).
+2. `docs/database/phase-1-database-architecture.md`, sections 0, 1 and 14 (revision notes, summary, decision and decision records).
 3. `docs/OPEN-QUESTIONS.md`, entries Q-026 to Q-034 and Q-041.
-4. This record, "Pending".
+4. This record, "Decision records" and "Pending".
 
-Starting point: the owner's review of the diagram (Q-026). Until then, nothing here changes.
+Starting point: the owner's go-ahead to write record 1 (ADR 0031). Nothing in `docs/decisions/` is written by this session until then.
 
-Already decided by the owner (answers, not yet an approved architecture): see "Decisions". Not to be asked again: whether the four roles and their titles are loaded as data (ADR 0024 and 0027), and whether Phase 1 uses test accounts only (ADR 0022).
+Already decided by the owner: Alternative B (Q-026), one organization at a time (Q-041), membership history (Q-032), test accounts on the phone (Q-031), permissions changed only through the file until Phase 2 (Q-034). Not to be asked again: whether the four roles and their titles are loaded as data (ADR 0024 and 0027), and whether Phase 1 uses test accounts only (ADR 0022).
 
-Must not be changed: the draft schema and branch `feat/phase-1-backend-foundation`, until the Platform Engineering session is told to rebuild it. The files in `docs/decisions/`, which this session does not write until the owner approves.
+Must not be changed: the draft schema and branch `feat/phase-1-backend-foundation`, until record 1 is written and the Platform Engineering session is asked to rebuild the draft.
 
 ## Next Step
 
-1. The owner reviews the diagram and the revised proposal, and answers Q-026.
-2. On approval, this session records the decision as a new ADR in `docs/decisions/` and updates this record and `docs/CURRENT_STATE.md`.
-3. The Platform Engineering session is asked (through `docs/OPEN-QUESTIONS.md` or a direct message) to rebuild the draft as section 12 describes, once the decision is recorded.
+1. The owner tells this session to write record 1 (ADR 0031), or asks for other changes.
+2. Product and Documentation confirms the membership rule (Q-041), then record 2 (ADR 0032) is written.
+3. Platform Engineering is asked, through `docs/OPEN-QUESTIONS.md` or a direct message, to rebuild the draft as section 12 describes, once record 1 exists.

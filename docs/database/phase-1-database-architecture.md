@@ -1,27 +1,27 @@
 # Expathio — Phase 1 Database Architecture
 
-**Status:** PROPOSED  
-**Document type:** Technical proposal (database architecture)  
+**Status:** APPROVED by the owner, 2026-11-17 (Alternative B, Q-026)  
+**Document type:** Technical architecture (database), approved content  
 **Project:** Expathio  
 **Proposed by:** Architecture and Quality session  
-**Date:** 2026-11-17 (revised the same day after the owner's decisions)  
-**Approval needed from:** Project owner, after reviewing the diagram in section 4. Business rules flagged in section 14 also need Product and Documentation.
+**Date:** 2026-11-17 (proposed, revised after the owner's decisions, approved the same day)  
+**Approved by:** Project owner. Business rules flagged in section 14 remain with Product and Documentation.
 
-This document is a proposal. It is not a decision. It becomes a decision only when the owner approves it, and then it is recorded in `docs/decisions/` (`CLAUDE.md`, section 5).
+The owner approved Alternative B on 2026-11-17 (Q-026). This document holds the approved content. The decision records in `docs/decisions/` are not written yet. Section 14 says what each record needs (`CLAUDE.md`, section 5).
 
 ---
 
 ## 0. Revision notes (2026-11-17)
 
-The owner reviewed the first version and decided the following. The decisions are relayed by Product and Documentation. They are not yet an approval of the architecture.
+The owner reviewed the first version and decided the following. The decisions are relayed by Product and Documentation. On 2026-11-17 the owner approved Alternative B (Q-026); the rest of this table is the owner's answers.
 
 | Question | Owner decision | Where it is applied |
 |---|---|---|
-| Q-026 (direction) | Do not limit the choice by complexity. Recommend Alternative B (database-enforced isolation, PostgreSQL row-level security). | Sections 1, 5.4, 7, 13, 14 |
+| Q-026 (direction) | Approved 2026-11-17: Alternative B (database-enforced isolation, PostgreSQL row-level security). The owner asked not to limit the choice by complexity. | Sections 1, 5.4, 7, 13, 14 |
 | Q-031 (test accounts on the phone) | Approved: test accounts stay on the phone, together with the MONUMENT reference data. | Section 9 |
 | Q-032 (membership history) | Keep the history of memberships from Phase 1, with start and end dates. | Sections 6, 7.3, 12 |
 | Q-034 (runtime editing of permissions) | No editing in the application until Phase 2. The versioned file stays the only way to change permissions. | Section 8.1 |
-| Q-027 (one role per account) | One role per account in one organization. Whether one account can be linked to two organizations at the same time is left open (new entry Q-041). | Sections 7.3, 14 |
+| Q-027 (one role per account) | One role at a time per account in one organization. Q-041 (2026-11-17): one organization at a time; earlier organizations stay in the history. | Sections 7.3, 14 |
 | Q-028 ("own") | "Own" means assigned to the occupant of the role. | Section 8.2 |
 | Q-029 (action vocabulary) | Not changed yet. Product will propose more natural names. The four actions stay in this document until then. | Section 8.2 |
 | Q-030 (customer data) | Accepted as a provisional recommendation. The schema is prepared for protected columns. | Section 8.4 |
@@ -35,12 +35,12 @@ Context from the owner, not designed here: the MONUMENT organization will be fou
 
 The database is the place where the organization's state is stored, and the rules for who may see and change that state depend on it (`05-TECHNICAL-ARCHITECTURE.md`, sections 5 and 10). Phase 1 must prove three things: a test account can log in, it is a member of an organization with a role, and the data of one organization cannot be seen from another.
 
-We recommend:
+Approved by the owner on 2026-11-17 (Q-026), Alternative B:
 
 1. **One PostgreSQL database, one schema, shared by all organizations.** Every table that describes organizational activity carries an `organization_id`. This is the approved direction of ADR 0010 and `05`, section 10.
 2. **Isolation enforced by the database itself (Alternative B).** Row-level security (RLS) in PostgreSQL makes the database refuse to return or change a row of another organization, even when the application forgets a filter. The application connects with a restricted database role, and each transaction states the organization it works for.
 3. **Keys and backend rules as well.** Foreign keys that include `organization_id` stop a row from pointing to another organization's parent. The backend takes the organization from the authenticated membership, never from the request body. Tests try to cross organizations and must fail.
-4. **Membership history.** A membership is never deleted. Ending a role or leaving an organization sets an end date, and a new membership starts the next role. Each organization has at most one active occupant per role, and each account has at most one active role per organization.
+4. **Membership history.** A membership is never deleted. Ending a role or leaving an organization sets an end date, and a new membership starts the next role. Each organization has at most one active occupant per role. Each account has one active membership at a time, in one organization; earlier organizations stay in the history (Q-041).
 5. **Permissions are data.** The permission matrix in `08-COMPANY.md`, section 6.1, is stored as rows in two tables (`permissions` and `role_permissions`). The rows are loaded from one versioned file in `shared/` by an idempotent seed, so they are reviewed in Git like code. Changes go through the file until Phase 2 (owner decision).
 6. **Migrations are SQL files generated by Drizzle Kit, versioned in Git, applied by the deployment script before restart.** Each schema change is one migration file. Tests build the database from the migration files, not from the schema file, so the tests check what production will run.
 7. **Integration tests run against PostgreSQL in Docker** (ADR 0016), with the PostgreSQL version pinned to match the phone once Q-007 is answered.
@@ -159,7 +159,7 @@ Image version: `docs/database/phase-1-entities.svg`. Open it in a browser to see
 |---|---|---|---|
 | Account | 1 to many | Session | An account can be signed in on several devices. |
 | Account | 1 to many | Login method | An account can have one or more ways to sign in. Phase 1 uses e-mail and password. |
-| Account | 1 to many | Membership | An account has its memberships over time: one active role per organization, and past memberships kept as history. |
+| Account | 1 to many | Membership | An account has its memberships over time: one active membership at a time, in one organization, and past memberships kept as history (Q-041). |
 | Organization | 1 to many | Membership | Every membership belongs to exactly one organization. |
 | Role | 1 to many | Membership | A role has at most one active occupant per organization (ADR 0007). Past occupants stay in the history. |
 | Role | 1 to many | Role permission | A role has several permission grants. |
@@ -215,7 +215,7 @@ The application never connects as the owner. The tables use `FORCE ROW LEVEL SEC
 
 **Policies on `memberships`:**
 
-- Read: a row is visible when its `organization_id` equals `app.organization_id`, or when its `user_id` equals `app.user_id`. The second condition lets a signed-in account see its own memberships in every organization before one is chosen.
+- Read: a row is visible when its `organization_id` equals `app.organization_id`, or when its `user_id` equals `app.user_id`. The second condition lets a signed-in account see its own memberships in every organization before one is chosen. Earlier memberships in other organizations are visible this way too, so the history of past organizations can be shown.
 - Insert, update, delete: allowed only when `organization_id` equals `app.organization_id` (the write check). Rows are never deleted by the application (7.4); the policy for delete is written anyway and tested.
 
 **Fail closed:** when a setting is missing, `current_setting(..., true)` returns no value and the rule matches no row. A query without context returns nothing, and cannot write.
@@ -299,13 +299,13 @@ Notes:
 - `started_at timestamptz` not null, default `now()`.
 - `ended_at timestamptz` nullable. Empty means the membership is active.
 - `CHECK (ended_at IS NULL OR ended_at > started_at)`.
-- Partial unique index on `(organization_id, user_id) WHERE ended_at IS NULL`: one active role per account per organization (owner decision Q-027).
+- Partial unique index on `(user_id) WHERE ended_at IS NULL`: one active membership per account at a time, in one organization (owner decisions Q-027 and Q-041).
 - Partial unique index on `(organization_id, role_key) WHERE ended_at IS NULL`: one active occupant per role per organization (ADR 0007). Past occupants remain in the table.
 - Index on `(user_id)` for the lookup of a signed-in account's memberships.
 - `created_at`, `updated_at` `timestamptz` not null.
 - Row-level security with the policies of 5.4.
 
-A role change or departure is one transaction: the active row gets `ended_at`, and a new row is inserted when there is a new role. Whether one account may be active in two organizations at once is not decided by these indexes (they are per organization). It is an open point (Q-041).
+A role change or departure is one transaction: the active row gets `ended_at`, and a new row is inserted when there is a new role. A move to another organization is the same transaction: the active row in the old organization gets `ended_at`, and a new active row is inserted in the new one. The index on `(user_id)` makes two active organizations at once impossible (owner decision Q-041).
 
 **`user`**
 - `id text` primary key (better-auth), `email` unique on `lower(email)`, `simulated boolean` not null default `true` (proposed, section 9).
@@ -465,7 +465,7 @@ Tests that touch the database connect as `expathio_app`, the same role the appli
 | Owner is subject to the rules | The owner role, with the table forced, also sees no rows without context | Integration (RLS) |
 | Context does not leak between transactions | After a transaction sets A, the next transaction on the same pooled connection without a setting sees nothing | Integration (RLS) |
 | History is kept | Ending a membership sets `ended_at`; the row remains; a role change creates a new row | Integration |
-| One active role per account and per role | A second active membership for the same account or role in the same organization fails; a past one does not | Integration (ADR 0007, Q-027) |
+| One active membership per account and one occupant per role | A second active membership for the same account, in any organization, fails; a second active occupant of a role in one organization fails; past rows do not | Integration (ADR 0007, Q-027, Q-041) |
 | Ended membership cannot be deleted by the application | The delete path is absent from the repository, and a delete under the app role is refused by the policy | Integration |
 | Duplicate e-mail in different case is refused | `Ana@x` and `ana@x` cannot both exist | Integration |
 | Organization with no membership is invisible | An account without an active membership gets "not found" for the organization | Integration, then flow test |
@@ -498,7 +498,7 @@ The draft was written before any database architecture was approved. It is read 
 |---|---|---|
 | `role_permissions.access` (free text) and `own_records_only` (boolean) | Cannot express "request" and "decide" separately, nor the case scope. Free text allows any value. | `permissions` (resource, action) and `role_permissions` (role, permission, scope), with `CHECK` constraints (section 8) |
 | `role_permissions.resource` free text | Any typo creates a new resource silently | Resource list in the `permissions` table, seeded from the file |
-| `memberships` unique on `(organization_id, user_id)` and `(organization_id, role_key)` for all rows | Blocks history: a second role for the same account, or a new occupant after a departure, cannot be recorded | Partial unique indexes on active rows only, plus `started_at` and `ended_at` (section 7.3, owner decision Q-032) |
+| `memberships` unique on `(organization_id, user_id)` and `(organization_id, role_key)` for all rows | Blocks history: a second role for the same account, or a new occupant after a departure, cannot be recorded | Partial unique indexes on active rows only (one active membership per account across organizations, one occupant per role per organization), plus `started_at` and `ended_at` (section 7.3, owner decisions Q-032 and Q-041) |
 | No row-level security | Isolation depends on the application | Two database roles and policies (section 5.4) |
 | `timestamp` without zone | Ambiguous times | `timestamptz` |
 | `user.email` unique as written | `Ana@x` and `ana@x` are two accounts | Unique index on `lower(email)` |
@@ -516,9 +516,9 @@ The draft's migration `0000_phase1_foundation.sql` must be regenerated after the
 
 ## 13. Alternatives
 
-Three alternatives are compared. The owner asked for the recommendation to be Alternative B.
+Three alternatives were compared. The owner approved Alternative B on 2026-11-17 (Q-026).
 
-### Alternative B (recommended): shared schema, organization column, database-enforced isolation (row-level security), plus keys, backend rules and tests
+### Alternative B (approved): shared schema, organization column, database-enforced isolation (row-level security), plus keys, backend rules and tests
 
 Described in sections 5 to 11.
 
@@ -556,7 +556,7 @@ Each organization gets its own schema, and migrations are applied to each one.
 
 ### Comparison
 
-| | B (recommended) | A (no RLS) | C (schema per organization) |
+| | B (approved) | A (no RLS) | C (schema per organization) |
 |---|---|---|---|
 | Isolation enforced by | Database policies, keys, backend, tests | Keys, backend, tests | Separate schemas |
 | Forgotten filter in code | Blocked by the database | Caught only by tests | Structural |
@@ -567,15 +567,15 @@ Each organization gets its own schema, and migrations are applied to each one.
 
 ---
 
-## 14. Recommendation and open points
+## 14. Decision, open points and decision records
 
-**Recommendation:** Alternative B. Shared schema with `organization_id`, database-enforced isolation with row-level security from Phase 1, keys and backend rules on top, membership history, permissions as seeded data, and test accounts on the phone with the reference data. The owner approves it after reviewing the diagram (Q-026).
+**Decision (approved by the owner, 2026-11-17, Q-026):** Alternative B. Shared schema with `organization_id`, database-enforced isolation with row-level security from Phase 1, keys and backend rules on top, membership history with one active membership per account at a time, permissions as seeded data, and test accounts on the phone with the reference data.
 
-Open points are registered in `docs/OPEN-QUESTIONS.md`, with their destination function. Summary:
+Points still open, and the answered ones, are registered in `docs/OPEN-QUESTIONS.md`. Summary:
 
 | Question | Destination | Entry |
 |---|---|---|
-| Approve Alternative B as the Phase 1 direction, after the diagram | Owner | Q-026 |
+| Approve Alternative B as the Phase 1 direction | Owner | Q-026: approved 2026-11-17 |
 | Can one account hold more than one role in the same organization? Answered: no, one at a time. | Product and Documentation (confirm) | Q-027 |
 | What "own" means for tasks, cases and messages. Answered: assigned to the occupant. | Product and Documentation (confirm) | Q-028 |
 | Action names (`read`, `change`, `request`, `decide`) and the messages case | Product and Documentation (proposing names) | Q-029 |
@@ -584,7 +584,7 @@ Open points are registered in `docs/OPEN-QUESTIONS.md`, with their destination f
 | Membership history from Phase 1. Answered: yes. | Owner | Q-032 |
 | Glossary terms (section 3) | Product and Documentation | Q-033 |
 | Runtime editing of permissions. Answered: not before Phase 2. | Owner | Q-034 |
-| Can one account be active in two organizations at the same time? | Owner | Q-041 |
+| One account, one organization at a time (earlier organizations kept in history) | Owner | Q-041: answered 2026-11-17 |
 
 **Inputs, not decided here:**
 
@@ -595,6 +595,14 @@ Open points are registered in `docs/OPEN-QUESTIONS.md`, with their destination f
 - **Q-012** (adding a role without a code change). Section 8 makes new roles data, but only for existing resources. A new resource is still a code change.
 - **ADR 0017** (stock by location). Product is reviewing the store count and roles; the stock design is not part of this proposal.
 - **Creation of the two database roles** on each machine (section 5.4): who runs it, and when. Proposed for Infrastructure and Operations with the Platform Engineering session.
+
+**Decision records (not written yet; the owner asked for readiness to be checked first):**
+
+- **Record 1, architecture (proposed number ADR 0031).** Phase 1 database isolation with row-level security, the two database roles, the per-transaction context, the permissions as data in a versioned file, Drizzle SQL migrations with tests on PostgreSQL in Docker, and the test accounts on the phone. This is the approved content of Q-026 and can be written from sections 5, 8, 9, 10 and 11.
+- **Record 2, business rule (proposed number ADR 0032).** Memberships are kept as history; one active membership per account at a time, in one organization; one active occupant per role per organization (Q-027, Q-032, Q-041). A separate record, because it is a business rule that affects career progression (Phase 7), and it can change without changing the database design. Product and Documentation confirms the rule in its documents before the record is written.
+- **Not records:** customer visibility (Q-030), action names (Q-029) and glossary terms (Q-033) are documentation items for Product. They change data and text, not the architecture.
+
+**Readiness:** the proposal is ready to become record 1 now. It is not ready to be implemented until two inputs are answered: Q-007 (PostgreSQL version on the phone, which also fixes the Docker image) and the procedure to create the two database roles (Infrastructure and Operations). Q-029 blocks only the seed of the permission rows, not the architecture.
 
 ---
 
@@ -617,7 +625,7 @@ Open points are registered in `docs/OPEN-QUESTIONS.md`, with their destination f
 
 ## 16. Next steps after approval
 
-1. The owner reviews the diagram and decides Q-026 (Alternative B). The owner also confirms Q-041, which can be decided later.
-2. The approved decision is recorded in `docs/decisions/` by this session (new ADR, sequential number).
+1. Done: the owner approved Alternative B (Q-026) and answered Q-041 on 2026-11-17.
+2. The decision records of section 14 are written in `docs/decisions/` when the owner asks for them. The numbers are proposed as 0031 and 0032.
 3. The Platform Engineering session rebuilds the draft from section 12, regenerates its migration, and adds the database and isolation tests of section 11. Its branch is not changed by this session.
 4. Infrastructure and Operations answers Q-007 before the Docker image is pinned, and defines how the two database roles are created on the phone and on the development computer.

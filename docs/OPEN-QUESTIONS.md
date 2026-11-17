@@ -154,12 +154,13 @@
 
 ### Q-026 — Approve the Phase 1 database architecture
 
-- **Status:** PROPOSED
+- **Status:** APPROVED
 - **Asked by:** Architecture and Quality
 - **Answered by:** owner
 - **Needed by:** before the Platform Engineering session rebuilds the draft schema (branch `feat/phase-1-backend-foundation`, on hold)
 - **Question:** approve Alternative B (recommended since 2026-11-17) of `docs/database/phase-1-database-architecture.md` (shared schema, `organization_id` on organization-owned tables, composite keys, isolation tests, permissions as seeded data). Row-level security is part of this recommendation (owner: do not limit the choice by complexity).
-- **Owner review (2026-11-17, relayed by Product and Documentation):** asked for the proposal to be revised with Alternative B recommended, the diagram updated and the schema changes shown. Approval waits for the owner to see the diagram.
+- **Owner review (2026-11-17, relayed by Product and Documentation):** asked for the proposal to be revised with Alternative B recommended, the diagram updated and the schema changes shown.
+- **Owner answer (2026-11-17, relayed by Product and Documentation):** Alternative B approved (database-enforced isolation, PostgreSQL row-level security). The decision record in `docs/decisions/` is not written yet; the proposal says what it needs.
 - **Source:** `docs/database/phase-1-database-architecture.md`, sections 13 and 14
 
 ### Q-027 — Can one account hold more than one role in one organization?
@@ -244,9 +245,10 @@
 
 ### Q-041 — One account in two organizations at the same time
 
-- **Status:** PROPOSED
+- **Status:** APPROVED
 - **Asked by:** Architecture and Quality
 - **Answered by:** owner
 - **Needed by:** before Phase 2, when a second organization or a second membership is possible
 - **Question:** can one account hold an active membership in two organizations at the same time? The owner's answer on Q-027 (one role per account per organization) does not say. The proposed schema allows it (the unique rules are per organization). Should it be allowed, or should a change of organization end the active membership in the other one?
+- **Owner answer (2026-11-17, relayed by Product and Documentation):** one account is in one organization at a time. A change of organization ends the active membership in the earlier organization, which stays in the history. Two active organizations at the same time are not accepted. Product to confirm in its documents before the membership decision record is written.
 - **Source:** `docs/database/phase-1-database-architecture.md`, sections 7.3 and 14; `docs/decisions/0010-scalability-foundations.md`
