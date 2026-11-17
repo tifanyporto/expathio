@@ -86,7 +86,7 @@ Money is stored as integer minor units (`bigint`) in `BRL`. The available balanc
 **Clarifications and changes to Amendment 1, made by this amendment:**
 
 - `budget_limits`: the effective date is the first day of a calendar month (`period_month`). A limit covers one month, and an unused amount does not carry over to the next month (Q-042). One limit per department per month. Exceptions to the monthly period are for a later version.
-- `commitments`: the status is `open`, `converted` or `released`. A commitment is created by an approved exception, with a reference to its decision (`source_decision_id`).
+- `commitments`: the status is `open`, `converted` or `released`. A commitment is created by an approved exception, with a reference to its decision (`source_decision_id`), a creation date (`created_at`) and an expiry date (`expires_at`, by default the last day of the budget month, Q-052).
 
 **What is added (all organization-owned, under decisions 2 to 8 of this record, unless marked global):**
 
@@ -103,6 +103,7 @@ Money is stored as integer minor units (`bigint`) in `BRL`. The available balanc
 2. An active rule for the actor and the action exists, and the amount is within its maximum.
 3. The department's available amount covers the requested amount. Available is defined as: the limit of the month, minus the realized spending of the department, minus its committed amount (Q-043). In Phase 1 realized spending is zero, because no purchase exists.
 4. The budget limit applied is the one of the month of the decision date (Q-042).
+5. The company's available cash covers the requested amount: the company's balance (sum of cash entries) minus its open commitments. This is a mandatory limit (Q-051). An exception can exceed the department's available budget, but it can never commit money the company does not have available. Example from the owner: department available 500, company available 300, purchase requested 400 — rejected even when the departmental exception is approved, because 100 is missing from the available cash.
 
 Any failed check is a rejection with its reason code. Nothing is approved by default, and nothing is approved silently.
 
@@ -110,9 +111,9 @@ Any failed check is a rejection with its reason code. Nothing is approved by def
 
 - An approved exception creates one commitment with status `open`. The approved amount is not available to other purchases while it is open.
 - When a purchase exists (Phase 3), the commitment becomes spending: its status changes to `converted` and the spending refers to it, so the amount is counted once.
-- Cancellation or expiry releases the amount: the status changes to `released`.
+- Each commitment has a creation date and an expiry date. The default expiry is the last day of the budget month (Q-052).
+- Cancellation releases the amount immediately. A commitment not realized by the end of its month expires and is released. In both cases the status changes to `released`.
 - Committed amount = sum of commitments with status `open`. Converted and released amounts are not counted as committed.
-- The expiry rule (how long a commitment stays open) is not defined by the answers. It is open (Q-052).
 
 **Demonstration:** `docs/database/phase-1-exception-entities.svg`, and the diagram below.
 
@@ -133,5 +134,6 @@ erDiagram
 - Phase 1 includes the six tables above, and the changes to `budget_limits` and `commitments`, in the database design. The Platform Engineering rebuild (ADR 0032, section 12) includes them.
 - Tests for the flow run without any purchase: every request gets one decision; an amount above the maximum is rejected with its reason; an ended or missing rule rejects; decisions and rules cannot be changed; snapshots match the balances at decision time; an approved exception creates one open commitment; cancellation or expiry releases it; the outcome does not depend on any model.
 - Only the owner grants or revokes the administrator role. A second administrator, or an administrator granting a role, is refused.
-- Open points that the tables depend on, not decided here: the expiry rule of a commitment (Q-052); whether the company's available balance also caps the decision (Q-051).
+- Answered 2026-11-17 (recorded in ADR 0036, commit 5a52645): the company's available cash is a mandatory limit on every exception (Q-051); a commitment expires at the end of its budget month by default (Q-052).
+- Tests added: the company-cash check rejects an amount the company does not have available, even when the department's budget covers it; a commitment not realized by the end of its month is released at expiry.
 - No change to the decisions 1 to 10 of this record.

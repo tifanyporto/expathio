@@ -350,6 +350,7 @@
 - **Answered by:** owner, with Product and Documentation
 - **Needed by:** before the evaluation rule of Amendment 2 is implemented
 - **Question:** the answer to Q-043 defines the department's available amount. It does not say whether an approved exception must also be covered by the company's single balance (balance minus open commitments). Should the rule require both?
+- **Answer (owner's answer, relayed by Product and Documentation, 2026-11-17):** yes. The company's available cash is a mandatory limit on every exception. An exception may exceed the department's available budget, but never commit money the company does not have available. Example: department available 500, company available 300, purchase requested 400: rejected even if the departmental exception is approved. The exception relaxes the departmental limit, not the financial availability. Entry kept open for the owner to close.
 - **Source:** `docs/decisions/0032-phase-1-database-architecture.md`, Amendment 2, evaluation order; `docs/database/phase-1-database-architecture.md`, section 17.5
 
 ### Q-052 — Expiry of an open commitment
@@ -359,4 +360,5 @@
 - **Answered by:** owner, with Product and Documentation
 - **Needed by:** before commitments are created (Phase 1, from the first approved exception)
 - **Question:** the answer to Q-049 says that cancellation or expiry releases a commitment, but not when expiry happens. Does an open commitment expire at the end of its month, after a fixed number of days, or never?
+- **Answer (owner's answer, relayed by Product and Documentation, 2026-11-17):** commitments have a creation date and an expiry date. The default expiry is the last day of the budget month. A purchase converts the commitment to spending. Cancellation releases it at once. An open commitment that is not realized by the end of the month expires and is released. Entry kept open for the owner to close.
 - **Source:** `docs/decisions/0032-phase-1-database-architecture.md`, Amendment 2, commitment lifecycle; Q-049

@@ -57,8 +57,8 @@
   <text x="352" y="382" font-size="14" font-weight="bold" fill="#111">commitments</text>
   <text x="352" y="402" font-size="11" fill="#222">id (PK, uuid), organization_id (RLS)</text>
   <text x="352" y="418" font-size="11" fill="#222">department_id (composite FK)</text>
-  <text x="352" y="434" font-size="11" fill="#222">amount_minor (above 0), status</text>
-  <text x="352" y="450" font-size="11" fill="#222">status: open or released</text>
+  <text x="352" y="434" font-size="11" fill="#222">amount_minor (above 0), expires_at</text>
+  <text x="352" y="450" font-size="11" fill="#222">status: open, converted or released</text>
   <text x="352" y="474" font-size="11" font-weight="bold" fill="#1d4ed8">no code creates them in Phase 1</text>
 
   <!-- BUDGET_LIMIT -->

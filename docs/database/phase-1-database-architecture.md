@@ -651,7 +651,7 @@ Phase 1 records the initial capital and later contributions, with the matching e
 | `capital_contributions` | Organization-owned, append-only | Each contribution of capital by the founder or a partner, with the bank account it went to. | `id` uuid; unique `(organization_id, client_request_id)` (idempotency, ADR 0010) |
 | `cash_ledger_entries` | Organization-owned, append-only | The one cash balance of the company. Each row is a signed amount. Phase 1 creates one kind of row: a capital contribution. | `id` uuid; unique `source_contribution_id` (one entry per contribution) |
 | `budget_limits` | Organization-owned, append-only | The limit for one department for one calendar month (`period_month`, Q-042). No carry-over: an unused amount does not pass to the next month. A new limit is a new row. | `id` uuid; index `(organization_id, department_id, effective_from)` |
-| `commitments` | Organization-owned | An amount promised to a department, not yet paid. An approved budget exception creates one (Q-049). A purchase converts it to spending in Phase 3; cancellation or expiry releases it. | `id` uuid; `status` is `open`, `converted` or `released`; `source_decision_id` |
+| `commitments` | Organization-owned | An amount promised to a department, not yet paid. An approved budget exception creates one (Q-049). A purchase converts it to spending in Phase 3; cancellation releases it at once, and expiry at the end of the budget month releases it (Q-052). | `id` uuid; `status` is `open`, `converted` or `released`; `source_decision_id`; `created_at`, `expires_at` |
 
 Money is stored as an integer in the smallest unit (centavos, `bigint`), never as a decimal or a float. Currency is `BRL` only (a `CHECK`), so the design can be extended later by a decision.
 
@@ -724,7 +724,7 @@ Queries are SQL functions that run with the caller's rights, so row-level securi
 - **Available balance** = sum of cash entries − sum of open commitments.
 - **Committed amount** = sum of open commitments, per department or for the company.
 - **Department available** = limit of the month − realized spending of the department − its committed amount (Q-043, owner answer, 2026-11-17). Realized spending is zero in Phase 1. The department limit is only a limit on use of the single company balance; it is not a separate cash box.
-- Whether the decision rule also requires the company's available balance to cover the amount is not stated by the answer to Q-043. It is open (Q-051).
+- The decision rule also requires the company's available cash to cover the amount. This is a mandatory limit, answered by the owner (Q-051, 2026-11-17): an exception may exceed the department's budget, never the company's available cash.
 
 ### 17.6 Changes to approved decisions, and the ADR question
 
