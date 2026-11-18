@@ -30,6 +30,8 @@ Checked by the Infrastructure and Operations session, with real output:
 
 Because the Windows PostgreSQL service already uses port 5432, the Docker database uses port **5433**. Nothing in this guide stops or changes the Windows PostgreSQL service.
 
+**Home computer (checked on 2026-11-17, real output of `ops/check-local.ps1`):** Docker Desktop is installed per user and the engine answers (server 29.9.2), so section 2 is already done there. Node.js is **v22.17.0** (section 1b). `ops/.env` and the container `expathio-postgres-dev` do not exist yet (sections 3 and 4).
+
 ---
 
 ## 1. Check Node.js
@@ -42,7 +44,20 @@ node --version
 
 **Expected:** a line starting with `v24.` (the check on 2026-11-09 printed `v24.12.0`).
 
-If it shows another major version, stop here and tell the session. Do not install another Node.js yet.
+If it shows another major version, follow section 1b.
+
+### 1b. Install Node.js 24 (only if section 1 showed another version)
+
+Node.js 24 was decided on 2026-11-17 (`docs/OPEN-QUESTIONS.md`, Q-007). The home computer had **v22.17.0**, installed in `C:\Program Files\nodejs` with the official installer (checked 2026-11-17).
+
+Before you start: installing Node 24 **replaces** Node 22 on this computer. If another project of yours needs Node 22, tell the session first; a version manager can keep both, but that is a new tool and needs your approval.
+
+1. Open `https://nodejs.org/dist/latest-v24.x/` in the browser. Download the file that ends in `-x64.msi` (for example `node-v24.22.1-x64.msi`; the number may be higher). Do not use the big "LTS" button on the home page: since October 2026 it offers Node 26, not 24.
+2. Run the file. The installer shows the **license agreement** (Node.js is under the MIT license, free of charge). Read it and accept it only if you agree; the session does not accept it for you.
+3. Keep the default options. If Windows asks for administrator permission, you decide and confirm it.
+4. Close every PowerShell window and open a new one, then run `node --version`.
+
+**Expected:** a line starting with `v24.`.
 
 ---
 

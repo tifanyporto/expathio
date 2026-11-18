@@ -1,6 +1,6 @@
 # 2026-11-17 — Phone Check and Operations Scripts
 
-**Status of this record:** in progress. Sections are updated as each step ends.
+**Status of this record:** steps 1 to 5 done as far as possible without changes to the phone; pending items below.
 
 ## Goal
 
@@ -51,16 +51,46 @@ Network names and addresses are not written here (ADR 0018).
 | Storage | Root 102.7 GB, 2.6 GB used (3%). |
 | Up time | 27 min at the time of the check. |
 
-**Open point — device model.** "pipa" is the code name of a Xiaomi tablet, not of the POCO F3 ("alioth"). The model (`/proc/device-tree/model`) was not read. The owner must confirm which device this is before the hosting records (ADR 0011, 0018) are taken as accurate.
+**Device model.** "pipa" is the code name of a Xiaomi tablet, not of the POCO F3 ("alioth"). The model (`/proc/device-tree/model`) was not read. **The owner confirmed on 2026-11-17 that the device is the POCO F3.**
 
 ## Step 2 — Q-007
 
-Proposal written in `docs/OPEN-QUESTIONS.md`, entry Q-007: PostgreSQL 18 (phone `postgresql18` 18.6, Docker pin moved from 18.4 to 18.6) and Node.js 24 (phone `nodejs` 24.22.1), with alternatives and impacts. The entry stays IN DISCUSSION. Support dates come from secondary sources and were not checked on the official sites.
+Proposal written in `docs/OPEN-QUESTIONS.md`, entry Q-007, with alternatives and impacts (commit `3582d6c`). Support dates come from secondary sources and were not checked on the official sites.
+
+**Owner answer (2026-11-17): PostgreSQL 18.6 and Node.js 24.** Recorded in the entry; the entry stays open until the owner closes it. Applied: `ops/docker-compose.yml` pins `postgres:18.6` (commit `8352062`). Consequence on the other computer: the next `docker compose up -d` there recreates `expathio-postgres-dev` with 18.6 and keeps the data volume (same major version). Not run by this session.
+
+## Step 3 — Database roles (ADR 0032)
+
+Files: `ops/db-roles/create-roles.sh` (the procedure, POSIX shell, runs on the phone or in a container), `ops/db-roles/test-roles.ps1` (test), `ops/db-roles/README.md` (how to run, on the computer and on the phone). `ops/.gitattributes` keeps LF line endings for `.sh`. Commit `8352062`.
+
+The procedure creates `expathio_owner` and `expathio_app` with login, no superuser, no BYPASSRLS, no CREATEDB/CREATEROLE; makes sure the app role is not a member of the owner; grants CONNECT on the database, and USAGE/CREATE on schema `public` to the owner and USAGE to the app. Passwords are read inside psql with `\getenv`, so they never appear in the process list or the output. Table grants and RLS policies stay in the migrations (ADR 0032, decision 7). Safe to run again.
+
+Test (real output, home computer, throwaway container `expathio-roles-test`, image `postgres:18.6`, server `18.6 (Debian 18.6-1.pgdg13+2)`): **15 of 15 checks passed**, container removed. Two earlier runs failed because of defects in the test script, not in the procedure: PowerShell 5.1 stopped on an expected error; booleans print as `true`/`false` in PostgreSQL 18; and the image trusts `127.0.0.1` without a password, so the first password checks were not real. The test now connects through the container's network address; the wrong-password check fails as it should.
+
+Not run: on `expathio-postgres-dev` (not on this computer) and on the phone.
+
+## Step 4 — Deployment, health check, rollback (ADR 0016, Q-009)
+
+Files in `ops/deploy/`: `deploy.ps1` (Windows; actions Deploy, Rollback, Status), `remote.sh` (target side), `targets/phone.target.example` (real target files are git-ignored), `README.md` (steps, failure table, rollback, one-time phone setup), `test/` (stand-in target and test). Commit `4b2a823`.
+
+Test (real output): `ops/deploy/test/test-deploy.ps1` against a local Docker stand-in (Alpine `3.25.0_alpha20260805`, i.e. edge, Node `v24.22.3`, SSH with a throwaway key on 127.0.0.1:2222): **16 of 16 checks passed** on the first run; container, image and key removed.
+
+Not covered: the `git archive` path, password login, `systemctl`, real PostgreSQL migration, backup and restore. The install/migrate/start commands in the phone example are placeholders until Platform Engineering defines them.
+
+Q-009: answer written in the entry (IN DISCUSSION), pointing to `ops/deploy/README.md`.
+
+## Step 5 — Home computer
+
+Docker Desktop is installed and was started by the session with the owner's approval; the engine answers (29.9.2). No Docker install guide is needed. `ops/check-local.ps1` (real output): Node `v22.17.0` FAIL (expected 24); Docker engine OK; compose file, container and port FAIL because `ops/.env` and `expathio-postgres-dev` do not exist here.
+
+`ops/local-setup.md` now has section 1b (install Node.js 24 from nodejs.org, with the license read and accepted by the owner) and a note on the home computer. `ops/.env.example` has the two role password lines.
 
 ## Pending
 
-- Owner: answer Q-007.
-- Owner: confirm the device model.
+- Owner: close Q-007 and Q-009 when satisfied.
+- Owner (home computer): install Node.js 24 (`ops/local-setup.md`, 1b). Approve creating `ops/.env` and the container here (sections 3 and 4), then run `ops/db-roles` on it.
+- Platform Engineering: the real install, migration, start and health commands for `ops/deploy/targets/phone.target.example`.
+- Phone, each step approved by the owner: install `postgresql18` and `nodejs`; create the database and the roles; `shared/app.env`; the user service; first deployment.
 - Owner (change on the phone, needs approval per step): rename the device to `expathio` (ADR 0018).
 - Backup off the device: design after Q-007, before any data that matters is stored (ADR 0011).
 - Handoff to Product and Documentation: ADRs 0031 and 0032 not on `main`.
