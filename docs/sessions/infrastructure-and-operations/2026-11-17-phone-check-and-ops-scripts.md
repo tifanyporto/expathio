@@ -118,6 +118,21 @@ After the steps: NetworkManager, `wpa_supplicant`, `sshd`, `tailscaled` and `nft
 
 One SSH public key is authorized for the phone user (ed25519, comment pointing to an Expathio WSL environment). The owner decides whether it stays.
 
+## Step 7 — The phone freezes under sustained writes (open risk, 2026-11-18)
+
+**Second `super` copy (raw, no compression, battery 97%).** The copy to a file in the user's home stopped at 1648 of 8704 MiB and the phone froze again (SSH and Tailscale unreachable; forced restart by the owner). So power was not the cause. The kernel log before the freeze, from 12:29:
+
+```
+ufshcd-qcom 1d84000.ufshc: ufshcd_wait_for_pending_cmds: timedout waiting for doorbell to clear (tm=0x0, tr=0x1)
+devfreq 1d84000.ufshc: dvfs failed with (-16) error
+```
+
+followed by `rcu_sched detected stalls`. The internal storage (UFS, WDC 128 GB) stops answering during a large write, and the whole system hangs. Reading the whole `super` partition (8.5 GiB, `sha256sum`) worked on 2026-11-17; both freezes happened while writing to the root file system (a loop device on the `userdata` partition, direct I/O on).
+
+**Test with UFS clock scaling off (owner approved).** `clkscale_enable` set to `0` until the next reboot; the partial `super` copy deleted; then a 4096 MiB write test with `dd ... conv=fsync`. The phone froze again: the test file reached 3,423,600,640 bytes at 13:16 and `rcu_sched detected stalls` started at 13:17 (owner restarted the phone at 13:40). Clock scaling off does not prevent the freeze. The test file is still on the phone. After each forced restart the root file system mounted without errors.
+
+**Impact.** Any sustained large write can freeze the phone: a large PostgreSQL import, a restore, a large migration, a local backup, or formatting and filling `super`. Normal small writes have not frozen it so far. This must be resolved, or the load kept small and tested, before the phone holds data that matters. Decision for the owner, with Platform Engineering.
+
 ## Pending
 
 - Owner: close Q-007 and Q-009 when satisfied.
