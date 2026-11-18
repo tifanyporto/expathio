@@ -89,10 +89,40 @@ Docker Desktop is installed and was started by the session with the owner's appr
 
 `ops/local-setup.md` now has section 1b (install Node.js 24 from nodejs.org, with the license read and accepted by the owner) and a note on the home computer. `ops/.env.example` has the two role password lines.
 
+## Step 6 — Phone: install attempt, reset decision, cleanup (2026-11-17/18)
+
+The owner approved the phone steps ("tudo aprovado"). Every change below ran as a script the owner started in a terminal tab, typing the phone password; real output was read from the tab.
+
+**Install not done.** The first install run (`apk add postgresql18 postgresql18-client nodejs npm`) stopped at apk's `[Y/n]` prompt; the tab was closed, so nothing was installed.
+
+**Reset investigation.** The owner asked for a "pure Linux" with no Android leftovers. Findings (read-only): the device is the POCO F3 (`/proc/device-tree/model`); the kernel package `linux-postmarketos-qcom-sm8250-alioth`, `device-xiaomi-alioth` and `firmware-xiaomi-alioth` are local builds from a community fork, not in the official repositories. **`apk upgrade --prune` or `--available` would remove them and can leave the phone unable to boot. Never run them.** Linux lives in the `userdata` partition. The Android `super` partition (8.5 GiB, logical partitions `system_a`, `vendor_a`, `product_a` and others, mapped by device-mapper) is unused by Linux. The boot, firmware, modem and calibration partitions must never be touched. The owner chose option B: copy `super` to the computer, then reuse it as Linux storage ("Confirmo, com cópia").
+
+**Copy of `super`: the phone froze.** The copy script checked the partition identity and size, computed the SHA-256 of the whole partition, then started `dd | gzip`. At 23:05:43 the kernel logged `rcu_sched detected stalls on CPUs/tasks` and repeated it until the owner restarted the phone; only 480 KB of the copy had been written. The battery was at 8–9% and draining even on the charger (battery `Discharging`, about 1.5 A out; charger about 0.2 A in). Most likely cause: not enough power under sustained load. Nothing was erased. Rule from now on: no heavy or risky step on the phone below 50% battery. The next copy will stream the raw partition to the computer without compressing on the phone.
+
+**What was on the screen.** The boot text with a loading screen is the kernel console plus `plymouth`/`postmarketos-bootsplash`. The on-screen keyboard is `buffyboard`; it is required by `postmarketos-initramfs`, so it stays installed; it is not running.
+
+**Cleanup (owner approved steps 1 to 6 on 2026-11-18; light steps run at 32% battery, real output):**
+
+| Step | Result |
+|---|---|
+| 1. Mark network, Wi-Fi, firewall, SSH rules, routing and disk tools as wanted | Done; world has 48 entries. Needed because `postmarketos-ui-console` is a meta package: removing it alone would have removed NetworkManager, `wpa_supplicant`, `nftables` and `util-linux` (simulated with `apk del -s`). |
+| 2. Remove `tmux`, language packs and `~/.tmux.conf` | Done (15 packages). |
+| 3. Limit system logs | Done; `/etc/systemd/journald.conf.d/expathio.conf` sets `SystemMaxUse=100M`; journal from about 1 GB to 98.8 MB. |
+| 4. Keep a copy of the device packages before cleaning the apk cache | The cache holds only the kernel package, 11 builds (`6.19.6-r2` to `-r12`; `-r12` installed). Copied to the computer (`D:\expathio-backups\phone-device-packages-2026-11-18`, 11 files, about 347 MB); all 11 SHA-256 sums match. **`device-xiaomi-alioth` and `firmware-xiaomi-alioth` are not in the cache: no copy exists.** Cache not cleaned yet. |
+| 5. Remove the console UI (sound, boot splash, mDNS, `chrony`, graphics libraries) | Not run; waits for 50% battery. The simulated list no longer contains network packages. |
+| 6. Delete the partial `super` copy on the phone | Done (3 files). |
+
+After the steps: NetworkManager, `wpa_supplicant`, `sshd`, `tailscaled` and `nftables` all `active`; root uses 2.0 GB.
+
+One SSH public key is authorized for the phone user (ed25519, comment pointing to an Expathio WSL environment). The owner decides whether it stays.
+
 ## Pending
 
 - Owner: close Q-007 and Q-009 when satisfied.
 - Platform Engineering: the real install, migration, start and health commands for `ops/deploy/targets/phone.target.example`.
+- Phone, at 50% battery or more: cleanup step 5 (keep the two NetworkManager config packages), clean the apk cache, reboot and verify; copy `super` to the computer and verify; then reuse `super` as `/srv/expathio-data`.
+- Phone: back up `device-xiaomi-alioth` and `firmware-xiaomi-alioth` (no copy exists).
+- Owner: keep or remove the authorized SSH key.
 - Phone, each step approved by the owner: install `postgresql18` and `nodejs`; create the database and the roles; `shared/app.env`; the user service; first deployment.
 - Owner (change on the phone, needs approval per step): rename the device to `expathio` (ADR 0018).
 - Backup off the device: design after Q-007, before any data that matters is stored (ADR 0011).
