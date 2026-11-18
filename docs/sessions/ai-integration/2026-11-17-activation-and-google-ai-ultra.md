@@ -10,11 +10,12 @@ In scope:
 
 - Activation of the AI Integration function (`docs/SESSION-STRUCTURE.md`, section 4.2), approved by the owner on 2026-11-17.
 - Recording what the subscription offers and what must be resolved before it is used.
+- The rule for using AI before Phase 6 (ADR 0037), prepared and approved during the session.
 
 Out of scope:
 
 - Any API call, account configuration or API key. ADR 0004 keeps the AI budget at R$ 0.
-- Moving AI earlier than Phase 6. ADR 0003 is unchanged.
+- Implementing any early AI case. ADR 0037 allows them, but none is approved yet.
 - Changes to documents owned by other functions. These are listed under "Pending".
 
 ## Documents Read
@@ -36,7 +37,6 @@ Out of scope:
 ## Decisions
 
 - Proposed (not approved):
-  - Google AI Ultra credits as a candidate resource for the Phase 6 agents (`04-AI-AGENTS.md`, section 17).
   - None open. The subscription terms in `04-AI-AGENTS.md`, sections 17.1 to 17.3, are reference information, not decisions.
   - An earlier draft of section 17.4 recommended claiming the credits now for preparation experiments. The owner redirected: this function implements AI in the product, in Phase 6 or earlier when an opportunity arises. The draft was replaced.
 - Approved by the owner:
@@ -49,7 +49,7 @@ Nothing was executed. Correction: earlier in the session, the owner was told tha
 
 ## Pending
 
-- **Product and Documentation:** update `docs/SESSION-STRUCTURE.md` to move AI Integration from "planned" to "active", with the limits of early activation: no code and no AI calls before a budget decision replaces ADR 0004. Add the `ai-integration` folder to the list in section 2 and update the table in section 6.
+- **Product and Documentation:** update `docs/SESSION-STRUCTURE.md` to move AI Integration from "planned" to "active", with the limits of early activation: no AI calls before a budget decision amends ADR 0004, and responsibility for early AI cases (ADR 0037). Add the `ai-integration` folder to the list in section 2 and update the table in section 6.
 - **Product and Documentation:** add the Google AI Ultra subscription to `docs/CURRENT_STATE.md` as a candidate resource, with its end date (around 2027-11).
 - **Architecture and Quality:** when a provider decision is prepared, consider adding the subscription end date and the overage risk to the risk register (`05-TECHNICAL-ARCHITECTURE.md`, section 21), and mention the candidate in the open decision on AI providers (section 22).
 - **Owner:** confirm the Ultra tier (5x with USD 40 per month, or 20x with USD 100 per month). Not urgent.
@@ -62,7 +62,7 @@ Nothing was executed. Correction: earlier in the session, the owner was told tha
 - Read `CLAUDE.md`, `docs/CURRENT_STATE.md`, `docs/SESSION-STRUCTURE.md` (section 4.2) and `docs/04-AI-AGENTS.md` (sections 14 to 17).
 - Starting point: `docs/decisions/0037-ai-before-phase-6-case-by-case.md` and `docs/04-AI-AGENTS.md`, section 17.4.
 - Already decided: the function is active; the subscription is for the platform's agents, not for development tools; use does not start now.
-- Do not change ADR 0003 or ADR 0004 without a new decision approved by the owner.
+- Do not change ADR 0003, ADR 0004 or ADR 0037 without a new decision approved by the owner.
 
 ## Next Step
 
