@@ -129,7 +129,7 @@ psql -h 127.0.0.1 -p 5433 -U expathio -d expathio_dev -c "SELECT version();"
 ```
 
 - `psql` asks for the password. Type the password from `ops/.env`. The screen shows nothing while you type; this is normal.
-- **Expected:** one row whose text starts with `PostgreSQL 18.4`.
+- **Expected:** one row whose text starts with `PostgreSQL 18.6`.
 
 Do not use port 5432 here. That is the Windows PostgreSQL 16 service.
 

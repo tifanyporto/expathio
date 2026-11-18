@@ -125,7 +125,11 @@ Facts found on 2026-11-09 (real output, see the session record): Docker is **not
 
 *Cost:* R$ 0 per month for every option. *Maintenance:* low; one minor-version pin to keep in step.
 
-**Owner decisions requested:** choose the PostgreSQL option (A, B or C) and the Node.js option (A or B). The entry stays open until the owner answers.
+**Owner answer (2026-11-17):** PostgreSQL **18.6** (option A) and the recommended Node.js, **24** (option A). The owner also confirmed that the device is the POCO F3 (the kernel name ending in `-pipa` does not mean another device).
+
+Applied by Infrastructure and Operations: `ops/docker-compose.yml` now pins `postgres:18.6`; `ops/.nvmrc` stays `24`. Not yet applied: installing `postgresql18` and `nodejs` on the phone (a change on the phone, one approved step at a time), and Node 24 on the home computer.
+
+The entry stays open until the owner closes it (see "How to Use This File").
 
 ### Q-008 — Continuous integration tool
 
