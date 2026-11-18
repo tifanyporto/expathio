@@ -1,0 +1,27 @@
+# Target settings for the production phone. Copy to targets/phone.target (git-ignored)
+# and fill in the values. No secret goes here: passwords live on the phone in
+# $BASE_DIR/shared/app.env, created by the owner (ops/deploy/README.md).
+#
+# Lines are KEY='value'. Lines starting with SSH_ stay on the computer;
+# the others are sent to the phone and read by remote.sh.
+
+SSH_HOST='<phone address on the private network>'
+SSH_USER='<phone user>'
+# SSH_PORT='22'
+# SSH_KEY='C:\Users\<you>\.ssh\id_ed25519'
+# SSH_OPTIONS=''
+
+BASE_DIR='/home/<phone user>/expathio'
+HEALTH_URL='http://127.0.0.1:3000/health'
+HEALTH_TIMEOUT='60'
+KEEP_RELEASES='3'
+
+# The commands below run inside the release folder on the phone.
+# PENDING: Platform Engineering defines the real install, migration and start
+# commands (docs/SESSION-STRUCTURE.md, section 3.3, dependencies). The values
+# below are placeholders and must be confirmed before the first deployment.
+# ADR 0032: migrations run as expathio_owner; the application runs as expathio_app.
+INSTALL_CMD='npm ci --omit=dev'
+PRE_MIGRATION_BACKUP_CMD='. ./.env && pg_dump --format=custom --file="$BACKUP_FILE" "$DATABASE_URL_OWNER"'
+MIGRATE_CMD='. ./.env && DATABASE_URL="$DATABASE_URL_OWNER" npm run db:migrate'
+RESTART_CMD='systemctl --user restart expathio'

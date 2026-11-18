@@ -1,0 +1,2 @@
+# Target files hold host names, user names and key paths (ADR 0018): never commit them.
+targets/*.target

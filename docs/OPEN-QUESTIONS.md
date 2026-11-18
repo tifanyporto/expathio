@@ -140,10 +140,18 @@ The entry stays open until the owner closes it (see "How to Use This File").
 
 ### Q-009 — Rollback steps of the deployment script
 
-- **Status:** PROPOSED
+- **Status:** IN DISCUSSION (answer written 2026-11-17; waiting for the owner)
 - **Asked by:** Architecture and Quality
 - **Answered by:** Infrastructure and Operations
 - **Needed by:** Phase 1, when the deployment script is built (ADR 0016)
+
+**Answer from Infrastructure and Operations (2026-11-17):** the rollback steps are in `ops/deploy/README.md`, section "When something fails". In short:
+
+- Each deployment keeps the previous release on the target. `deploy.ps1 -Action Rollback` switches back to it, restarts and runs the health check. This part is tested on a local target (`ops/deploy/test/test-deploy.ps1`).
+- Before each migration, the script takes a copy of the database (`backups/pre-<release>.dump`). If that copy fails, nothing is migrated.
+- Database rollback is chosen case by case by the owner: a reverse migration written by hand, or restoring the pre-migration copy. Restoring deletes everything written after the deployment and needs the owner's written confirmation for that case.
+
+Not tested yet: the restore of a real PostgreSQL copy (needs the application's migrations), and anything on the phone. The owner decides whether this answer closes the entry.
 
 ### Q-010 — Visual specification
 
