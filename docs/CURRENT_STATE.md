@@ -49,6 +49,7 @@ Recorded in `docs/decisions/`:
 - `0026` — The vacancy application flow (ADR 0005) is built in Phase 2, not Phase 4.
 - `0027` — The four first-version role titles are Operations Assistant, Customer Service Representative, Sales Support Assistant and Finance Assistant.
 - `0028` — Phase 1 login uses e-mail, the post-login page shows the organization and role with a simulated-data label, there is no password recovery in Phase 1, and the text "Expathio" is used until a logo is approved.
+- `0037` — AI may be used before Phase 6, case by case, in one bounded role at a time, with the owner's approval for each case. Amends `0003`. `0004` stays at R$ 0 until the first case is approved with its budget. First candidate: the simulated manager for proposal approval in Phase 4.
 
 Other decisions recorded in the documents, added on 2026-11-06:
 
@@ -67,14 +68,24 @@ Other decisions recorded in the documents:
 - Participant data is personal data (`01-PRODUCT.md`, section 12; `CLAUDE.md`, section 11).
 - Planning assumption: 5 to 10 hours per week (`06-ROADMAP.md`, section 1).
 
+## Candidate Resources
+
+Resources available to the project but not in use. Using one needs a decision approved by the owner.
+
+- **Google AI Ultra subscription** (owner, 2026-11-17, one year, ends around 2027-11). It grants monthly Google Cloud credits that can pay for the Gemini API. Each credit is valid for 12 months from its grant. Nothing has been claimed: claiming needs a Google Cloud billing account, and the owner's existing one stays closed. Credits are claimed only when the first early AI case is approved (ADR 0037), and any use needs an amendment to ADR 0004. The Ultra tier (5x or 20x) is not confirmed. Details: `04-AI-AGENTS.md`, section 17.
+
 ## Open
 
 Open questions are listed in `docs/OPEN-QUESTIONS.md`, one entry per question, with the function it is addressed to. Do not repeat them here.
 
 - **Standard session prompt and role assignment**: kept by the owner, outside the project, so that sessions do not read it. Not a project document.
-- **Session structure**: the session map in `docs/SESSION-STRUCTURE.md` is APPROVED (2026-11-04), including the planned sessions for Phases 5 to 7 (section 4). The Phase 1 source code folder layout is set by ADR 0019.
+- **Session structure**: the session map in `docs/SESSION-STRUCTURE.md` is APPROVED (2026-11-04), including the planned sessions for Phases 5 to 7 (section 4). The Phase 1 source code folder layout is set by ADR 0019. AI Integration is active since 2026-11-17, before Phase 6 (section 3.7; ADR 0037).
 
 ## Open Inconsistencies
+
+Open since 2026-11-17, waiting for the owner:
+
+- **Direct messages between sessions.** `CLAUDE.md`, section 14, allows and recommends direct messages between sessions and cites `docs/decisions/0029-direct-messages-between-sessions.md`. ADRs 0029 and 0030 (APPROVED on 2026-11-09) exist only on unmerged branches, such as `docs/adr-0030-direct-communication`, not on `main`. On `main`, `SESSION-STRUCTURE.md`, section 2, still says that sessions do not message each other and that the owner routes handoffs. No branch updates `SESSION-STRUCTURE.md` to match. Not changed until the owner decides.
 
 Resolved on 2026-11-06:
 

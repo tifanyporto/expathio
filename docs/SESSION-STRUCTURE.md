@@ -17,7 +17,7 @@ The structure is kept small on purpose. A session is added only when a phase nee
 ## 2. Working Rules
 
 - A session starts by reading `CLAUDE.md`, `docs/CURRENT_STATE.md`, its own function in this document, and the latest record in its function's folder under `docs/sessions/`.
-- Records go in `docs/sessions/<function-folder>/`, one folder per function: product-and-documentation, architecture-and-quality, infrastructure-and-operations, platform-engineering, frontend-engineering and experience-and-design. A folder is created when its function becomes active.
+- Records go in `docs/sessions/<function-folder>/`, one folder per function: product-and-documentation, architecture-and-quality, infrastructure-and-operations, platform-engineering, frontend-engineering, experience-and-design and ai-integration. A folder is created when its function becomes active.
 - A session changes only the files listed under its own function.
 - Work that belongs to another function is written as a handoff in the session record, under "Pending", with the target function named. The owner routes it.
 - Sessions do not message each other. Information moves through documents, session records and the owner.
@@ -185,6 +185,45 @@ The structure is kept small on purpose. A session is added only when a phase nee
 
 **Activation:** before the first screen is built in Phase 1. Until then the design direction in `docs/03` and `docs/09` remains a direction, not a specification.
 
+### 3.7. AI Integration
+
+**Phase:** 6 (`06-ROADMAP.md`, section 9), and early cases before Phase 6 under ADR 0037.
+
+**Status:** active since 2026-11-17, activated by the owner before Phase 6 (section 7). Moved here from section 4.2.
+
+**Role:** Adds AI-driven behavior to selected manager and employee roles, under bounded autonomy. Owns the AI layer that connects the application to model providers.
+
+**Responsibilities:**
+- Build the AI integration layer, with a model abstraction and context control (`05`, section 9).
+- Define each agent's role and permissions before any agent acts (ADR 0003).
+- Validate every AI action before it changes business state.
+- Measure AI usage and cost, and enforce the budget (ADR 0004).
+- Make AI failures non-blocking for essential operations (`05`, section 14).
+- Implement each early AI case approved by the owner before Phase 6, under the conditions of ADR 0037. The first candidate is the simulated manager that approves participant proposals, in Phase 4 (`06-ROADMAP.md`, section 7).
+- Agree the minimum AI layer for an early case with Architecture and Quality before code is written (`04-AI-AGENTS.md`, section 17.5).
+
+**Limits:**
+- Does not give agents autonomy level 4 (ADR 0003: out of scope). Early cases use levels 1 or 2 only (ADR 0037).
+- Does not spend money on AI without an approved budget change (ADR 0004).
+- Makes no AI call, creates no API key, reopens no billing account and claims no credit before a budget decision amends ADR 0004. That amendment is approved together with the first early case (ADR 0037).
+- Works on one bounded early case at a time, each approved by the owner. Phase 6 remains the phase for AI-powered employees and customers.
+- Does not run local language models (`CLAUDE.md`, section 8).
+
+**Owned documents:**
+- `docs/04-AI-AGENTS.md`.
+- Decision records on AI written by this function, such as ADR 0037.
+- AI integration source code and tests (folder to be defined).
+- Its own session records, in `docs/sessions/ai-integration/`.
+
+**Dependencies:**
+- Platform Engineering: the services and permissions AI actions use.
+- Simulation Engine: the events agents react to.
+- Product and Documentation: which roles get agents, and the business rules of each early case, such as the proposal approval rules in Phase 4.
+- Architecture and Quality: AI risks, cost controls and the minimum AI layer.
+- Owner: approval of each early case, its budget, and the AI provider.
+
+**Activation:** activated by the owner on 2026-11-17, before Phase 6, after the owner subscribed to Google AI Ultra (`04-AI-AGENTS.md`, section 17). The owner must still approve the AI provider and the budget before any use (`CLAUDE.md`, section 2; ADR 0004).
+
 ## 4. Sessions Planned for Later Phases
 
 These functions are planned but not active. Each is created only when its phase starts and the owner approves it. The entries below use the same structure as the active sessions, so the scope is fixed in advance. Details may change when the phase starts.
@@ -220,33 +259,7 @@ These functions are planned but not active. Each is created only when its phase 
 
 ### 4.2. AI Integration
 
-**Phase:** 6 (`06-ROADMAP.md`, section 9).
-
-**Role:** Adds AI-driven behavior to selected manager and employee roles, under bounded autonomy. Owns the AI layer that connects the application to model providers.
-
-**Responsibilities:**
-- Build the AI integration layer, with a model abstraction and context control (`05`, section 9).
-- Define each agent's role and permissions before any agent acts (ADR 0003).
-- Validate every AI action before it changes business state.
-- Measure AI usage and cost, and enforce the budget (ADR 0004).
-- Make AI failures non-blocking for essential operations (`05`, section 14).
-
-**Limits:**
-- Does not give agents autonomy level 4 (ADR 0003: out of scope).
-- Does not spend money on AI without an approved budget change (ADR 0004).
-- Does not run local language models (`CLAUDE.md`, section 8).
-
-**Owned documents (planned):**
-- `docs/04-AI-AGENTS.md`.
-- AI integration source code and tests (folder to be defined).
-
-**Dependencies:**
-- Platform Engineering: the services and permissions AI actions use.
-- Simulation Engine: the events agents react to.
-- Product and Documentation: which roles get agents.
-- Architecture and Quality: AI risks and cost controls.
-
-**Activation:** after the Phase 5 simulation runs reliably. The owner must approve the AI provider and budget at that time (`CLAUDE.md`, section 2).
+Active since 2026-11-17. Its definition is now in section 3.7.
 
 ### 4.3. Progression and Rewards
 
@@ -302,9 +315,9 @@ Reading the map: an arrow means "gives input to". Every arrow goes through docum
 | Phase 1 | Platform Engineering; Frontend Engineering; Experience and Design (before the first screen); the three active sessions above |
 | Phase 2 | Product and Documentation (organization content); Platform Engineering; Frontend Engineering |
 | Phase 3 | Product and Documentation (workflow rules); Platform Engineering; Frontend Engineering |
-| Phase 4 | All active sessions; Experience and Design leads the workspace design |
+| Phase 4 | All active sessions; Experience and Design leads the workspace design; AI Integration if the simulated manager is approved as an early AI case (ADR 0037) |
 | Phase 5 | Simulation Engine (new, or merged into Platform Engineering) |
-| Phase 6 | AI Integration (new) |
+| Phase 6 | AI Integration (active since 2026-11-17) |
 | Phase 7 | Progression and Rewards (new) |
 
 ## 7. Decisions Taken on the Structure
@@ -317,5 +330,9 @@ Approved by the owner on 2026-11-04:
 Approved by the owner on 2026-11-05:
 
 - The Phase 1 source code folders follow ADR 0019: one package at the repository root, with `server/`, `web/`, `shared/` and `ops/`.
+
+Approved by the owner on 2026-11-17:
+
+- AI Integration is active before Phase 6 (section 3.7). AI may enter before Phase 6, case by case, in one bounded role at a time (ADR 0037). ADR 0004 (R$ 0 for AI calls) stays in force until the first case is approved with its budget.
 
 Still open: none in this section.

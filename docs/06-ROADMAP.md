@@ -220,6 +220,14 @@ Transform the platform from an organization management foundation into an enviro
 - Work history.
 - Basic collaboration mechanisms between participants and simulated actors. Collaboration between human participants belongs to Phase 8.
 
+### Possible Early AI Case
+
+The simulated manager that approves participant proposals (`docs/decisions/0007-first-version-participant-rules.md`, item 4) belongs to the review and approval processes of this phase. It is the first candidate for AI before Phase 6 (`docs/decisions/0037-ai-before-phase-6-case-by-case.md`; `04-AI-AGENTS.md`, section 17.4).
+
+- The case is evaluated when this phase specifies its review and approval processes. It needs the owner's approval, and its budget is approved in an amendment to ADR 0004 before implementation.
+- The approval rules come from Product and Documentation. AI Integration implements the AI part.
+- The feature must work without AI: proposals within fixed limits follow a rule, and the rest wait for a human or are rejected with a standard reason.
+
 ### Expected Outcome
 
 A participant can perform meaningful professional responsibilities within the organization.
