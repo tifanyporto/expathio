@@ -38,7 +38,7 @@ docker compose exec -e PGUSER=expathio -e EXPATHIO_DB=expathio_dev -e EXPATHIO_O
 
 `-e NAME` without a value passes the variable from the PowerShell session, so set the two passwords there first (`$env:EXPATHIO_OWNER_PASSWORD = '...'`), copying them from `ops/.env`. `PGUSER=expathio` is the image's superuser (`POSTGRES_USER` in `ops/.env`).
 
-Status: this exact command has not been run yet on `expathio-postgres-dev` (that container is on the other computer). The script itself is tested by `test-roles.ps1`.
+Status: run on 2026-11-17 on the home computer's `expathio-postgres-dev` (PostgreSQL 18.6): both roles created, and each logged in with its password. Not run yet on the other computer's container or on the phone.
 
 Expected: a table with both roles, `login` = `t` and the other columns `f`, then `OK: roles expathio_owner and expathio_app are set up in database expathio_dev.`
 

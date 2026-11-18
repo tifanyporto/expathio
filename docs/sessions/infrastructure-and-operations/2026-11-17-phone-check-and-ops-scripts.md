@@ -83,12 +83,14 @@ Q-009: answer written in the entry (IN DISCUSSION), pointing to `ops/deploy/READ
 
 Docker Desktop is installed and was started by the session with the owner's approval; the engine answers (29.9.2). No Docker install guide is needed. `ops/check-local.ps1` (real output): Node `v22.17.0` FAIL (expected 24); Docker engine OK; compose file, container and port FAIL because `ops/.env` and `expathio-postgres-dev` do not exist here.
 
+**Local database on the home computer (owner approved, 2026-11-17).** `ops/.env` created from the template with three generated passwords (32 characters each, never shown); git-ignored (`.gitignore:2:.env`). Port 5433 was free. `docker compose up -d`: volume `expathio-dev_expathio-pgdata`, network and container `expathio-postgres-dev` created; status `Up (healthy)`, `127.0.0.1:5433->5432/tcp`; `SELECT version()` = `PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2)`. `check-local.ps1`: 4 of 5 OK, only Node (v22.17.0) fails. Roles created with the command in `ops/db-roles/README.md`: both `login t`, the other attributes `f`, `OK:` line; each role logged in with its password through the container's network address.
+
 `ops/local-setup.md` now has section 1b (install Node.js 24 from nodejs.org, with the license read and accepted by the owner) and a note on the home computer. `ops/.env.example` has the two role password lines.
 
 ## Pending
 
 - Owner: close Q-007 and Q-009 when satisfied.
-- Owner (home computer): install Node.js 24 (`ops/local-setup.md`, 1b). Approve creating `ops/.env` and the container here (sections 3 and 4), then run `ops/db-roles` on it.
+- Owner (home computer): install Node.js 24 (`ops/local-setup.md`, 1b).
 - Platform Engineering: the real install, migration, start and health commands for `ops/deploy/targets/phone.target.example`.
 - Phone, each step approved by the owner: install `postgresql18` and `nodejs`; create the database and the roles; `shared/app.env`; the user service; first deployment.
 - Owner (change on the phone, needs approval per step): rename the device to `expathio` (ADR 0018).
