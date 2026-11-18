@@ -85,12 +85,13 @@ Docker Desktop is installed and was started by the session with the owner's appr
 
 **Local database on the home computer (owner approved, 2026-11-17).** `ops/.env` created from the template with three generated passwords (32 characters each, never shown); git-ignored (`.gitignore:2:.env`). Port 5433 was free. `docker compose up -d`: volume `expathio-dev_expathio-pgdata`, network and container `expathio-postgres-dev` created; status `Up (healthy)`, `127.0.0.1:5433->5432/tcp`; `SELECT version()` = `PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2)`. `check-local.ps1`: 4 of 5 OK, only Node (v22.17.0) fails. Roles created with the command in `ops/db-roles/README.md`: both `login t`, the other attributes `f`, `OK:` line; each role logged in with its password through the container's network address.
 
+**Node.js 24 on the home computer (2026-11-17).** At the owner's request the session downloaded `node-v24.22.3-x64.msi` (33 MB) from `nodejs.org/dist/latest-v24.x/`, checked its SHA-256 against the published `SHASUMS256.txt` (match) and its Authenticode signature (`Valid`, OpenJS Foundation), and opened the installer. The owner accepted the license and the administrator prompt. Real output after: `node --version` = `v24.22.3`, `npm --version` = `11.19.1`; `ops/check-local.ps1`: **all 5 checks passed**, exit 0. The installer file was deleted afterwards.
+
 `ops/local-setup.md` now has section 1b (install Node.js 24 from nodejs.org, with the license read and accepted by the owner) and a note on the home computer. `ops/.env.example` has the two role password lines.
 
 ## Pending
 
 - Owner: close Q-007 and Q-009 when satisfied.
-- Owner (home computer): install Node.js 24 (`ops/local-setup.md`, 1b).
 - Platform Engineering: the real install, migration, start and health commands for `ops/deploy/targets/phone.target.example`.
 - Phone, each step approved by the owner: install `postgresql18` and `nodejs`; create the database and the roles; `shared/app.env`; the user service; first deployment.
 - Owner (change on the phone, needs approval per step): rename the device to `expathio` (ADR 0018).
