@@ -489,7 +489,7 @@ These decisions must be resolved before AI Integration starts in Phase 6 (`docs/
 
 ## 17. Candidate Provider Resources
 
-**Status:** PROPOSED. Nothing in this section is a decision. ADR 0003 (AI in Phase 6) and ADR 0004 (R$ 0 per month for AI calls) remain in force.
+**Status:** PROPOSED. Nothing in this section is a decision. ADR 0003 (AI in Phase 6) and ADR 0004 (R$ 0 per month for AI calls) remain in force until a new decision amends them.
 
 ### 17.1. Google AI Ultra Subscription
 
@@ -510,8 +510,8 @@ Not confirmed: what happens to credits already granted if the subscription is no
 
 ### 17.2. Points to Resolve Before Any Use
 
-1. **Timing.** The subscription ends around 2027-11. Each credit lasts 12 months, so credits granted now expire in 2027-11 or 2028. Phase 6 is not expected by then. Credits help only if they are used before Phase 6, for preparation work.
-2. **Budget.** Any API call, even one paid by credits, needs a decision that amends ADR 0004. See section 17.4.
+1. **Timing.** The subscription ends around 2027-11. Each credit lasts 12 months from its grant. Phase 6 is not expected by then. Credits help only if AI is used earlier, in a case like the one in section 17.4, or if the subscription is renewed.
+2. **Budget.** Any API call, even one paid by credits, needs a decision that amends ADR 0004, approved together with the first case that uses AI.
 3. **Provider lock-in.** Business code must not depend on Gemini directly. The model abstraction in `05-TECHNICAL-ARCHITECTURE.md`, section 9.1, keeps the provider replaceable.
 4. **Data.** No participant personal data is sent to a model provider without a decision on it (`CLAUDE.md`, section 11; ADR 0022).
 5. **Secrets.** API keys stay outside the repository, in environment variables or ignored files (`CLAUDE.md`, section 7).
@@ -525,34 +525,46 @@ Not confirmed: what happens to credits already granted if the subscription is no
 
 Not confirmed: whether the project spend cap counts usage paid by credits, or only real charges. This must be checked in AI Studio before the cap is relied on.
 
-### 17.4. Proposal: Use of the Ultra Credits Before Phase 6
+### 17.4. Proposal: AI Before Phase 6, Case by Case
 
-**Status:** PROPOSED. Prepared on 2026-11-17 at the owner's request. Not approved.
+**Status:** PROPOSED. Direction given by the owner on 2026-11-17. Not approved as a decision.
 
-**Context.** ADR 0004 sets the AI budget at R$ 0 per month. ADR 0003 places AI in the product in Phase 6. The Ultra credits are already paid for by the subscription, but they need a billing account, a USD 5 prepayment, and they expire before Phase 6 if unused.
+**Context.** ADR 0003 places AI in Phase 6 and rejected, at the time, the alternative of AI before Phase 6 in a specific role. The owner now wants to keep Phase 6 as the AI phase, but to allow AI earlier when a phase offers a good opportunity. The example given is the simulated manager that approves participant proposals (ADR 0007, item 4), which belongs to the review and approval processes of Phase 4 (`06-ROADMAP.md`, section 7).
 
 **Alternatives.**
 
-1. **Do not claim now.** Claim when Phase 6 approaches, if the subscription is renewed.
-   - Cost: R$ 0. Maintenance: none.
-   - Downside: no credit is granted until the first claim. Everything the subscription offers this year is lost.
-2. **Claim now, without using the API.** Set up billing and claim the credits, but make no API calls.
-   - Cost: none in money, unless the USD 5 prepayment is also made. Maintenance: none.
-   - Downside: the credits expire unused, because Phase 6 is not expected before they do. A billing account with a card is open with no benefit.
-3. **Claim now and allow preparation experiments paid by credits only (recommended).**
-   - Scope: the AI Integration session runs small experiments outside the product code, to answer the open questions in section 16: which roles need AI, cost per agent action, how context size affects cost, how a model handles organization rules. No product feature uses AI before Phase 6, so ADR 0003 is unchanged.
-   - Money limit: R$ 0 per month beyond the credits. The only real expense is the USD 5 prepayment (about R$ 30 at current rates), paid once and kept as a balance.
-   - Controls: one dedicated project; project spend cap set to the lowest value allowed; Cloud budget alerts at 50%, 90% and 100% of USD 5; API key kept outside the repository; only fictional data sent to the model.
-   - Cost: USD 5 once. Maintenance: low. The owner checks the monthly e-mail alert or the AI Studio billing page.
-   - Downside: a card is linked to the account, so a failure of the controls could cause a real charge. The unconfirmed point in section 17.3 must be checked first.
-4. **Claim now and start AI in the product earlier.**
-   - Changes ADR 0003 and the roadmap. Not recommended: Phase 6 depends on a stable deterministic simulation, which does not exist yet.
+1. **Keep ADR 0003 as it is.** AI only in Phase 6. Earlier phases use deterministic rules, such as a manager that approves proposals within fixed limits.
+   - Cost: R$ 0. Simplest to maintain.
+   - Downside: features that need judgment over free text, such as a participant's proposal written in their own words, stay limited until Phase 6. The Ultra credits are not used.
+2. **AI before Phase 6, case by case (recommended).** Phase 6 remains the phase for AI-powered employees and customers in general. An earlier phase may use AI in one bounded role when the feature needs interpretation or judgment, with the owner's approval for each case.
+   - Cost: R$ 0 per month in real charges while the Ultra credits cover usage. The USD 5 prepayment is needed when the first case is implemented.
+   - Downside: the first case must also build the minimum AI integration layer (section 17.5), which Phase 6 would otherwise build.
+3. **Move all AI earlier.** Not recommended. Phase 6 depends on a stable deterministic simulation (Phase 5).
 
-**Recommendation.** Alternative 3. It turns credits that would otherwise expire into answers the project needs before Phase 6, with a real cost limited to the USD 5 prepayment.
+**Conditions for each early case (alternative 2).**
+
+- The feature works without AI. If the model fails or the budget is reached, a deterministic rule takes over or the item waits for a human. AI failures do not block essential operations (`06-ROADMAP.md`, Phase 6 exit criteria).
+- Autonomy levels 1 or 2 only (section 5).
+- The AI result is validated by the backend before it changes business state (section 9).
+- Each AI action is recorded: trigger, input, result and cost (section 13).
+- Only fictional data is sent to the model (ADR 0022; `CLAUDE.md`, section 11).
+- The budget for the case is approved before implementation (amendment to ADR 0004).
+
+**First candidate: the simulated manager for proposal approval.**
+
+- What it does: reads a participant's proposal, checks it against the role's permissions and the organization's rules, and answers approve, reject or ask for more information, with a reason.
+- Why AI fits: proposals are free text and outside predefined tasks (ADR 0007), so fixed rules can only cover part of them.
+- Deterministic fallback: proposals within fixed limits follow a rule; the rest wait for the owner or are rejected with a standard reason.
+- When: Phase 4, when review and approval processes are specified. Product and Documentation defines the approval rules; this function implements the AI part.
+
+**Use of the Ultra credits.** Claim only when the first early case is approved and ready to be implemented. Until then, no billing account is reopened and no API key is created. Credits last 12 months from each grant (section 17.1), so claiming earlier would let them expire unused.
 
 **Consequences if approved.**
 
-- A new decision record amends ADR 0004: budget of R$ 0 per month in real charges, use of the Ultra credits allowed for preparation experiments, USD 5 prepayment approved. Its number is chosen at approval, after checking the numbers already used on other branches.
-- The owner reopens the existing billing account, or creates one, without starting the Google Cloud free trial, so the trial remains available for later.
-- The AI Integration session writes the setup steps for the owner, and records each experiment and its cost in its session records.
-- Experiment code lives outside `server/` and `web/`, in a folder agreed with Architecture and Quality.
+- A new decision record amends ADR 0003: AI may enter before Phase 6 in bounded cases approved one by one. ADR 0003 belongs to Product and Documentation (`SESSION-STRUCTURE.md`, section 3.1); the record is written by that function, or by this one at the owner's request.
+- `06-ROADMAP.md`, section 7 (Phase 4), mentions the simulated manager as a possible AI case. Product and Documentation updates it.
+- ADR 0004 is amended only when the first case is approved, with its budget.
+
+### 17.5. Minimum AI Layer for an Early Case
+
+An early case needs a smaller version of the layer in `05-TECHNICAL-ARCHITECTURE.md`, section 9: one provider behind an interface, one model call per decision, a usage and cost record, a timeout with the fallback, and a switch to turn the case off. Memory, agent coordination and scheduling stay in Phase 6. The design is agreed with Architecture and Quality before code is written.
