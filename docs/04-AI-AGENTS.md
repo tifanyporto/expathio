@@ -489,7 +489,7 @@ These decisions must be resolved before AI Integration starts in Phase 6 (`docs/
 
 ## 17. Candidate Provider Resources
 
-**Status:** PROPOSED. Nothing in this section is a decision. ADR 0003 (AI in Phase 6) and ADR 0004 (R$ 0 per month for AI calls) remain in force until a new decision amends them.
+**Status:** PROPOSED, except section 17.4, which is APPROVED (ADR 0037). ADR 0004 (R$ 0 per month for AI calls) remains in force until the first early case is approved with its budget.
 
 ### 17.1. Google AI Ultra Subscription
 
@@ -527,7 +527,7 @@ Not confirmed: whether the project spend cap counts usage paid by credits, or on
 
 ### 17.4. Proposal: AI Before Phase 6, Case by Case
 
-**Status:** PROPOSED. Direction given by the owner on 2026-11-17. Not approved as a decision.
+**Status:** APPROVED by the owner on 2026-11-17, alternative 2. Recorded in `docs/decisions/0037-ai-before-phase-6-case-by-case.md`.
 
 **Context.** ADR 0003 places AI in Phase 6 and rejected, at the time, the alternative of AI before Phase 6 in a specific role. The owner now wants to keep Phase 6 as the AI phase, but to allow AI earlier when a phase offers a good opportunity. The example given is the simulated manager that approves participant proposals (ADR 0007, item 4), which belongs to the review and approval processes of Phase 4 (`06-ROADMAP.md`, section 7).
 
