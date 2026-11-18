@@ -64,7 +64,7 @@ None. Documentation change only.
 
 - ADRs 0029 and 0030 are cited by `SESSION-STRUCTURE.md`, section 2, but are only on unmerged branches (such as `docs/adr-0030-direct-communication`). The links resolve once those branches are merged into `main`.
 - **Owner:** merge order. `docs/ai-integration-activation` and this branch are not merged. On merge, `CURRENT_STATE.md` needs the small conflict resolution described above.
-- **Owner (from AI Integration):** confirm the Ultra tier (5x or 20x). Not urgent.
+- **Owner (from AI Integration):** confirm the Ultra tier (5x or 20x). No longer applies: the subscription was cancelled on 2026-11-18 (see `2026-11-18-ultra-cancellation-handoff.md`).
 - ADR 0003 belongs to Product and Documentation and is amended by ADR 0037, which AI Integration wrote. ADR 0037 is now listed under AI Integration's owned documents. ADR 0003 itself is unchanged.
 
 ## How to Resume

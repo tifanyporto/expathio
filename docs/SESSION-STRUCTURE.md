@@ -224,7 +224,7 @@ The structure is kept small on purpose. A session is added only when a phase nee
 - Architecture and Quality: AI risks, cost controls and the minimum AI layer.
 - Owner: approval of each early case, its budget, and the AI provider.
 
-**Activation:** activated by the owner on 2026-11-17, before Phase 6, after the owner subscribed to Google AI Ultra (`04-AI-AGENTS.md`, section 17). The owner must still approve the AI provider and the budget before any use (`CLAUDE.md`, section 2; ADR 0004).
+**Activation:** activated by the owner on 2026-11-17, before Phase 6, after the owner subscribed to Google AI Ultra (`04-AI-AGENTS.md`, section 17). The owner cancelled that subscription on 2026-11-18, with no credit claimed. The activation stays in force. The AI provider and the budget are approved with the first early case, before any use (ADR 0037; ADR 0004; `CLAUDE.md`, section 2).
 
 ## 4. Sessions Planned for Later Phases
 

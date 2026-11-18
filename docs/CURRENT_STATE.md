@@ -68,12 +68,6 @@ Other decisions recorded in the documents:
 - Participant data is personal data (`01-PRODUCT.md`, section 12; `CLAUDE.md`, section 11).
 - Planning assumption: 5 to 10 hours per week (`06-ROADMAP.md`, section 1).
 
-## Candidate Resources
-
-Resources available to the project but not in use. Using one needs a decision approved by the owner.
-
-- **Google AI Ultra subscription** (owner, 2026-11-17, one year, ends around 2027-11). It grants monthly Google Cloud credits that can pay for the Gemini API. Each credit is valid for 12 months from its grant. Nothing has been claimed: claiming needs a Google Cloud billing account, and the owner's existing one stays closed. Credits are claimed only when the first early AI case is approved (ADR 0037), and any use needs an amendment to ADR 0004. The Ultra tier (5x or 20x) is not confirmed. Details: `04-AI-AGENTS.md`, section 17.
-
 ## Open
 
 Open questions are listed in `docs/OPEN-QUESTIONS.md`, one entry per question, with the function it is addressed to. Do not repeat them here.
