@@ -48,3 +48,7 @@ Keeping Phase 6 as the main AI phase preserves the order of the roadmap: determi
 - `06-ROADMAP.md`, section 7 (Phase 4), should mention the simulated manager as a possible AI case. Product and Documentation updates it.
 - `docs/CURRENT_STATE.md` should list this decision. Product and Documentation updates it.
 - ADR numbers 0034 and 0035 are reserved on other branches for the store and role revision. This record uses 0037.
+
+## Update — 2026-11-18
+
+The owner cancelled the Google AI Ultra subscription. No credit was claimed. The decision above stays in force: it does not depend on the Ultra credits. The consequence about claiming the credits no longer applies. The provider, the model and the budget of the first early case are chosen when that case is approved, in the amendment to ADR 0004.
