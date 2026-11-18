@@ -109,10 +109,12 @@ The owner approved the phone steps ("tudo aprovado"). Every change below ran as 
 | 2. Remove `tmux`, language packs and `~/.tmux.conf` | Done (15 packages). |
 | 3. Limit system logs | Done; `/etc/systemd/journald.conf.d/expathio.conf` sets `SystemMaxUse=100M`; journal from about 1 GB to 98.8 MB. |
 | 4. Keep a copy of the device packages before cleaning the apk cache | The cache holds only the kernel package, 11 builds (`6.19.6-r2` to `-r12`; `-r12` installed). Copied to the computer (`D:\expathio-backups\phone-device-packages-2026-11-18`, 11 files, about 347 MB); all 11 SHA-256 sums match. **`device-xiaomi-alioth` and `firmware-xiaomi-alioth` are not in the cache: no copy exists.** Cache not cleaned yet. |
-| 5. Remove the console UI (sound, boot splash, mDNS, `chrony`, graphics libraries) | Not run; waits for 50% battery. The simulated list no longer contains network packages. |
+| 5. Remove the console UI (sound, boot splash, mDNS, `chrony`, graphics libraries) | Done at 56% battery. First a copy of `/etc/NetworkManager` in `/root`, and the two NetworkManager configuration packages marked as wanted; the script stopped unless the simulated list was free of network, SSH, Tailscale, kernel, firmware and device packages (passed). 66 packages removed. `apk cache clean`: cache from 755 MB to 411 MB (only the installed kernel build left). Device, firmware, kernel and `postmarketos-mkinitfs` packages still installed. |
 | 6. Delete the partial `super` copy on the phone | Done (3 files). |
 
-After the steps: NetworkManager, `wpa_supplicant`, `sshd`, `tailscaled` and `nftables` all `active`; root uses 2.0 GB.
+After the steps: NetworkManager, `wpa_supplicant`, `sshd`, `tailscaled` and `nftables` all `active`; root uses 1.6 GB.
+
+**Reboot (owner approved).** A reboot started in the background from the SSH session did not happen: the process ended with the session. A `systemd-run --on-active=5 systemctl reboot` timer worked. After the reboot (real output): no failed units; NetworkManager, `wpa_supplicant`, `sshd`, `tailscaled`, `nftables`, `expathio-standby` and `systemd-timesyncd` active; Wi-Fi and Tailscale connected; clock synchronized; no kernel stalls; battery 79%. Remaining kernel errors are hardware driver messages (touchscreen CRC, video codec probe, display encoder when the screen turns off) also present in earlier boots; not a concern for a server.
 
 One SSH public key is authorized for the phone user (ed25519, comment pointing to an Expathio WSL environment). The owner decides whether it stays.
 
@@ -120,7 +122,7 @@ One SSH public key is authorized for the phone user (ed25519, comment pointing t
 
 - Owner: close Q-007 and Q-009 when satisfied.
 - Platform Engineering: the real install, migration, start and health commands for `ops/deploy/targets/phone.target.example`.
-- Phone, at 50% battery or more: cleanup step 5 (keep the two NetworkManager config packages), clean the apk cache, reboot and verify; copy `super` to the computer and verify; then reuse `super` as `/srv/expathio-data`.
+- Phone, at 50% battery or more: copy `super` to the computer and verify; then reuse `super` as `/srv/expathio-data`.
 - Phone: back up `device-xiaomi-alioth` and `firmware-xiaomi-alioth` (no copy exists).
 - Owner: keep or remove the authorized SSH key.
 - Phone, each step approved by the owner: install `postgresql18` and `nodejs`; create the database and the roles; `shared/app.env`; the user service; first deployment.
