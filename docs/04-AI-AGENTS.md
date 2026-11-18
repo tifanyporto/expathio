@@ -489,9 +489,11 @@ These decisions must be resolved before AI Integration starts in Phase 6 (`docs/
 
 ## 17. Candidate Provider Resources
 
-**Status:** PROPOSED, except section 17.4, which is APPROVED (ADR 0037). ADR 0004 (R$ 0 per month for AI calls) remains in force until the first early case is approved with its budget.
+**Status:** PROPOSED, except section 17.4, which is APPROVED (ADR 0037). The Ultra subscription in section 17.1 was cancelled on 2026-11-18. ADR 0004 (R$ 0 per month for AI calls) remains in force until the first early case is approved with its budget.
 
 ### 17.1. Google AI Ultra Subscription
+
+**Cancelled on 2026-11-18.** The owner cancelled the subscription. No credit was claimed and no billing account was reopened. The terms below are kept as reference only. The provider for the first early AI case is chosen when that case is approved (section 17.4).
 
 The owner subscribed to Google AI Ultra on 2026-11-17, for one year. The owner's intent is to use it for the platform's agents (this document), not now, but when AI Integration starts.
 
@@ -510,7 +512,7 @@ Not confirmed: what happens to credits already granted if the subscription is no
 
 ### 17.2. Points to Resolve Before Any Use
 
-1. **Timing.** The subscription ends around 2027-11. Each credit lasts 12 months from its grant. Phase 6 is not expected by then. Credits help only if AI is used earlier, in a case like the one in section 17.4, or if the subscription is renewed.
+1. **Provider.** With the Ultra subscription cancelled, no provider is available. The provider, the model and the cost are chosen together with the first early case, with alternatives and a recommendation.
 2. **Budget.** Any API call, even one paid by credits, needs a decision that amends ADR 0004, approved together with the first case that uses AI.
 3. **Provider lock-in.** Business code must not depend on Gemini directly. The model abstraction in `05-TECHNICAL-ARCHITECTURE.md`, section 9.1, keeps the provider replaceable.
 4. **Data.** No participant personal data is sent to a model provider without a decision on it (`CLAUDE.md`, section 11; ADR 0022).
@@ -557,7 +559,7 @@ Not confirmed: whether the project spend cap counts usage paid by credits, or on
 - Deterministic fallback: proposals within fixed limits follow a rule; the rest wait for the owner or are rejected with a standard reason.
 - When: Phase 4, when review and approval processes are specified. Product and Documentation defines the approval rules; this function implements the AI part.
 
-**Use of the Ultra credits.** Claim only when the first early case is approved and ready to be implemented. Until then, no billing account is reopened and no API key is created. Credits last 12 months from each grant (section 17.1), so claiming earlier would let them expire unused.
+**Provider and budget.** The Ultra subscription was cancelled on 2026-11-18 (section 17.1). The provider is chosen when the first early case is approved, together with its budget. The case-by-case rule does not depend on the Ultra credits.
 
 **Consequences if approved.**
 
