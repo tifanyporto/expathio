@@ -8,7 +8,7 @@
 
 ## 1. Purpose
 
-Expathio is built through working sessions. Each session has one function, like an employee responsible for one area of a company. A session acts only inside its function, records what it finds outside it, and passes that to the project owner. The owner decides scope and priorities.
+Expathio is built through working sessions. Each session has one function, like an employee responsible for one area of a company. A session acts only inside its function, records what it finds outside it, and passes that to the function responsible, or to the project owner when the owner must decide. The owner decides scope and priorities.
 
 This document maps the sessions needed to build the project, their responsibilities, limits, owned documents and dependencies. It follows the rule in `CLAUDE.md`, section 14.
 
@@ -19,8 +19,10 @@ The structure is kept small on purpose. A session is added only when a phase nee
 - A session starts by reading `CLAUDE.md`, `docs/CURRENT_STATE.md`, its own function in this document, and the latest record in its function's folder under `docs/sessions/`.
 - Records go in `docs/sessions/<function-folder>/`, one folder per function: product-and-documentation, architecture-and-quality, infrastructure-and-operations, platform-engineering, frontend-engineering, experience-and-design and ai-integration. A folder is created when its function becomes active.
 - A session changes only the files listed under its own function.
-- Work that belongs to another function is written as a handoff in the session record, under "Pending", with the target function named. The owner routes it.
-- Sessions do not message each other. Information moves through documents, session records and the owner.
+- Work that belongs to another function is written as a handoff in the session record, under "Pending", with the target function named. The session may send it to that function by direct message.
+- Sessions may, and are encouraged to, request things from each other by direct message, without prior approval from the owner. Each request is recorded in the sending session's record. Direct messages do not replace documents: decisions go to `docs/decisions/`, and questions for another function go to `docs/OPEN-QUESTIONS.md` (`docs/decisions/0029-direct-messages-between-sessions.md`, `docs/decisions/0030-direct-communication-between-sessions.md`).
+- A session that receives a request answers it within its own function, or routes it on.
+- The owner is consulted only for business rules, visual decisions and external dependencies that depend on the owner's approval (`CLAUDE.md`, section 2; ADR 0030).
 - Questions that another function must answer are added to `docs/OPEN-QUESTIONS.md`, with the function they are addressed to. The owner closes each entry. The answering function writes the answer in the entry and links the decision record, if there is one.
 - Decisions are recorded by the function that owns the subject, and approved by the owner (`CLAUDE.md`, section 5).
 - A session that finds a contradiction between documents records it in `docs/CURRENT_STATE.md` and asks the owner. It does not pick a side.
@@ -305,7 +307,7 @@ Architecture and Quality --> Platform Engineering --> Frontend Engineering
 Infrastructure and Operations   (API contracts)     Experience and Design
 ```
 
-Reading the map: an arrow means "gives input to". Every arrow goes through documents or through the owner. No session writes into another session's area.
+Reading the map: an arrow means "gives input to". Every arrow goes through documents, direct messages between sessions (ADR 0030) or the owner. No session writes into another session's area.
 
 ## 6. Build Order Against the Roadmap
 

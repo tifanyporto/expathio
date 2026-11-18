@@ -83,9 +83,9 @@ Open questions are listed in `docs/OPEN-QUESTIONS.md`, one entry per question, w
 
 ## Open Inconsistencies
 
-Open since 2026-11-17, waiting for the owner:
+Resolved on 2026-11-17:
 
-- **Direct messages between sessions.** `CLAUDE.md`, section 14, allows and recommends direct messages between sessions and cites `docs/decisions/0029-direct-messages-between-sessions.md`. ADRs 0029 and 0030 (APPROVED on 2026-11-09) exist only on unmerged branches, such as `docs/adr-0030-direct-communication`, not on `main`. On `main`, `SESSION-STRUCTURE.md`, section 2, still says that sessions do not message each other and that the owner routes handoffs. No branch updates `SESSION-STRUCTURE.md` to match. Not changed until the owner decides.
+- `CLAUDE.md`, section 14, and ADRs 0029 and 0030 (APPROVED on 2026-11-09) allow direct messages between sessions, while `SESSION-STRUCTURE.md`, section 2, said that sessions do not message each other and that the owner routes handoffs. The owner chose to align the document with the ADRs: sections 1, 2 and 5 of `SESSION-STRUCTURE.md` updated. ADRs 0029 and 0030 are still only on unmerged branches, such as `docs/adr-0030-direct-communication`, so the links resolve once those branches are merged into `main`.
 
 Resolved on 2026-11-06:
 
