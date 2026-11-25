@@ -1,0 +1,7 @@
+# Secrets and credentials must never be committed.
+*.pem
+*.key
+.env
+.env.*
+sasl_passwd*
+*credentials*

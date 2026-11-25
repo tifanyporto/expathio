@@ -1,0 +1,2 @@
+# Files deployed to the Linux host must keep LF line endings.
+infra/** text eol=lf

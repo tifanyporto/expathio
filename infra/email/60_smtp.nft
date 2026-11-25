@@ -1,0 +1,15 @@
+# Opens TCP port 25 on the Wi-Fi interface so the server can receive mail from
+# the internet. Optional: install.sh does not install this file.
+#
+# It adds a rule to the distribution's existing "inet filter" table and its
+# "input" base chain (default policy: drop); it does nothing useful without them.
+# The "inet" family covers IPv4 and IPv6, so a host with a global IPv6 address
+# accepts SMTP over IPv6 as soon as this is loaded, independently of any IPv4
+# port forwarding. IMAP (993) and submission (587/465) are not opened here.
+#
+# See README.md, "Receiving mail from the internet", for how to load it.
+table inet filter {
+	chain input {
+		iifname "wlan*" tcp dport 25 accept comment "accept SMTP (inbound mail)"
+	}
+}

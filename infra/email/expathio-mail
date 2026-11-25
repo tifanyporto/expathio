@@ -1,0 +1,92 @@
+#!/bin/sh
+# Manages the mail accounts of the Expathio mail server.
+# Installed as /usr/local/bin/expathio-mail by install.sh. Run as root.
+set -eu
+
+USERS=/etc/dovecot/users
+[ "$(id -u)" = 0 ] || { echo "expathio-mail: must run as root" >&2; exit 1; }
+[ -f "$USERS" ] || { echo "expathio-mail: $USERS not found; run install.sh first" >&2; exit 1; }
+DOMAIN=$(postconf -h virtual_mailbox_domains)
+
+usage() {
+	cat >&2 <<EOF
+Usage: expathio-mail <command> [address]
+
+  add    name@$DOMAIN   create an account (prompts for the password)
+  passwd name@$DOMAIN   change the password of an account
+  del    name@$DOMAIN   remove an account (its mailbox stays on disk)
+  list                  list the accounts
+
+For scripted use, set EXPATHIO_MAIL_PASS instead of typing the password.
+EOF
+	exit 1
+}
+
+# Rebuilds the Postfix lookup tables from the account file.
+regen() {
+	cut -d: -f1 "$USERS" | awk '{print $1 " OK"}' > /etc/postfix/vmailbox
+	cut -d: -f1 "$USERS" | awk '{print $1 " " $1}' > /etc/postfix/sender_login
+	postmap lmdb:/etc/postfix/vmailbox
+	postmap lmdb:/etc/postfix/sender_login
+}
+
+# Prints the password hash. The password never appears on a command line.
+hash_pass() {
+	if [ -n "${EXPATHIO_MAIL_PASS:-}" ]; then
+		printf '%s\n%s\n' "$EXPATHIO_MAIL_PASS" "$EXPATHIO_MAIL_PASS" | doveadm pw -s BLF-CRYPT -r 12
+	else
+		doveadm pw -s BLF-CRYPT -r 12
+	fi
+}
+
+# Local part: lowercase letters, digits, ".", "_" and "-"; it must start and
+# end with a letter or digit and must not contain "..".
+check_addr() {
+	case "$1" in
+		'') usage ;;
+		*[!a-z0-9._-]*@*|@*|*@*@*|[!a-z0-9]*|*[!a-z0-9]@*|*..*@*)
+			echo "invalid address: $1" >&2; exit 1 ;;
+		*@"$DOMAIN") ;;
+		*) echo "the address must end in @$DOMAIN" >&2; exit 1 ;;
+	esac
+}
+
+exists() { awk -F: -v a="$1" '$1 == a { found = 1 } END { exit !found }' "$USERS"; }
+
+# Writes the account file without the given address, keeping it private.
+write_without() {
+	( umask 077; awk -F: -v a="$1" '$1 != a' "$USERS" > "$USERS.new" )
+	chown root:dovecot "$USERS.new"
+	chmod 640 "$USERS.new"
+}
+
+cmd=${1:-}
+addr=${2:-}
+case "$cmd" in
+	list)
+		cut -d: -f1 "$USERS" ;;
+	add)
+		check_addr "$addr"
+		if exists "$addr"; then echo "account already exists: $addr" >&2; exit 1; fi
+		hash=$(hash_pass)
+		echo "$addr:$hash::::::" >> "$USERS"
+		regen
+		echo "created: $addr" ;;
+	passwd)
+		check_addr "$addr"
+		if ! exists "$addr"; then echo "no such account: $addr" >&2; exit 1; fi
+		hash=$(hash_pass)
+		write_without "$addr"
+		echo "$addr:$hash::::::" >> "$USERS.new"
+		mv "$USERS.new" "$USERS"
+		echo "password changed: $addr" ;;
+	del)
+		check_addr "$addr"
+		if ! exists "$addr"; then echo "no such account: $addr" >&2; exit 1; fi
+		write_without "$addr"
+		mv "$USERS.new" "$USERS"
+		regen
+		echo "removed: $addr (the mailbox stays under /var/mail/domains/$DOMAIN/)" ;;
+	*)
+		usage ;;
+esac

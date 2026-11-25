@@ -1,0 +1,17 @@
+[Unit]
+Description=Postfix SMTP server (Expathio mail)
+After=network.target dovecot.service
+Wants=dovecot.service
+
+[Service]
+Type=forking
+PIDFile=/var/spool/postfix/pid/master.pid
+ExecStartPre=/usr/sbin/postfix check
+ExecStart=/usr/sbin/postfix start
+ExecStop=/usr/sbin/postfix stop
+ExecReload=/usr/sbin/postfix reload
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
