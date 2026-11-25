@@ -28,8 +28,12 @@ server. It boots Linux directly; no Android system is installed.
   WireGuard-based private network. A firewall rule accepts traffic that
   arrives on the Tailscale interface, so the members of that network can reach
   services that listen on all addresses.
-- **Administration.** Over SSH, as allowed by the distribution's default
-  firewall rules.
+- **Administration.** Over SSH. A restriction table
+  ([`infra/host/`](../infra/host/README.md)) drops SSH from any source that is
+  not local: it is accepted from the private network, from USB networking, and
+  on other interfaces from private IPv4 ranges and link-local IPv6 only. The
+  same table closes two ports that the distribution opens for desktop
+  applications and limits DNS to the same local sources.
 - **Mail exposure.** The mail ports are closed to every network except the
   private one. Inbound SMTP (TCP port 25) is the only mail port meant to be
   public, and it is opened by an optional firewall rule (section 3.6).

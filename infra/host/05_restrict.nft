@@ -1,0 +1,40 @@
+# Host firewall restrictions for the Expathio server.
+# Installed as /etc/nftables.d/05_restrict.nft.
+#
+# The distribution's default snippets in /etc/nftables.d accept SSH without
+# restricting the source, open two ports for desktop applications that this
+# server does not run, and accept DNS on the Wi-Fi interface from any source.
+# This file leaves those snippets untouched and adds a separate table whose
+# chain runs before the distribution's "inet filter" chain. A packet dropped
+# here is gone whatever the other chain would accept; a packet accepted here
+# still has to pass the other chain.
+#
+# Result:
+#   - SSH and DNS are accepted from the private network (Tailscale), from USB
+#     networking, and on other interfaces only from local addresses: private
+#     IPv4 ranges and link-local IPv6, whatever the connected subnet is.
+#     Packets with a public source address are dropped. A router that rewrites
+#     the source address of forwarded connections would defeat this.
+#   - TCP 24727 (AusweisApp2) and TCP/UDP 53317 (LocalSend) are closed.
+#
+# From the local network, connect to the host's IPv4 address: its global IPv6
+# address does not accept SSH.
+#
+# The three lines below make the file safe to load more than once.
+table inet expathio_restrict
+delete table inet expathio_restrict
+table inet expathio_restrict {
+	chain input {
+		type filter hook input priority -10; policy accept;
+
+		iifname "lo" accept
+		ct state established,related accept
+
+		iifname != "tailscale0" iifname != "usb*" tcp dport 22 ip saddr != { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 169.254.0.0/16 } drop comment "SSH only from local IPv4 addresses"
+		iifname != "tailscale0" iifname != "usb*" tcp dport 22 ip6 saddr != fe80::/10 drop comment "SSH only from link-local IPv6 addresses"
+		iifname != "tailscale0" iifname != "usb*" meta l4proto { tcp, udp } th dport 53 ip saddr != { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 169.254.0.0/16 } drop comment "DNS only from local IPv4 addresses"
+		iifname != "tailscale0" iifname != "usb*" meta l4proto { tcp, udp } th dport 53 ip6 saddr != fe80::/10 drop comment "DNS only from link-local IPv6 addresses"
+		tcp dport 24727 drop comment "close the AusweisApp2 port"
+		meta l4proto { tcp, udp } th dport 53317 drop comment "close the LocalSend port"
+	}
+}
