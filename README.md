@@ -45,6 +45,12 @@ no Android system.
 
 The full technical description is in [`docs/architecture.md`](docs/architecture.md).
 
+## Design
+
+Expathio's interface is meant to be clean and intimate: warm paper, a single
+violet, generous space and plain wording. The colours, typography, components
+and voice are specified in [`docs/design.md`](docs/design.md).
+
 ## Running it
 
 Each component has its own instructions:
@@ -59,6 +65,7 @@ Each component has its own instructions:
 ```
 README.md              this file
 docs/architecture.md   technical specification of the platform and its services
+docs/design.md         visual identity and interface rules
 infra/email/           mail server: configuration, installer, account tool, tests
 infra/host/            host firewall restrictions
 ```
