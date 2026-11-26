@@ -139,7 +139,7 @@ postconf -P "465/inet/smtpd_tls_wrappermode=yes"
 
 echo "== postfix: lookup tables"
 mkdir -p /usr/local/bin
-install -m 755 expathio-mail /usr/local/bin/expathio-mail
+install -m 755 expathio-mail expathio-mail-backup /usr/local/bin/
 cut -d: -f1 /etc/dovecot/users | awk '{print $1 " OK"}' > /etc/postfix/vmailbox
 cut -d: -f1 /etc/dovecot/users | awk '{print $1 " " $1}' > /etc/postfix/sender_login
 [ -f /etc/postfix/virtual ] || : > /etc/postfix/virtual

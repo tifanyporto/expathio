@@ -177,6 +177,9 @@ that authorizes the relay and DKIM records for the keys the relay signs with.
 - One mail domain per installation.
 - No spam or virus filtering.
 - No webmail; any IMAP client can be used.
+- Mail is stored only on the host. Copies are made by pulling an archive from
+  another machine (`expathio-mail-backup`); the archives are full copies and
+  are not encrypted.
 
 ## 4. DNS and certificate automation
 

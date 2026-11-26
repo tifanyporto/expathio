@@ -195,6 +195,53 @@ and its mailbox. Remove all of that with:
 ssh -t <user>@<host> 'cd ~/email && sudo sh test.sh --cleanup'
 ```
 
+## Backup
+
+The mailboxes exist only on the host, so copy them to another machine
+regularly. `expathio-mail-backup`, installed by `install.sh`, writes a
+gzip-compressed tar archive to standard output with the mailboxes
+(`/var/mail/domains`), the account file (`/etc/dovecot/users`) and the alias
+table (`/etc/postfix/virtual`). Secrets that can be created again (the relay
+password, the TLS key, the DNS API token) are not included. The archive is not
+encrypted and holds all mail and the password hashes: keep it somewhere safe.
+
+Pull a copy from another machine, so that nothing has to be stored on the host:
+
+```sh
+ssh <user>@<host> 'sudo expathio-mail-backup' > mail-backup.tar.gz
+ssh -t <user>@<host> 'sudo expathio-mail-backup --list'   # what would be saved
+```
+
+The first command has no terminal, so it works only where `sudo` does not ask
+for a password.
+
+On Windows, `backup-pull.ps1` does the same, checks that the archive can be
+read, keeps the most recent archives (30 by default) and writes a line per run
+to `backup.log`:
+
+```powershell
+.\backup-pull.ps1 -Server <user>@<host> -Destination D:\backups\mail
+```
+
+Run it every day with a scheduled task, for example:
+
+```powershell
+$action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-NoProfile -WindowStyle Hidden -File "D:\backups\backup-pull.ps1" -Server <user>@<host> -Destination "D:\backups\mail"'
+Register-ScheduledTask -TaskName 'Mail backup' -Action $action -Trigger (New-ScheduledTaskTrigger -Daily -At '12:30') -Settings (New-ScheduledTaskSettingsSet -StartWhenAvailable)
+```
+
+Each archive is a full copy.
+
+To restore on an installed host, stop the services, extract the archive over
+the file system and run the installer, which rebuilds the lookup tables from
+the account file and starts the services:
+
+```sh
+ssh -t <user>@<host> 'sudo systemctl stop postfix dovecot'
+ssh <user>@<host> 'sudo tar -xzf - -C /' < mail-backup.tar.gz
+ssh -t <user>@<host> 'cd ~/email && sudo sh install.sh'
+```
+
 ## Receiving mail from the internet
 
 Not enabled by the installer. It needs:
@@ -291,6 +338,8 @@ ssh -t <user>@<host> 'sudo sh ~/email/set-relay.sh --remove'
 | `dovecot.conf` | `/etc/dovecot/dovecot.conf` | Mailboxes, accounts, IMAP, sockets for Postfix |
 | `dovecot.service`, `postfix.service` | `/etc/systemd/system/` | systemd units (the Alpine packages ship none) |
 | `expathio-mail` | `/usr/local/bin/expathio-mail` | Account management |
+| `expathio-mail-backup` | `/usr/local/bin/expathio-mail-backup` | Writes a backup archive to standard output |
+| `backup-pull.ps1` | run on a Windows computer (optional) | Pulls a backup over SSH and keeps the most recent archives |
 | `test.sh` | run on the host | End-to-end tests |
 | `set-relay.sh` | run on the host (optional) | Configures or removes the relay host for mail to other domains |
 | `issue-certificate.sh` | run on the host (optional); `/usr/local/lib/expathio/` for renewal | Obtains and renews a Let's Encrypt certificate for the mail host name |

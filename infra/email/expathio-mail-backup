@@ -1,0 +1,41 @@
+#!/bin/sh
+# Writes a backup of the mail server to standard output as a gzip-compressed
+# tar archive: the mailboxes, the account file and the alias table.
+# Secrets that can be created again (the relay password, the TLS key, the DNS
+# API token) are not included.
+#
+# Run as root, from another machine, so that the copy leaves the host:
+#
+#   ssh <user>@<host> 'sudo expathio-mail-backup' > mail-backup.tar.gz
+#
+#   expathio-mail-backup          write the archive to standard output
+#   expathio-mail-backup --list   print what would be saved
+set -eu
+
+die() { echo "expathio-mail-backup: $*" >&2; exit 1; }
+[ "$(id -u)" = 0 ] || die "must run as root"
+
+mode=archive
+case ${1:-} in
+	'') ;;
+	--list) mode=list ;;
+	*) die "usage: expathio-mail-backup [--list]" ;;
+esac
+[ $# -le 1 ] || die "usage: expathio-mail-backup [--list]"
+
+# Paths relative to /, so the archive can be extracted there or anywhere else.
+set --
+for p in var/mail/domains etc/dovecot/users etc/postfix/virtual; do
+	if [ -e "/$p" ]; then set -- "$@" "$p"; fi
+done
+[ $# -gt 0 ] || die "nothing to back up (is the mail server installed?)"
+
+if [ "$mode" = list ]; then
+	cd /
+	find "$@" -type f | sort
+	exit 0
+fi
+
+[ -t 1 ] && die "refusing to write an archive to a terminal; redirect the output to a file"
+# One process, so that a read error makes the command fail.
+exec tar -C / -czf - "$@"
