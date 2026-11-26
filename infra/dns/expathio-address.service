@@ -1,0 +1,8 @@
+[Unit]
+Description=Expathio dynamic DNS: point the mail host name at the current public address
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh /usr/local/lib/expathio/update-address.sh mx.expathio.com

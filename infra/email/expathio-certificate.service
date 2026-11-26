@@ -1,0 +1,8 @@
+[Unit]
+Description=Expathio mail certificate: renew when due
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh /usr/local/lib/expathio/issue-certificate.sh --renew

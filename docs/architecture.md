@@ -56,6 +56,8 @@ tooling live in [`infra/email/`](../infra/email/README.md).
 
 ```
 Receive:  sender's server --25--> Postfix --LMTP (unix socket)--> Dovecot --> Maildir
+          or, where inbound port 25 is blocked (section 3.6):
+          sender's server --25--> inbound relay --alternate port--> Postfix --> ...
 Send:     mail client --587/465, authenticated--> Postfix --> relay host --25--> recipient's server
 Read:     mail client --993 (IMAP over TLS)--> Dovecot
 ```
@@ -117,8 +119,9 @@ directory: `private/dovecot-lmtp` (delivery) and `private/auth` (SASL).
   only after the optional rule is loaded.
 - **TLS certificate.** The installer generates a self-signed certificate, valid
   for 365 days and not renewed automatically, when none is present. Clients
-  warn about it until it is replaced by a certificate from a certificate
-  authority.
+  warn about it until it is replaced. `infra/email/issue-certificate.sh`
+  replaces it with a Let's Encrypt certificate for the SMTP host name,
+  validated through DNS and renewed by a daily systemd timer.
 
 ### 3.6 Receiving mail from the internet
 
@@ -136,6 +139,18 @@ installation:
 When the host is offline, sending servers keep the message and retry, as SMTP
 requires.
 
+**Inbound relay.** Some internet providers block inbound connections to port
+25 in their own network, where no router setting can open it. Other mail
+servers deliver only to port 25, so the domain's `MX` record then points to a
+mail service that accepts the mail on port 25 and forwards each message to the
+host on another port. The router forwards that port to the host's port 25, so
+Postfix and the firewall rule are the same as for direct delivery. The
+mailboxes stay on the host: the relay handles mail in transit and queues it
+while the host is unreachable. Postfix sees the relay as the client of every
+inbound connection, so checks based on the sending server's address cannot be
+done on the host. The reference deployment receives mail this way, on external
+port 2525.
+
 ### 3.7 Sending mail to other domains
 
 The host does not deliver directly to other mail servers. Outbound mail for
@@ -143,12 +158,44 @@ other domains is handed to a relay host (smarthost) on the submission port,
 which performs the final delivery. This design suits networks where outbound
 port 25 is blocked, which is common on residential connections.
 
-Relay configuration is not part of this repository. While no relay host is
-set, Postfix refuses mail for other domains at submission time with
-`550 5.4.4`, so nothing waits in the queue for a delivery that cannot happen.
+The relay is configured by `infra/email/set-relay.sh`, which works with any
+provider of authenticated SMTP submission. Postfix authenticates to the relay
+with a user name and password kept in `/etc/postfix/sasl_passwd` (readable by
+root only), and it uses the relay only over TLS with a certificate that is
+valid for the relay's host name (`smtp_tls_security_level = secure`).
+
+While no relay host is set, Postfix refuses mail for other domains at
+submission time with `550 5.4.4`, so nothing waits in the queue for a delivery
+that cannot happen.
+
+For recipients to accept the mail as coming from the domain, the domain's DNS
+needs the records that the relay provider specifies: usually an SPF record
+that authorizes the relay and DKIM records for the keys the relay signs with.
 
 ### 3.8 Limits
 
 - One mail domain per installation.
 - No spam or virus filtering.
 - No webmail; any IMAP client can be used.
+
+## 4. DNS and certificate automation
+
+The domain's DNS is hosted at Cloudflare. Tooling lives in
+[`infra/dns/`](../infra/dns/README.md).
+
+- **Credentials.** An API token limited to editing the DNS records of the
+  domain's zone, stored with the zone ID in `/etc/expathio/cloudflare.env`
+  (owner `root`, mode 600). The scripts pass the token to `curl` on standard
+  input, never on a command line.
+- **Dynamic DNS.** The host's connection has a public IPv4 address that can
+  change. A systemd timer runs `update-address.sh` one minute after boot and
+  every five minutes: it learns the current public address from a public
+  service and keeps the `A` record of the SMTP host name at that address. It
+  calls the DNS API only when the address changed or once a day.
+- **TLS certificate.** `infra/email/issue-certificate.sh` obtains a Let's
+  Encrypt certificate for the SMTP host name with the `acme.sh` client. The
+  name is validated through a DNS record (DNS-01), so no inbound port is
+  involved. The record is created and removed by the DNS record tool, and the
+  certificate client never receives the API token. A daily systemd timer
+  renews the certificate and reloads Postfix and Dovecot.
+

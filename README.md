@@ -27,8 +27,9 @@ tool to connect, organize and turn ideas into functional experiences.
 
 | Component | What it does | Where |
 |---|---|---|
-| Mail server | Self-hosted mail for the project domain (`expathio.com`): SMTP, IMAP and mailbox storage. Exchanging mail with other domains needs the extra setup described in its instructions. | [`infra/email/`](infra/email/README.md) |
+| Mail server | Self-hosted mail for the project domain (`expathio.com`): SMTP, IMAP, mailbox storage, relay configuration and TLS certificate. Exchanging mail with other domains needs the extra setup described in its instructions. | [`infra/email/`](infra/email/README.md) |
 | Host firewall | Restrictions on top of the distribution's default firewall: SSH only from local sources, unused ports closed. | [`infra/host/`](infra/host/README.md) |
+| DNS tools | Management of the domain's DNS records from the host: record tool, dynamic DNS for a changing public address. | [`infra/dns/`](infra/dns/README.md) |
 
 ## Platform
 
@@ -59,6 +60,8 @@ Each component has its own instructions:
   requirements, installation, account management and tests.
 - Host firewall: [`infra/host/README.md`](infra/host/README.md) covers the
   installation and removal of the restrictions.
+- DNS tools: [`infra/dns/README.md`](infra/dns/README.md) covers the API
+  credentials, the record tool and the dynamic DNS timer.
 
 ## Repository layout
 
@@ -66,6 +69,7 @@ Each component has its own instructions:
 README.md              this file
 docs/architecture.md   technical specification of the platform and its services
 docs/design.md         visual identity and interface rules
-infra/email/           mail server: configuration, installer, account tool, tests
+infra/email/           mail server: configuration, installer, account tool, relay and certificate scripts, tests
 infra/host/            host firewall restrictions
+infra/dns/             DNS record tool, dynamic DNS, API credential storage
 ```
